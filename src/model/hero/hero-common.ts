@@ -11,6 +11,7 @@ import {
 import { AuxiliaryModel, WeaponModel } from "../wepon/wepon-common";
 import { EnemyModel } from "../enemy/ememy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
+import { DamageText } from "../ui/damage";
 
 export class HeroModel extends SpriteModel {
   private _life?: Sprite;
@@ -19,6 +20,7 @@ export class HeroModel extends SpriteModel {
   private _attackGageMask: Array<Sprite> = [];
   private _weapons?: Array<WeaponType>;
   private _currentWeapons: Array<WeaponModel> = [];
+  private _UI: Array<SpriteModel> = [];
   private _attackCount: Array<number> = [];
   private _team: Array<HeroModel> = [];
 
@@ -41,8 +43,8 @@ export class HeroModel extends SpriteModel {
     this._me.anchor.set(0.5);
     this._me.width = 300 * 0.25;
     this._me.height = 512 * 0.25;
-    this._me.animationSpeed = 0.1;
-    this._me.play();
+    (this._me as AnimatedSprite).animationSpeed = 0.1;
+    (this._me as AnimatedSprite).play();
 
     this._life = Sprite.from("bar_1");
     this._life.anchor.set(0);
@@ -130,6 +132,7 @@ export class HeroModel extends SpriteModel {
   }
 
   update(framesPassed: number) {
+    if (this.isDead()) return;
     super.update(framesPassed);
     this._lifeMask!.width =
       60 * (this._hp / (this._config as HeroConfig).maxHp);
@@ -149,6 +152,7 @@ export class HeroModel extends SpriteModel {
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);
     });
+    this._UI.forEach((u) => u.update(framesPassed));
   }
 
   loadAttack(type: WeaponType): void {
@@ -161,8 +165,9 @@ export class HeroModel extends SpriteModel {
       (obj) => {
         this.onLoad?.(obj);
       },
-      (_) => {
+      (obj) => {
         this._currentWeapons.splice(this._currentWeapons.indexOf(attack), 1);
+        this.onDestroy!(obj);
       }
     );
     this._currentWeapons.push(attack);
@@ -176,6 +181,23 @@ export class HeroModel extends SpriteModel {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (w.isHit(e)) {
+            const ui = new DamageText(
+              "UI",
+              this._parentWidth,
+              this._parentHeight
+            );
+            ui.setText(w.getAttackPower().toString());
+            ui.load(
+              (obj) => {
+                this._UI.push(ui);
+                this.onLoad?.(obj);
+              },
+              (obj) => {
+                this._UI.splice(this._UI.indexOf(ui), 1);
+                this.onDestroy!(obj);
+              }
+            );
+            ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
             e.damaged(w.getAttackPower());
             w.hitted();
           }

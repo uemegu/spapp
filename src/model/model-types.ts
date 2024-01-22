@@ -25,7 +25,22 @@ export interface WeaponConfig {
   targetType: "味方" | "敵";
 }
 
-export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
+export interface UIConfig {
+  type: UIType;
+  resourceName: string;
+  sequenceCount: number;
+  limitTime: number;
+}
+
+export const ModelConfig: Array<
+  HeroConfig | EnemyConfig | WeaponConfig | UIConfig
+> = [
+  {
+    type: "UI",
+    resourceName: "",
+    sequenceCount: 1,
+    limitTime: 10,
+  },
   {
     type: "勇者",
     resourceName: "hero_walk_",
@@ -58,7 +73,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     sequenceCount: 2,
     maxHp: 10,
     power: 20,
-    speed: 2,
+    speed: 3,
   },
   {
     type: "スライム",
@@ -73,7 +88,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     resourceName: "sword_",
     sequenceCount: 4,
     power: 10,
-    coolTime: 25,
+    coolTime: 40,
     limitTime: 4,
     onetime: false,
     targetType: "敵",
@@ -103,3 +118,4 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
 export type HeroType = "勇者" | "魔法使い" | "僧侶";
 export type EnemyType = "ゾンビ" | "ゴブリン" | "スライム";
 export type WeaponType = "剣" | "ファイア" | "ヒール";
+export type UIType = "UI";

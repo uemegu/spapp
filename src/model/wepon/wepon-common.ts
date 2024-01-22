@@ -25,7 +25,7 @@ export abstract class WeaponModel extends SpriteModel {
     }
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
-    this._me.onComplete = () => {
+    (this._me as AnimatedSprite).onComplete = () => {
       this.destroy();
     };
     this.onLoad!(this._me);
@@ -36,27 +36,27 @@ export abstract class WeaponModel extends SpriteModel {
 export class SwordModel extends WeaponModel {
   load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
     super.load(onLoad, onDestroy);
-    this._me!.loop = false;
+    (this._me as AnimatedSprite).loop = false;
     this._me!.width = 128;
     this._me!.height = 128;
     this._me!.position.x = this._parentWidth / 2 - 40;
     this._me!.position.y = this._parentHeight / 2;
-    this._me!.animationSpeed = 0.8;
-    this._me!.play();
+    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).play();
   }
 }
 
 export class FireModel extends WeaponModel {
   load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
     super.load(onLoad, onDestroy);
-    this._me!.loop = true;
+    (this._me as AnimatedSprite).loop = true;
     this._me!.width = 64;
     this._me!.height = 64;
     this._me!.rotation = -Math.PI / 2;
     this._me!.position.x = this._parentWidth / 2 - 40;
     this._me!.position.y = this._parentHeight / 2;
-    this._me!.animationSpeed = 0.8;
-    this._me!.play();
+    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).play();
   }
 
   update(framesPassed: number): void {

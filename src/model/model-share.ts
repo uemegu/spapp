@@ -5,23 +5,25 @@ import {
   HeroConfig,
   HeroType,
   ModelConfig,
+  UIConfig,
+  UIType,
   WeaponConfig,
   WeaponType,
 } from "./model-types";
 
 export abstract class SpriteModel {
-  protected _me?: AnimatedSprite;
+  protected _me?: Sprite;
   protected _parentWidth: number;
   protected _parentHeight: number;
   protected _damagedCount: number = 0;
   protected _hp: number = 0;
-  protected _config: HeroConfig | EnemyConfig | WeaponConfig;
+  protected _config: HeroConfig | EnemyConfig | WeaponConfig | UIConfig;
 
   onDestroy?: (me: Sprite) => void;
   onLoad?: (me: Sprite) => void;
 
   constructor(
-    type: HeroType | EnemyType | WeaponType,
+    type: HeroType | EnemyType | WeaponType | UIType,
     parentWidth: number,
     parentHeight: number
   ) {
@@ -64,9 +66,7 @@ export abstract class SpriteModel {
     this._hp -= damage;
     console.log("ダメージ", this._config.type, this._hp);
     if (this._hp <= 0) {
-      if (this.onDestroy) {
-        this.onDestroy!(this._me!);
-      }
+      this.destroy();
     } else {
       this._damagedCount = 50;
     }
@@ -82,5 +82,8 @@ export abstract class SpriteModel {
   }
   isDead(): boolean {
     return this._hp <= 0;
+  }
+  getCoordinate(): { x: number | undefined; y: number | undefined } {
+    return { x: this._me?.x, y: this._me?.y };
   }
 }

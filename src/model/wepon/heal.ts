@@ -32,15 +32,15 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
       this.onLoad!(m);
       m.play();
     }
-    this._mes.push(this._me!);
+    this._mes.push(this._me as AnimatedSprite);
     for (let i = 0; i < this._mes.length; i++) {
       const m = this._mes[i];
       m.anchor.set(0.5);
-      m.onComplete = () => {
+      (this._me as AnimatedSprite).onComplete = () => {
         this.onDestroy!(m);
         m.destroy();
       };
-      m.loop = true;
+      (this._me as AnimatedSprite).loop = true;
       const sizeTmp = getRandom(20);
       m.width = 12 + sizeTmp;
       m.height = 12 + sizeTmp;
