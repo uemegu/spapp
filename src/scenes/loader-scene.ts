@@ -35,7 +35,6 @@ export class LoaderScene extends Container implements IScene {
   }
 
   private loaded(): void {
-    //sound.play("forklift-effect");
     SceneManager.changeScene(
       new GameScene(SceneManager.width, SceneManager.height)
     );

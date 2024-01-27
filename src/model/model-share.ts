@@ -10,6 +10,8 @@ import {
   WeaponConfig,
   WeaponType,
 } from "./model-types";
+import { GameScene } from "../scenes/game-scene";
+import { sound } from "@pixi/sound";
 
 export abstract class SpriteModel {
   protected _me?: Sprite;
@@ -18,9 +20,10 @@ export abstract class SpriteModel {
   protected _damagedCount: number = 0;
   protected _hp: number = 0;
   protected _config: HeroConfig | EnemyConfig | WeaponConfig | UIConfig;
+  protected _isStopMoving = false;
+  protected _attackMotionCount = 0;
 
   onDestroy?: (me: Sprite) => void;
-  onLoad?: (me: Sprite) => void;
 
   constructor(
     type: HeroType | EnemyType | WeaponType | UIType,
@@ -31,8 +34,7 @@ export abstract class SpriteModel {
     this._parentHeight = parentHeight;
     this._config = ModelConfig.find((c) => c.type === type)!;
   }
-  load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
-    this.onLoad = onLoad;
+  load(onDestroy: (me: Sprite) => void): void {
     this.onDestroy = onDestroy;
   }
   getAttackPower(): number {
@@ -41,6 +43,10 @@ export abstract class SpriteModel {
   move(x: number, y: number): void {
     this._me!.x += x;
     this._me!.y += y;
+  }
+  moveAt(x: number, y: number): void {
+    this._me!.x = x;
+    this._me!.y = y;
   }
   isHit(a: SpriteModel): boolean {
     if (!this._me) return false;
@@ -57,19 +63,28 @@ export abstract class SpriteModel {
   destroy() {
     if (this._me) {
       this.onDestroy?.(this._me);
+      GameScene.requestRemoveChild(this._me);
       this._me!.destroy();
       this._me = undefined;
     }
   }
-  damaged(damage: number): void {
-    if (this._damagedCount > 0) return;
+  attackMotion() {}
+  damaged(damage: number, needSound: boolean = false): boolean {
+    const MAX_DAMAGE_COUNT = (this._config as EnemyConfig).speed ? 10 : 50;
+    if (this._damagedCount > 0 && this._damagedCount != MAX_DAMAGE_COUNT) {
+      return false;
+    }
     this._hp -= damage;
     console.log("ダメージ", this._config.type, this._hp);
     if (this._hp <= 0) {
       this.destroy();
     } else {
-      this._damagedCount = 50;
+      this._damagedCount = MAX_DAMAGE_COUNT;
     }
+    if (needSound) {
+      sound.play("damaged");
+    }
+    return true;
   }
   update(framesPassed: number): void {
     if (!this._me) return;
@@ -79,11 +94,19 @@ export abstract class SpriteModel {
     } else {
       this._me!.alpha = 1;
     }
+    this._attackMotionCount -= framesPassed;
   }
   isDead(): boolean {
     return this._hp <= 0;
   }
   getCoordinate(): { x: number | undefined; y: number | undefined } {
     return { x: this._me?.x, y: this._me?.y };
+  }
+  stop(isStop: boolean) {
+    this._isStopMoving = isStop;
+  }
+  resize(parentWidth: number, parentHeight: number): void {
+    this._parentWidth = parentWidth;
+    this._parentHeight = parentHeight;
   }
 }

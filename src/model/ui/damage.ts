@@ -1,5 +1,6 @@
 import { Sprite, TextStyle, Text } from "pixi.js";
 import { SpriteModel } from "../model-share";
+import { GameScene } from "../../scenes/game-scene";
 
 export class DamageText extends SpriteModel {
   private _text?: string;
@@ -9,8 +10,8 @@ export class DamageText extends SpriteModel {
     this._text = text;
   }
 
-  load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
-    super.load(onLoad, onDestroy);
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
     const style = new TextStyle({
       fontFamily: "Arial",
       fontSize: 24,
@@ -29,15 +30,15 @@ export class DamageText extends SpriteModel {
       lineJoin: "round",
     });
     this._me = new Text(this._text!, style);
-    this.onLoad!(this._me);
+    GameScene.requestAddChild(this._me);
   }
 
   update(framesPassed: number): void {
     this._count += framesPassed;
-    if (this._count > 10) {
+    if (this._count > 30) {
       this.destroy();
     } else {
-      this._me!.y -= framesPassed * 2;
+      this._me!.y -= framesPassed * 5;
     }
   }
 }

@@ -21,6 +21,11 @@ export const manifest: ResolverManifest = {
         slime_2: "resources/images/enemy/slime_2.png",
         slime_3: "resources/images/enemy/slime_3.png",
         slime_4: "resources/images/enemy/slime_2.png",
+        boss_1: "resources/images/enemy/boss_1.png",
+        boss_2: "resources/images/enemy/boss_2.png",
+        boss_2_attack_1: "resources/images/enemy/boss_3.png",
+        boss_2_attack_2: "resources/images/enemy/boss_4.png",
+        boss_2_attack_3: "resources/images/enemy/boss_2.png",
       },
     },
     {
@@ -31,6 +36,9 @@ export const manifest: ResolverManifest = {
         sword_3: "resources/images/weapon/sword_3.png",
         sword_4: "resources/images/weapon/sword_4.png",
         fire_1: "resources/images/weapon/fire_1.png",
+        after_fire_1: "resources/images/weapon/after_fire_1.png",
+        after_fire_2: "resources/images/weapon/after_fire_2.png",
+        after_fire_3: "resources/images/weapon/after_fire_3.png",
         heal_1: "resources/images/weapon/heal_1.png",
       },
     },
@@ -38,7 +46,7 @@ export const manifest: ResolverManifest = {
       name: "background",
       assets: {
         background_1: "resources/images/background/background_1.jpeg",
-        background_2: "resources/images/background/maptile_sogen_01.png",
+        background_2: "resources/images/background/background_2.png",
       },
     },
     {
@@ -51,7 +59,17 @@ export const manifest: ResolverManifest = {
     {
       name: "sound",
       assets: {
-        "forklift-effect": "sound/forklift-effect.wav",
+        field1: "sound/bgm/field1.m4a",
+      },
+    },
+    {
+      name: "se",
+      assets: {
+        fire: "sound/se/fire.mp3",
+        heal: "sound/se/heal.mp3",
+        sword_1: "sound/se/sword_1.mp3",
+        sword_2: "sound/se/sword_2.mp3",
+        damaged: "sound/se/damaged.mp3",
       },
     },
   ],

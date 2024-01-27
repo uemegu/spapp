@@ -2,8 +2,14 @@ import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import { getRandom } from "../../util";
 import { EnemyConfig, EnemyType, HeroType, WeaponType } from "../model-types";
+import { GameScene } from "../../scenes/game-scene";
+import { WeaponFactory } from "../wepon/wepon-factory";
+import { WeaponModel } from "../wepon/wepon-common";
+import { HeroModel } from "../hero/hero-common";
 
 export class EnemyModel extends SpriteModel {
+  private _currentWeapons: Array<WeaponModel> = [];
+
   constructor(
     type: HeroType | EnemyType | WeaponType,
     parentWidth: number,
@@ -17,8 +23,8 @@ export class EnemyModel extends SpriteModel {
     return (this._config as EnemyConfig).power;
   }
 
-  load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
-    super.load(onLoad, onDestroy);
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
     const frames = [];
     for (let i = 1; i <= this._config.sequenceCount; i++) {
       frames.push(Texture.from(`${this._config.resourceName}${i}`));
@@ -30,12 +36,44 @@ export class EnemyModel extends SpriteModel {
     this._me.height = 128;
     this._me.position.x = this._parentWidth;
     this._me.position.y = this._parentHeight / 2 + offset - 15;
-    this._me.animationSpeed = 0.1;
-    this._me.play();
-    this.onLoad!(this._me);
+    (this._me as AnimatedSprite).animationSpeed = 0.1;
+    (this._me as AnimatedSprite).play();
+    GameScene.requestAddChild(this._me);
   }
 
   update(framesPassed: number): void {
-    this.move(-(this._config as EnemyConfig).speed, 0);
+    super.update(framesPassed);
+    if (!this._isStopMoving) {
+      this.move(-(this._config as EnemyConfig).speed, 0);
+    }
+  }
+
+  loadAttack(type: WeaponType): void {
+    const attack = WeaponFactory.CreateWeapon(
+      type,
+      this._parentWidth,
+      this._parentHeight
+    );
+    attack.load((_) => {
+      this._currentWeapons.splice(this._currentWeapons.indexOf(attack), 1);
+    });
+    attack.reverse();
+    attack.moveAt(this._me!.x - 100, this._me!.y);
+    this._currentWeapons.push(attack);
+  }
+
+  attackHitTest(hero: Array<HeroModel>): void {
+    if (this._currentWeapons.length > 0) {
+      hero.forEach((e) => {
+        this._currentWeapons.forEach((w) => {
+          if (w.isHit(e)) {
+            const damage = w.getAttackPower();
+            if (e.damaged(damage)) {
+              w.hitted();
+            }
+          }
+        });
+      });
+    }
   }
 }

@@ -12,6 +12,7 @@ import { AuxiliaryModel, WeaponModel } from "../wepon/wepon-common";
 import { EnemyModel } from "../enemy/ememy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { DamageText } from "../ui/damage";
+import { GameScene } from "../../scenes/game-scene";
 
 export class HeroModel extends SpriteModel {
   private _life?: Sprite;
@@ -33,8 +34,8 @@ export class HeroModel extends SpriteModel {
     this._hp = (this._config as HeroConfig).maxHp;
   }
 
-  load(onLoad: (me: Sprite) => void, onDestroy: (me: Sprite) => void): void {
-    super.load(onLoad, onDestroy);
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
     const frames = [];
     for (let i = 1; i <= this._config.sequenceCount; i++) {
       frames.push(Texture.from(`${this._config.resourceName}${i}`));
@@ -57,9 +58,9 @@ export class HeroModel extends SpriteModel {
     this._lifeMask.height = this._life!.height;
     this._life.mask = this._lifeMask;
 
-    this.onLoad!(this._me);
-    this.onLoad!(this._life);
-    this.onLoad!(this._lifeMask);
+    GameScene.requestAddChild(this._me);
+    GameScene.requestAddChild(this._life);
+    GameScene.requestAddChild(this._lifeMask);
 
     this._weapons?.forEach((_) => {
       const gage = Sprite.from("bar_2");
@@ -74,8 +75,8 @@ export class HeroModel extends SpriteModel {
       gage.mask = gagemask;
       this._attackGage?.push(gage);
       this._attackGageMask?.push(gagemask);
-      this.onLoad!(gage);
-      this.onLoad!(gagemask);
+      GameScene.requestAddChild(gage);
+      GameScene.requestAddChild(gagemask);
     });
   }
 
@@ -161,15 +162,9 @@ export class HeroModel extends SpriteModel {
       this._parentWidth,
       this._parentHeight
     );
-    attack.load(
-      (obj) => {
-        this.onLoad?.(obj);
-      },
-      (obj) => {
-        this._currentWeapons.splice(this._currentWeapons.indexOf(attack), 1);
-        this.onDestroy!(obj);
-      }
-    );
+    attack.load((_) => {
+      this._currentWeapons.splice(this._currentWeapons.indexOf(attack), 1);
+    });
     this._currentWeapons.push(attack);
     if (this.getWeaponConfig(type).targetType === "味方") {
       (attack as AuxiliaryModel).powerUp(this._team);
@@ -181,25 +176,21 @@ export class HeroModel extends SpriteModel {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (w.isHit(e)) {
-            const ui = new DamageText(
-              "UI",
-              this._parentWidth,
-              this._parentHeight
-            );
-            ui.setText(w.getAttackPower().toString());
-            ui.load(
-              (obj) => {
-                this._UI.push(ui);
-                this.onLoad?.(obj);
-              },
-              (obj) => {
+            const damage = w.getAttackPower();
+            if (e.damaged(damage)) {
+              const ui = new DamageText(
+                "UI",
+                this._parentWidth,
+                this._parentHeight
+              );
+              ui.setText(damage.toString());
+              ui.load((_) => {
                 this._UI.splice(this._UI.indexOf(ui), 1);
-                this.onDestroy!(obj);
-              }
-            );
-            ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
-            e.damaged(w.getAttackPower());
-            w.hitted();
+              });
+              this._UI.push(ui);
+              ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
+              w.hitted();
+            }
           }
         });
       });
