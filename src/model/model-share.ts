@@ -12,6 +12,7 @@ import {
 } from "./model-types";
 import { GameScene } from "../scenes/game-scene";
 import { sound } from "@pixi/sound";
+import { SceneManager } from "../shared/scene-manager";
 
 export abstract class SpriteModel {
   protected _me?: Sprite;
@@ -63,7 +64,7 @@ export abstract class SpriteModel {
   destroy() {
     if (this._me) {
       this.onDestroy?.(this._me);
-      GameScene.requestRemoveChild(this._me);
+      SceneManager.requestRemoveChild(this._me);
       this._me!.destroy();
       this._me = undefined;
     }
@@ -82,7 +83,7 @@ export abstract class SpriteModel {
       this._damagedCount = MAX_DAMAGE_COUNT;
     }
     if (needSound) {
-      sound.play("damaged");
+      sound.play("se_damaged");
     }
     return true;
   }

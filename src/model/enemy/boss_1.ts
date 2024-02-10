@@ -37,7 +37,7 @@ export class Boss_1 extends EnemyModel {
         (this._me as AnimatedSprite).animationSpeed = 0.1;
         (this._me as AnimatedSprite).play();
       };
-      this.loadAttack("剣");
+      this.loadAttack("スマッシュ");
       this._attackMotionCount = 50;
     }
   }

@@ -3,8 +3,7 @@ import { AuxiliaryModel, WeaponModel } from "./wepon-common";
 import { HeroModel } from "../hero/hero-common";
 import { WeaponConfig } from "../model-types";
 import { getRandom } from "../../util";
-import { GameScene } from "../../scenes/game-scene";
-import { sound } from "@pixi/sound";
+import { SceneManager } from "../../shared/scene-manager";
 
 export class HealModel extends WeaponModel implements AuxiliaryModel {
   private _mes: Array<AnimatedSprite> = [];
@@ -31,7 +30,7 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
     for (let i = 0; i < 15; i++) {
       const m = new AnimatedSprite(frames);
       this._mes.push(m);
-      GameScene.requestAddChild(m);
+      SceneManager.requestAddChild(m);
       m.play();
     }
     this._mes.push(this._me as AnimatedSprite);

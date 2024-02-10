@@ -1,6 +1,6 @@
-import type { ResolverManifest } from "pixi.js";
+import { AssetsManifest } from "pixi.js";
 
-export const manifest: ResolverManifest = {
+export const manifest: AssetsManifest = {
   bundles: [
     {
       name: "hero",
@@ -8,6 +8,7 @@ export const manifest: ResolverManifest = {
         hero_walk_1: "resources/images/hero/hero_walk_1.png",
         wizard_walk_1: "resources/images/hero/wizard_walk_1.png",
         priest_walk_1: "resources/images/hero/priest_walk_1.png",
+        archer_walk_1: "resources/images/hero/archer_walk_1.png",
       },
     },
     {
@@ -40,6 +41,12 @@ export const manifest: ResolverManifest = {
         after_fire_2: "resources/images/weapon/after_fire_2.png",
         after_fire_3: "resources/images/weapon/after_fire_3.png",
         heal_1: "resources/images/weapon/heal_1.png",
+        arrow_1: "resources/images/weapon/arrow_1.png",
+        aero_1: "resources/images/weapon/aero_1.png",
+        thander_1: "resources/images/weapon/thander_1.png",
+        thander_2: "resources/images/weapon/thander_2.png",
+        thander_3: "resources/images/weapon/thander_3.png",
+        thander_4: "resources/images/weapon/thander_4.png",
       },
     },
     {
@@ -65,11 +72,13 @@ export const manifest: ResolverManifest = {
     {
       name: "se",
       assets: {
-        fire: "sound/se/fire.mp3",
-        heal: "sound/se/heal.mp3",
-        sword_1: "sound/se/sword_1.mp3",
-        sword_2: "sound/se/sword_2.mp3",
-        damaged: "sound/se/damaged.mp3",
+        se_fire: "sound/se/fire.mp3",
+        se_heal: "sound/se/heal.mp3",
+        se_sword_1: "sound/se/sword_1.mp3",
+        se_sword_2: "sound/se/sword_2.mp3",
+        se_damaged: "sound/se/damaged.mp3",
+        se_thander: "sound/se/thander.mp3",
+        se_aero: "sound/se/aero.mp3",
       },
     },
   ],

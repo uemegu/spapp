@@ -1,6 +1,6 @@
 import { Sprite, TextStyle, Text } from "pixi.js";
 import { SpriteModel } from "../model-share";
-import { GameScene } from "../../scenes/game-scene";
+import { SceneManager } from "../../shared/scene-manager";
 
 export class DamageText extends SpriteModel {
   private _text?: string;
@@ -30,7 +30,7 @@ export class DamageText extends SpriteModel {
       lineJoin: "round",
     });
     this._me = new Text(this._text!, style);
-    GameScene.requestAddChild(this._me);
+    SceneManager.requestAddChild(this._me);
   }
 
   update(framesPassed: number): void {

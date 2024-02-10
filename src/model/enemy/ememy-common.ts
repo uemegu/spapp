@@ -2,10 +2,10 @@ import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import { getRandom } from "../../util";
 import { EnemyConfig, EnemyType, HeroType, WeaponType } from "../model-types";
-import { GameScene } from "../../scenes/game-scene";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { WeaponModel } from "../wepon/wepon-common";
 import { HeroModel } from "../hero/hero-common";
+import { SceneManager } from "../../shared/scene-manager";
 
 export class EnemyModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
@@ -35,10 +35,10 @@ export class EnemyModel extends SpriteModel {
     this._me.width = 128;
     this._me.height = 128;
     this._me.position.x = this._parentWidth;
-    this._me.position.y = this._parentHeight / 2 + offset - 15;
+    this._me.position.y = this._parentHeight - 180 - offset;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
-    GameScene.requestAddChild(this._me);
+    SceneManager.requestAddChild(this._me);
   }
 
   update(framesPassed: number): void {
@@ -66,7 +66,7 @@ export class EnemyModel extends SpriteModel {
     if (this._currentWeapons.length > 0) {
       hero.forEach((e) => {
         this._currentWeapons.forEach((w) => {
-          if (w.isHit(e)) {
+          if (!w.isDead() && w.isHit(e)) {
             const damage = w.getAttackPower();
             if (e.damaged(damage)) {
               w.hitted();

@@ -2,9 +2,9 @@ import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import { WeaponConfig } from "../model-types";
 import { HeroModel } from "../hero/hero-common";
-import { GameScene } from "../../scenes/game-scene";
 import { sound } from "@pixi/sound";
 import { getRandom } from "../../util";
+import { SceneManager } from "../../shared/scene-manager";
 
 export abstract class WeaponModel extends SpriteModel {
   protected _restTime: number = 0;
@@ -17,7 +17,7 @@ export abstract class WeaponModel extends SpriteModel {
 
   hitted(): void {
     if ((this._config as WeaponConfig).hittedSEName) {
-      sound.play((this._config as WeaponConfig).hittedSEName!);
+      sound.play(`se_${(this._config as WeaponConfig).hittedSEName!}`);
     }
     if ((this._config as WeaponConfig).sequenceCount2) {
       const frames = [];
@@ -38,10 +38,10 @@ export abstract class WeaponModel extends SpriteModel {
       sprite.animationSpeed = 0.5;
       sprite.loop = false;
       sprite.onComplete = () => {
-        GameScene.requestRemoveChild(sprite);
+        SceneManager.requestRemoveChild(sprite);
         sprite.destroy();
       };
-      GameScene.requestAddChild(sprite);
+      SceneManager.requestAddChild(sprite);
       sprite.play();
     }
     this._me!.width *= (this._config as WeaponConfig).attenuationRate;
@@ -55,7 +55,7 @@ export abstract class WeaponModel extends SpriteModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
     if ((this._config as WeaponConfig).startSEName) {
-      sound.play((this._config as WeaponConfig).startSEName!);
+      sound.play(`se_${(this._config as WeaponConfig).startSEName!}`);
     }
     const frames = [];
     for (let i = 1; i <= this._config.sequenceCount; i++) {
@@ -67,7 +67,7 @@ export abstract class WeaponModel extends SpriteModel {
     (this._me as AnimatedSprite).onComplete = () => {
       this.destroy();
     };
-    GameScene.requestAddChild(this._me);
+    SceneManager.requestAddChild(this._me);
     this._restTime = (this._config as WeaponConfig).limitTime;
   }
 
@@ -83,27 +83,63 @@ export class SwordModel extends WeaponModel {
     this._me!.width = 128;
     this._me!.height = 128;
     this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight / 2;
+    this._me!.position.y = this._parentHeight - 200;
     (this._me as AnimatedSprite).animationSpeed = 0.8;
     (this._me as AnimatedSprite).play();
   }
 }
 
-export class FireModel extends WeaponModel {
+export class LineModel extends WeaponModel {
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
+    (this._me as AnimatedSprite).loop = false;
+    this._me!.anchor.set(0);
+    this._me!.width = this._parentWidth;
+    this._me!.height = 128;
+    this._me!.position.x = this._parentWidth / 2 - 40;
+    this._me!.position.y = this._parentHeight - 240;
+    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).play();
+  }
+}
+
+export class ThrowAttakModel extends WeaponModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
     (this._me as AnimatedSprite).loop = true;
     this._me!.width = 64;
     this._me!.height = 64;
-    this._me!.rotation = -Math.PI / 2;
     this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight / 2;
+    this._me!.position.y = this._parentHeight - 200;
     (this._me as AnimatedSprite).animationSpeed = 0.8;
     (this._me as AnimatedSprite).play();
   }
 
   update(framesPassed: number): void {
     this._me!.x += framesPassed * 2;
+    this._restTime -= framesPassed;
+    if (this._restTime <= 0) {
+      this.destroy();
+    }
+  }
+}
+
+export class BigAttakModel extends ThrowAttakModel {
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
+    (this._me as AnimatedSprite).loop = true;
+    this._me!.width = 128;
+    this._me!.height = 128;
+    this._me!.position.x = this._parentWidth / 2 - 40;
+    this._me!.position.y = this._parentHeight - 210;
+    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).play();
+  }
+}
+
+export class FastThrowAttakModel extends ThrowAttakModel {
+  update(framesPassed: number): void {
+    this._me!.x += framesPassed * 2 * 3;
     this._restTime -= framesPassed;
     if (this._restTime <= 0) {
       this.destroy();

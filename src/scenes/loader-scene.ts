@@ -1,9 +1,8 @@
 import { Container, Assets } from "pixi.js";
 import { LoadingBarContainer } from "../containers/loading-bar-container";
 import { SceneManager, IScene } from "../shared/scene-manager";
-import { GameScene } from "./game-scene";
 import { manifest } from "../shared/manifest";
-import { sound } from "@pixi/sound";
+import { StartScene } from "./start-scene";
 
 export class LoaderScene extends Container implements IScene {
   private _loadingBar: LoadingBarContainer;
@@ -24,6 +23,8 @@ export class LoaderScene extends Container implements IScene {
     });
   }
 
+  load(): void {}
+
   async initLoader(): Promise<void> {
     await Assets.init({ manifest: manifest });
     const bundlesIds = manifest.bundles.map((bundle) => bundle.name);
@@ -36,7 +37,7 @@ export class LoaderScene extends Container implements IScene {
 
   private loaded(): void {
     SceneManager.changeScene(
-      new GameScene(SceneManager.width, SceneManager.height)
+      new StartScene(SceneManager.width, SceneManager.height)
     );
   }
 
@@ -46,5 +47,13 @@ export class LoaderScene extends Container implements IScene {
 
   resize(parentWidth: number, parentHeight: number): void {
     //...
+  }
+
+  public requestAddChild(obj: Container): void {
+    this.addChild(obj);
+  }
+
+  public requestRemoveChild(obj: Container): void {
+    this.removeChild(obj);
   }
 }

@@ -1,15 +1,45 @@
-import { Container, Sprite, Texture, TilingSprite } from "pixi.js";
-import { IScene } from "../shared/scene-manager";
+import { Container, Texture, TilingSprite } from "pixi.js";
+import { IScene, SceneManager } from "../shared/scene-manager";
 import { HeroModel } from "../model/hero/hero-common";
 import { getRandom } from "../util";
 import { EnemyModel } from "../model/enemy/ememy-common";
-import { SpriteModel } from "../model/model-share";
-import { EnemyType } from "../model/model-types";
+import {
+  EnemyType,
+  HeroType,
+  ModelConfig,
+  WeaponConfig,
+  WeaponType,
+} from "../model/model-types";
 import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
+import { IndicatorButton } from "../control/indicator-button";
+
+export interface UnitInfo {
+  type: HeroType;
+  weapons: Array<WeaponType>;
+}
 
 export class GameScene extends Container implements IScene {
-  private static instance: GameScene;
+  // TODO
+  private _unitInfo: Array<UnitInfo> = [
+    {
+      type: "勇者",
+      weapons: ["スマッシュ", "ソニックブーム"],
+    },
+    {
+      type: "アーチャー",
+      weapons: ["ショット", "ロングショット"],
+    },
+    {
+      type: "魔法使い",
+      weapons: ["ファイア", "サンダー"],
+    },
+    {
+      type: "僧侶",
+      weapons: ["ヒール", "エアロ"],
+    },
+  ];
+
   private _hero!: Array<HeroModel>;
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite!: TilingSprite;
@@ -23,29 +53,28 @@ export class GameScene extends Container implements IScene {
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
-    GameScene.instance = this;
-    sound.play("field1", { loop: true });
-
     this._parentWidth = parentWidth;
     this._parentHeight = parentHeight;
+  }
+
+  load(): void {
     this._enemy = [];
     this._nextEnemy = getRandom(400);
 
+    sound.play("field1", { loop: true });
     this.loadBackground();
+    this.setHeros();
+    this.addCommandButton();
+  }
 
+  private setHeros(): void {
     this._hero = [];
-    this._hero.push(
-      new HeroModel("勇者", this._parentWidth, this._parentHeight)
-    );
-    this._hero[0].setWeapon(["剣"]);
-    this._hero.push(
-      new HeroModel("魔法使い", this._parentWidth, this._parentHeight)
-    );
-    this._hero[1].setWeapon(["ファイア"]);
-    this._hero.push(
-      new HeroModel("僧侶", this._parentWidth, this._parentHeight)
-    );
-    this._hero[2].setWeapon(["ヒール"]);
+    this._unitInfo.forEach((u) => {
+      this._hero.push(
+        new HeroModel(u.type, this._parentWidth, this._parentHeight)
+      );
+    });
+
     this._hero.forEach((hero, index) => {
       hero.setTeam(this._hero);
       hero.load((_) => {
@@ -54,18 +83,40 @@ export class GameScene extends Container implements IScene {
         }
       });
       hero.move(
-        this._parentWidth / 2 - 120 - 100 * index,
-        this._parentHeight / 2
+        this._parentWidth / 2 - 120 - 60 * index,
+        this._parentHeight - 190
       );
     });
   }
 
-  static requestAddChild(obj: Sprite): void {
-    GameScene.instance.addChild(obj);
+  private addCommandButton(): void {
+    this._unitInfo.forEach((u, index) => {
+      if (this._hero[index].isDead()) return;
+      u.weapons.forEach((w, index2) => {
+        const config = ModelConfig.find((c) => c.type === w) as WeaponConfig;
+        const b = new IndicatorButton(
+          w,
+          (index * this._parentWidth) / this._unitInfo.length,
+          this._parentHeight - 60 * (index2 + 1),
+          this._parentWidth / this._unitInfo.length,
+          60,
+          config.coolTime
+        );
+        b.setCallback(() => {
+          const hero = this._hero[index];
+          hero.loadAttack(w);
+        });
+        this.addChild(b);
+      });
+    });
   }
 
-  static requestRemoveChild(obj: Sprite): void {
-    GameScene.instance.removeChild(obj);
+  public requestAddChild(obj: Container): void {
+    this.addChild(obj);
+  }
+
+  public requestRemoveChild(obj: Container): void {
+    this.removeChild(obj);
   }
 
   loadBackground(): void {
