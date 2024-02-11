@@ -132,6 +132,9 @@ export class HeroModel extends SpriteModel {
               });
               this._UI.push(ui);
               ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
+              if (!e.isDead() && w.getKnockback()) {
+                e.move(w.getKnockback(), 0);
+              }
               w.hitted();
             }
           }

@@ -13,6 +13,7 @@ import {
 import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
 import { IndicatorButton } from "../control/indicator-button";
+import { Button } from "../control/button";
 
 export interface UnitInfo {
   type: HeroType;
@@ -50,6 +51,7 @@ export class GameScene extends Container implements IScene {
   private _gameover: boolean = false;
   private _frameCount: number = 0;
   private _suspend: boolean = false;
+  private _isHitted: boolean = false;
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
@@ -61,6 +63,7 @@ export class GameScene extends Container implements IScene {
     this._enemy = [];
     this._nextEnemy = getRandom(400);
 
+    sound.stopAll();
     sound.play("field1", { loop: true });
     this.loadBackground();
     this.setHeros();
@@ -80,6 +83,7 @@ export class GameScene extends Container implements IScene {
       hero.load((_) => {
         if (!this._hero.find((h) => !h.isDead())) {
           this._gameover = true;
+          this.showReload();
         }
       });
       hero.move(
@@ -89,9 +93,22 @@ export class GameScene extends Container implements IScene {
     });
   }
 
+  private showReload(): void {
+    const button = new Button(
+      "もう１かい",
+      SceneManager.width / 2 - 60,
+      SceneManager.height / 2
+    );
+    button.setCallback(() => {
+      SceneManager.changeScene(
+        new GameScene(SceneManager.width, SceneManager.height)
+      );
+    });
+    this.addChild(button);
+  }
+
   private addCommandButton(): void {
     this._unitInfo.forEach((u, index) => {
-      if (this._hero[index].isDead()) return;
       u.weapons.forEach((w, index2) => {
         const config = ModelConfig.find((c) => c.type === w) as WeaponConfig;
         const b = new IndicatorButton(
@@ -104,7 +121,9 @@ export class GameScene extends Container implements IScene {
         );
         b.setCallback(() => {
           const hero = this._hero[index];
+          if (hero.isDead()) return false;
           hero.loadAttack(w);
+          return true;
         });
         this.addChild(b);
       });
@@ -156,6 +175,9 @@ export class GameScene extends Container implements IScene {
     enemy.load((obj) => {
       this.removeChild(obj);
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
+      if (type == "ボブゴブリン") {
+        this.showReload();
+      }
     });
   }
 
@@ -167,7 +189,9 @@ export class GameScene extends Container implements IScene {
     if (this._gameover) {
       return;
     }
-    this._tilingSprite.tilePosition.x -= 1;
+    if (!this._isHitted) {
+      this._tilingSprite.tilePosition.x -= 1;
+    }
     this._counter += framesPassed;
     this._hero.forEach((hero) => {
       hero.update(framesPassed);
@@ -177,7 +201,7 @@ export class GameScene extends Container implements IScene {
     });
     if (this._counter >= this._nextEnemy) {
       this.loadEnemy();
-      this._nextEnemy = getRandom(50) + 10;
+      this._nextEnemy = getRandom(30) + 10;
       this._counter = 0;
     }
     this._enemy.forEach((e) => {
@@ -194,12 +218,14 @@ export class GameScene extends Container implements IScene {
   }
 
   heroHitTest(): void {
+    this._isHitted = false;
     this._enemy.forEach((e) => {
       e.stop(false);
       this._hero.forEach((hero) => {
         if (hero.isHit(e)) {
           hero.damaged(e.getAttackPower(), true);
           e.stop(true);
+          this._isHitted = true;
         }
       });
       e.attackHitTest(this._hero);

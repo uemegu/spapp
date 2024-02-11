@@ -55,12 +55,16 @@ export class SceneManager {
   }
 
   private static update(framesPassed: number): void {
-    if (SceneManager._currentScene) {
-      SceneManager._currentScene.update(framesPassed);
+    try {
+      if (SceneManager._currentScene) {
+        SceneManager._currentScene.update(framesPassed);
+      }
+      SceneManager._tickLisnters.forEach((l) => {
+        l.update(framesPassed);
+      });
+    } catch (e) {
+      console.log(e);
     }
-    SceneManager._tickLisnters.forEach((l) => {
-      l.update(framesPassed);
-    });
   }
 
   public static resize(): void {

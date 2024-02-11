@@ -42,15 +42,17 @@ export abstract class SpriteModel {
     throw new Error("Method not implemented.");
   }
   move(x: number, y: number): void {
+    if (!this._me) return;
     this._me!.x += x;
     this._me!.y += y;
   }
   moveAt(x: number, y: number): void {
+    if (!this._me) return;
     this._me!.x = x;
     this._me!.y = y;
   }
   isHit(a: SpriteModel): boolean {
-    if (!this._me) return false;
+    if (!this._me || !a._me) return false;
     const w1 = a._me!.width;
     const h1 = a._me!.height;
     const isX =
@@ -76,7 +78,7 @@ export abstract class SpriteModel {
       return false;
     }
     this._hp -= damage;
-    console.log("ダメージ", this._config.type, this._hp);
+    //console.log("ダメージ", this._config.type, this._hp);
     if (this._hp <= 0) {
       this.destroy();
     } else {

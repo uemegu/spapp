@@ -29,6 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  user-select: none;
 }
 
 h1 {
@@ -45,8 +46,8 @@ h1 {
 
 #pixi-screen {
   position: fixed;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   bottom: 0;
   right: 0;
   width: 100%;

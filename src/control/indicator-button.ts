@@ -78,12 +78,13 @@ export class IndicatorButton extends Container implements IUpdate {
     }
   }
 
-  setCallback(callback: () => void): void {
+  setCallback(callback: () => boolean): void {
     this.eventMode = "dynamic";
     this.on("pointerdown", () => {
       if (this._coolTime === 0) {
-        this._coolTime = this._maxCoolTime;
-        callback();
+        if (callback()) {
+          this._coolTime = this._maxCoolTime;
+        }
       }
     });
   }

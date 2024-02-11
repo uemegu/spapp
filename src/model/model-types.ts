@@ -28,6 +28,7 @@ export interface WeaponConfig {
   onetime: boolean;
   attenuationRate: number;
   criticalRate?: number;
+  knockback?: number;
   targetType: "味方" | "敵";
 }
 
@@ -95,15 +96,15 @@ export const ModelConfig: Array<
     type: "ボブゴブリン",
     resourceName: "boss_",
     sequenceCount: 2,
-    maxHp: 300,
-    power: 20,
+    maxHp: 800,
+    power: 30,
     speed: 1,
   },
   {
     type: "スライム",
     resourceName: "slime_",
     sequenceCount: 4,
-    maxHp: 50,
+    maxHp: 100,
     power: 5,
     speed: 0.5,
   },
@@ -113,8 +114,8 @@ export const ModelConfig: Array<
     startSEName: "sword_1",
     hittedSEName: "sword_2",
     sequenceCount: 4,
-    power: 10,
-    coolTime: 40,
+    power: 30,
+    coolTime: 20,
     limitTime: 4,
     onetime: false,
     targetType: "敵",
@@ -155,7 +156,7 @@ export const ModelConfig: Array<
     resourceName: "thander_",
     startSEName: "thander",
     sequenceCount: 4,
-    power: 40,
+    power: 20,
     coolTime: 300,
     limitTime: 4,
     onetime: false,
@@ -180,13 +181,14 @@ export const ModelConfig: Array<
     resourceName: "aero_",
     startSEName: "aero",
     sequenceCount: 1,
-    power: 20,
-    coolTime: 200,
+    power: 2,
+    coolTime: 400,
     limitTime: 80,
     onetime: false,
     targetType: "敵",
-    attenuationRate: 0.5,
-    criticalRate: 0.2,
+    attenuationRate: 1,
+    criticalRate: 1,
+    knockback: 80,
   },
   {
     type: "ショット",

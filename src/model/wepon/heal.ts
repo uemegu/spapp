@@ -14,7 +14,7 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
         for (let i = index; i < this._mes.length; i += team.length) {
           this._mes[i].x =
             this._parentWidth / 2 - 120 - 100 * index + getRandom(120) - 60;
-          this._mes[i].y = this._parentHeight / 2 - getRandom(120) + 40;
+          this._mes[i].y = this._parentHeight - getRandom(120) - 150;
         }
       }
     });
@@ -56,9 +56,11 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
     });
     this._restTime -= framesPassed;
     if (this._restTime <= 0) {
-      this._mes.forEach((m) => {
-        this.onDestroy!(m);
+      this._mes.forEach((m, index) => {
         m.destroy();
+        if (index === this._mes.length - 1) {
+          this.onDestroy!(m);
+        }
       });
       this._mes = [];
     }

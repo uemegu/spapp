@@ -15,6 +15,11 @@ export abstract class WeaponModel extends SpriteModel {
     return power + getRandom(power * rate);
   }
 
+  getKnockback(): number {
+    const power = (this._config as WeaponConfig).knockback;
+    return power ?? 0;
+  }
+
   hitted(): void {
     if ((this._config as WeaponConfig).hittedSEName) {
       sound.play(`se_${(this._config as WeaponConfig).hittedSEName!}`);
@@ -74,6 +79,13 @@ export abstract class WeaponModel extends SpriteModel {
   reverse(): void {
     this._me!.scale = { x: -1, y: 1 };
   }
+
+  update(framesPassed: number): void {
+    this._restTime -= framesPassed;
+    if (this._restTime <= 0) {
+      this.destroy();
+    }
+  }
 }
 
 export class SwordModel extends WeaponModel {
@@ -117,10 +129,7 @@ export class ThrowAttakModel extends WeaponModel {
 
   update(framesPassed: number): void {
     this._me!.x += framesPassed * 2;
-    this._restTime -= framesPassed;
-    if (this._restTime <= 0) {
-      this.destroy();
-    }
+    super.update(framesPassed);
   }
 }
 
@@ -140,10 +149,7 @@ export class BigAttakModel extends ThrowAttakModel {
 export class FastThrowAttakModel extends ThrowAttakModel {
   update(framesPassed: number): void {
     this._me!.x += framesPassed * 2 * 3;
-    this._restTime -= framesPassed;
-    if (this._restTime <= 0) {
-      this.destroy();
-    }
+    super.update(framesPassed);
   }
 }
 
