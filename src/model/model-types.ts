@@ -180,7 +180,7 @@ export const ModelConfig: Array<
     type: "エアロ",
     resourceName: "aero_",
     startSEName: "aero",
-    sequenceCount: 1,
+    sequenceCount: 5,
     power: 2,
     coolTime: 400,
     limitTime: 80,

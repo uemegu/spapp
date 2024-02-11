@@ -11,7 +11,7 @@ export class StartScene extends Container implements IScene {
 
   load(): void {
     const button = new Button(
-      strings.getString("start"),
+      strings.getString("スタート"),
       SceneManager.width / 2 - 60,
       SceneManager.height / 2
     );

@@ -141,7 +141,7 @@ export class BigAttakModel extends ThrowAttakModel {
     this._me!.height = 128;
     this._me!.position.x = this._parentWidth / 2 - 40;
     this._me!.position.y = this._parentHeight - 210;
-    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).animationSpeed = 0.6;
     (this._me as AnimatedSprite).play();
   }
 }

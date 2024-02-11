@@ -14,6 +14,7 @@ import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
 import { IndicatorButton } from "../control/indicator-button";
 import { Button } from "../control/button";
+import { strings } from "../strings";
 
 export interface UnitInfo {
   type: HeroType;
@@ -95,7 +96,7 @@ export class GameScene extends Container implements IScene {
 
   private showReload(): void {
     const button = new Button(
-      "もう１かい",
+      strings.getString("もう1回"),
       SceneManager.width / 2 - 60,
       SceneManager.height / 2
     );
@@ -112,7 +113,7 @@ export class GameScene extends Container implements IScene {
       u.weapons.forEach((w, index2) => {
         const config = ModelConfig.find((c) => c.type === w) as WeaponConfig;
         const b = new IndicatorButton(
-          w,
+          strings.getString(w),
           (index * this._parentWidth) / this._unitInfo.length,
           this._parentHeight - 60 * (index2 + 1),
           this._parentWidth / this._unitInfo.length,

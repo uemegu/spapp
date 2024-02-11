@@ -76,6 +76,11 @@ export class HeroModel extends SpriteModel {
       this._currentWeapons.forEach((a) => {
         a.destroy();
       });
+      this._UI.forEach((a) => {
+        a.destroy();
+      });
+      this._currentWeapons = [];
+      this._UI = [];
     }
     super.destroy();
   }
@@ -89,14 +94,16 @@ export class HeroModel extends SpriteModel {
   }
 
   update(framesPassed: number) {
-    if (this.isDead()) return;
-    super.update(framesPassed);
-    this._lifeMask!.width =
-      60 * (this._hp / (this._config as HeroConfig).maxHp);
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);
     });
     this._UI.forEach((u) => u.update(framesPassed));
+    if (this.isDead()) {
+      return;
+    }
+    super.update(framesPassed);
+    this._lifeMask!.width =
+      60 * (this._hp / (this._config as HeroConfig).maxHp);
   }
 
   loadAttack(type: WeaponType): void {
