@@ -5,6 +5,7 @@ import { getRandom } from "../util";
 import { EnemyModel } from "../model/enemy/ememy-common";
 import {
   EnemyType,
+  HeroConfig,
   HeroType,
   ModelConfig,
   WeaponConfig,
@@ -12,7 +13,7 @@ import {
 } from "../model/model-types";
 import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
-import { IndicatorButton } from "../control/indicator-button";
+import { SkillButton } from "../control/indicator-button";
 import { Button } from "../control/button";
 import { strings } from "../strings";
 
@@ -43,6 +44,7 @@ export class GameScene extends Container implements IScene {
   ];
 
   private _hero!: Array<HeroModel>;
+  private _heroCommands: Array<SkillButton> = [];
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite!: TilingSprite;
   private _counter: number = 0;
@@ -73,19 +75,18 @@ export class GameScene extends Container implements IScene {
 
   private setHeros(): void {
     this._hero = [];
-    this._unitInfo.forEach((u) => {
-      this._hero.push(
-        new HeroModel(u.type, this._parentWidth, this._parentHeight)
-      );
-    });
-
-    this._hero.forEach((hero, index) => {
+    this._unitInfo.forEach((u, index) => {
+      const hero = new HeroModel(u.type, this._parentWidth, this._parentHeight);
+      this._hero.push(hero);
       hero.setTeam(this._hero);
       hero.load((_) => {
         if (!this._hero.find((h) => !h.isDead())) {
           this._gameover = true;
           this.showReload();
         }
+        this._heroCommands
+          .filter((b) => b.getHeroType() === u.type)
+          .forEach((b) => b.disable());
       });
       hero.move(
         this._parentWidth / 2 - 120 - 60 * index,
@@ -109,16 +110,25 @@ export class GameScene extends Container implements IScene {
   }
 
   private addCommandButton(): void {
+    const sum = this._unitInfo
+      .map((a, b) => a.weapons.length)
+      .reduce((a, b) => a + b);
+    let i = 0;
     this._unitInfo.forEach((u, index) => {
-      u.weapons.forEach((w, index2) => {
-        const config = ModelConfig.find((c) => c.type === w) as WeaponConfig;
-        const b = new IndicatorButton(
-          strings.getString(w),
-          (index * this._parentWidth) / this._unitInfo.length,
-          this._parentHeight - 60 * (index2 + 1),
-          this._parentWidth / this._unitInfo.length,
-          60,
-          config.coolTime
+      u.weapons.forEach((w) => {
+        const heroConfig = ModelConfig.find(
+          (c) => c.type === u.type
+        ) as HeroConfig;
+        const weaponConfig = ModelConfig.find(
+          (c) => c.type === w
+        ) as WeaponConfig;
+        const b = new SkillButton(
+          heroConfig,
+          weaponConfig,
+          (i * this._parentWidth) / sum,
+          this._parentHeight - 120,
+          this._parentWidth / sum,
+          120
         );
         b.setCallback(() => {
           const hero = this._hero[index];
@@ -127,6 +137,8 @@ export class GameScene extends Container implements IScene {
           return true;
         });
         this.addChild(b);
+        this._heroCommands.push(b);
+        i++;
       });
     });
   }
@@ -202,7 +214,7 @@ export class GameScene extends Container implements IScene {
     });
     if (this._counter >= this._nextEnemy) {
       this.loadEnemy();
-      this._nextEnemy = getRandom(30) + 10;
+      this._nextEnemy = getRandom(60) + 10;
       this._counter = 0;
     }
     this._enemy.forEach((e) => {
