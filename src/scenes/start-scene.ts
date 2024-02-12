@@ -1,4 +1,4 @@
-import { Container, Graphics } from "pixi.js";
+import { Container } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { GameScene } from "./game-scene";
 import { Button } from "../control/button";

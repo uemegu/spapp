@@ -1,4 +1,4 @@
-import { AnimatedSprite, Container, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import {
   EnemyConfig,
   EnemyType,
@@ -10,7 +10,6 @@ import {
   WeaponConfig,
   WeaponType,
 } from "./model-types";
-import { GameScene } from "../scenes/game-scene";
 import { sound } from "@pixi/sound";
 import { SceneManager } from "../shared/scene-manager";
 

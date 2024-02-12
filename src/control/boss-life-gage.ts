@@ -1,22 +1,5 @@
-import {
-  TextStyle,
-  Text,
-  Graphics,
-  Container,
-  ColorSource,
-  Sprite,
-  AnimatedSprite,
-  Texture,
-} from "pixi.js";
-import { IUpdate, SceneManager } from "../shared/scene-manager";
-import {
-  EnemyConfig,
-  EnemyType,
-  HeroConfig,
-  HeroType,
-  WeaponConfig,
-} from "../model/model-types";
-import { strings } from "../strings";
+import { TextStyle, Text, Graphics, Container, Sprite } from "pixi.js";
+import { EnemyType } from "../model/model-types";
 
 export class BossLifeGage extends Container {
   private _x: number;

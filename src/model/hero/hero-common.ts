@@ -1,4 +1,4 @@
-import { AnimatedSprite, Container, Sprite, Texture } from "pixi.js";
+import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import {
   EnemyType,
