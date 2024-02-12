@@ -201,12 +201,12 @@ export class GameScene extends Container implements IScene {
     this._enemy.push(enemy);
     enemy.load((obj) => {
       this.removeChild(obj);
-      this.removeChild(this._bossLifeGage!);
-      this._bossLifeGage?.destroy();
-      this._bossLifeGage = undefined;
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
       if (type == "ホブゴブリン") {
         this.showReload();
+        this.removeChild(this._bossLifeGage!);
+        this._bossLifeGage?.destroy();
+        this._bossLifeGage = undefined;
       }
     });
 
