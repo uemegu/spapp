@@ -93,7 +93,7 @@ export const ModelConfig: Array<
     speed: 3,
   },
   {
-    type: "ボブゴブリン",
+    type: "ホブゴブリン",
     resourceName: "boss_",
     sequenceCount: 2,
     maxHp: 800,
@@ -221,7 +221,7 @@ export const ModelConfig: Array<
 ];
 
 export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
-export type EnemyType = "ゾンビ" | "ゴブリン" | "スライム" | "ボブゴブリン";
+export type EnemyType = "ゾンビ" | "ゴブリン" | "スライム" | "ホブゴブリン";
 export type WeaponType =
   | "スマッシュ"
   | "ソニックブーム"

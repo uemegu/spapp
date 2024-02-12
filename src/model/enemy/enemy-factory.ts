@@ -10,7 +10,7 @@ export class EnemyFactory {
     parentHeight: number
   ): EnemyModel {
     switch (type) {
-      case "ボブゴブリン":
+      case "ホブゴブリン":
         return new Boss_1(type, parentWidth, parentHeight);
       default:
         return new EnemyModel(type, parentWidth, parentHeight);

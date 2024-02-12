@@ -58,6 +58,8 @@ export const manifest: AssetsManifest = {
       assets: {
         background_1: "resources/images/background/background_1.jpeg",
         background_2: "resources/images/background/background_2.png",
+        sky_1: "resources/images/background/sky_1.png",
+        ground_1: "resources/images/background/ground_1.png",
       },
     },
     {

@@ -16,6 +16,7 @@ import { EnemyFactory } from "../model/enemy/enemy-factory";
 import { SkillButton } from "../control/indicator-button";
 import { Button } from "../control/button";
 import { strings } from "../strings";
+import { BossLifeGage } from "../control/boss-life-gage";
 
 export interface UnitInfo {
   type: HeroType;
@@ -47,6 +48,7 @@ export class GameScene extends Container implements IScene {
   private _heroCommands: Array<SkillButton> = [];
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite!: TilingSprite;
+  private _tilingSprite2!: TilingSprite;
   private _counter: number = 0;
   private _nextEnemy: number = 0;
   private _parentWidth: number;
@@ -55,6 +57,8 @@ export class GameScene extends Container implements IScene {
   private _frameCount: number = 0;
   private _suspend: boolean = false;
   private _isHitted: boolean = false;
+  private _isAppearBoss = false;
+  private _boss?: EnemyModel;
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
@@ -152,17 +156,18 @@ export class GameScene extends Container implements IScene {
   }
 
   loadBackground(): void {
-    const texture = Texture.from("background_1");
-    this._tilingSprite = new TilingSprite(
-      texture,
-      this._parentWidth,
-      this._parentHeight
-    );
-    this._tilingSprite.position._y = this._parentHeight;
+    const texture = Texture.from("sky_1");
+    this._tilingSprite = new TilingSprite(texture, this._parentWidth, 400);
+    this._tilingSprite.position.y = -160;
     this.addChild(this._tilingSprite);
+
+    const texture2 = Texture.from("ground_1");
+    this._tilingSprite2 = new TilingSprite(texture2, this._parentWidth, 82);
+    this._tilingSprite2.y = this._parentHeight - 160;
+    this.addChild(this._tilingSprite2);
   }
 
-  private _isAppearBoss = false;
+  private _bossLifeGage?: BossLifeGage;
   loadEnemy(): void {
     if (this._isAppearBoss) return;
     let type: EnemyType;
@@ -175,8 +180,17 @@ export class GameScene extends Container implements IScene {
       type = "ゾンビ";
     }
     if (!this._isAppearBoss && this._frameCount > 2000) {
-      type = "ボブゴブリン";
+      type = "ホブゴブリン";
       this._isAppearBoss = true;
+
+      this._bossLifeGage = new BossLifeGage(
+        type,
+        this._parentWidth / 5,
+        0,
+        (3 * this._parentWidth) / 5,
+        48
+      );
+      this.addChild(this._bossLifeGage);
     }
 
     const enemy = EnemyFactory.CreateEnemy(
@@ -187,11 +201,18 @@ export class GameScene extends Container implements IScene {
     this._enemy.push(enemy);
     enemy.load((obj) => {
       this.removeChild(obj);
+      this.removeChild(this._bossLifeGage!);
+      this._bossLifeGage?.destroy();
+      this._bossLifeGage = undefined;
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
-      if (type == "ボブゴブリン") {
+      if (type == "ホブゴブリン") {
         this.showReload();
       }
     });
+
+    if (this._isAppearBoss) {
+      this._boss = enemy;
+    }
   }
 
   update(framesPassed: number): void {
@@ -203,7 +224,8 @@ export class GameScene extends Container implements IScene {
       return;
     }
     if (!this._isHitted) {
-      this._tilingSprite.tilePosition.x -= 1;
+      this._tilingSprite.tilePosition.x -= 0.1;
+      this._tilingSprite2.tilePosition.x -= 1;
     }
     this._counter += framesPassed;
     this._hero.forEach((hero) => {
@@ -222,6 +244,9 @@ export class GameScene extends Container implements IScene {
     });
     this.enemyHitTest();
     this.heroHitTest();
+    if (this._bossLifeGage) {
+      this._bossLifeGage.update(this._boss!.restLife());
+    }
   }
 
   enemyHitTest(): void {

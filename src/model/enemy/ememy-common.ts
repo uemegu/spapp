@@ -29,13 +29,13 @@ export class EnemyModel extends SpriteModel {
     for (let i = 1; i <= this._config.sequenceCount; i++) {
       frames.push(Texture.from(`${this._config.resourceName}${i}`));
     }
-    const offset = getRandom(30);
+    const offset = getRandom(15);
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
     this._me.width = 128;
     this._me.height = 128;
     this._me.position.x = this._parentWidth;
-    this._me.position.y = this._parentHeight - 180 - offset;
+    this._me.position.y = this._parentHeight - 175 - offset;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
     SceneManager.requestAddChild(this._me);
@@ -75,5 +75,10 @@ export class EnemyModel extends SpriteModel {
         });
       });
     }
+  }
+
+  restLife(): number {
+    const maxHP = (this._config as EnemyConfig).maxHp;
+    return Math.ceil((this._hp / maxHP) * 100);
   }
 }
