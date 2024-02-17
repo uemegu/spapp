@@ -19,6 +19,7 @@ export class HeroModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
   private _UI: Array<SpriteModel> = [];
   private _team: Array<HeroModel> = [];
+  private _maxHP: number;
 
   constructor(
     type: HeroType | EnemyType | WeaponType,
@@ -26,7 +27,16 @@ export class HeroModel extends SpriteModel {
     parentHeight: number
   ) {
     super(type, parentWidth, parentHeight);
-    this._hp = (this._config as HeroConfig).maxHp;
+    this._maxHP =
+      (this._config as HeroConfig).maxHp +
+      (this._config as HeroConfig).maxHp *
+        (GameScene.getLevel(this._config.type as HeroType) - 1) *
+        0.1;
+    this._hp =
+      (this._config as HeroConfig).maxHp +
+      (this._config as HeroConfig).maxHp *
+        (GameScene.getLevel(this._config.type as HeroType) - 1) *
+        0.1;
   }
 
   load(onDestroy: (me: Sprite) => void): void {
@@ -137,14 +147,13 @@ export class HeroModel extends SpriteModel {
 
   heal(num: number): void {
     this._hp += num;
-    if (this._hp > (this._config as HeroConfig).maxHp) {
-      this._hp = (this._config as HeroConfig).maxHp;
+    if (this._hp > this._maxHP) {
+      this._hp = this._maxHP;
     }
   }
 
   restLife(): number {
-    const maxHP = (this._config as HeroConfig).maxHp;
-    return Math.ceil((this._hp / maxHP) * 100);
+    return Math.ceil((this._hp / this._maxHP) * 100);
   }
 
   static judgeLevel(exp: number) {
@@ -155,5 +164,18 @@ export class HeroModel extends SpriteModel {
       level++;
     }
     return level;
+  }
+
+  levelUp(level: number) {
+    this._maxHP =
+      (this._config as HeroConfig).maxHp +
+      (this._config as HeroConfig).maxHp *
+        (GameScene.getLevel(this._config.type as HeroType) - 1) *
+        0.1;
+    this._hp =
+      (this._config as HeroConfig).maxHp +
+      (this._config as HeroConfig).maxHp *
+        (GameScene.getLevel(this._config.type as HeroType) - 1) *
+        0.1;
   }
 }

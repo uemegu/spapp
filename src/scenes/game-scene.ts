@@ -321,6 +321,7 @@ export class GameScene extends Container implements IScene {
           if (newLevel != u.level) {
             u.level = newLevel;
             this._heroPanels[index].updateText();
+            this._hero[index].levelUp(newLevel);
           }
         }
       });
