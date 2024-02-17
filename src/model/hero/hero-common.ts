@@ -15,8 +15,6 @@ import { DamageText } from "../ui/damage";
 import { SceneManager } from "../../shared/scene-manager";
 
 export class HeroModel extends SpriteModel {
-  private _life?: Sprite;
-  private _lifeScale?: IPointData;
   private _currentWeapons: Array<WeaponModel> = [];
   private _UI: Array<SpriteModel> = [];
   private _team: Array<HeroModel> = [];
@@ -38,20 +36,12 @@ export class HeroModel extends SpriteModel {
     }
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
-    this._me.width = 300 * 0.25 * SceneManager.scale;
+    this._me.width = 250 * 0.25 * SceneManager.scale;
     this._me.height = 512 * 0.25 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
 
-    this._life = Sprite.from("bar_1");
-    this._life.anchor.set(0);
-    this._life.width = 60 * SceneManager.scale;
-    this._life.height = 20 * SceneManager.scale;
-    this._lifeScale = this._life.scale;
-
     SceneManager.requestAddChild(this._me);
-    SceneManager.requestAddChild(this._life);
-    //SceneManager.requestAddChild(this._lifeMask);
   }
 
   getWeaponConfig(type: WeaponType) {
@@ -64,8 +54,6 @@ export class HeroModel extends SpriteModel {
 
   destroy() {
     if (this._me) {
-      this._life!.destroy();
-      this.onDestroy?.(this._life!);
       this._currentWeapons.forEach((a) => {
         a.destroy();
       });
@@ -80,23 +68,16 @@ export class HeroModel extends SpriteModel {
 
   move(x: number, y: number): void {
     super.move(x, y);
-    this._life!.x += x - this._life!.width / 2;
-    this._life!.y += y + this._me!.height / 3;
   }
 
   update(framesPassed: number) {
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);
     });
-    this._UI.forEach((u) => u.update(framesPassed));
     if (this.isDead()) {
       return;
     }
     super.update(framesPassed);
-    this._life!.scale = {
-      x: (this._lifeScale!.x * this._hp) / (this._config as HeroConfig).maxHp,
-      y: this._lifeScale!.y,
-    };
   }
 
   loadAttack(type: WeaponType): void {
@@ -148,5 +129,10 @@ export class HeroModel extends SpriteModel {
     if (this._hp > (this._config as HeroConfig).maxHp) {
       this._hp = (this._config as HeroConfig).maxHp;
     }
+  }
+
+  restLife(): number {
+    const maxHP = (this._config as HeroConfig).maxHp;
+    return Math.ceil((this._hp / maxHP) * 100);
   }
 }

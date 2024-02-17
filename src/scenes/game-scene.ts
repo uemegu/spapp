@@ -17,6 +17,7 @@ import { SkillButton } from "../control/indicator-button";
 import { Button } from "../control/button";
 import { strings } from "../strings";
 import { BossLifeGage } from "../control/boss-life-gage";
+import { HeroPanel } from "../control/hero-panel";
 
 export interface UnitInfo {
   type: HeroType;
@@ -46,6 +47,7 @@ export class GameScene extends Container implements IScene {
 
   private _hero!: Array<HeroModel>;
   private _heroCommands: Array<SkillButton> = [];
+  private _heroPanels: Array<HeroPanel> = [];
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite!: TilingSprite;
   private _tilingSprite2!: TilingSprite;
@@ -93,12 +95,6 @@ export class GameScene extends Container implements IScene {
           .filter((b) => b.getHeroType() === u.type)
           .forEach((b) => b.disable());
       });
-      console.log(
-        u,
-        this._parentWidth / 2 -
-          120 * SceneManager.scale -
-          60 * index * SceneManager.scale
-      );
       hero.move(
         this._parentWidth / 2 -
           120 * SceneManager.scale -
@@ -128,10 +124,19 @@ export class GameScene extends Container implements IScene {
       .reduce((a, b) => a + b);
     let i = 0;
     this._unitInfo.forEach((u, index) => {
+      const heroConfig = ModelConfig.find(
+        (c) => c.type === u.type
+      ) as HeroConfig;
+      const p = new HeroPanel(
+        heroConfig,
+        (i * this._parentWidth) / sum,
+        this._parentHeight - 120 * SceneManager.scale,
+        this._parentWidth / this._unitInfo.length,
+        40 * SceneManager.scale
+      );
+      this.addChild(p);
+      this._heroPanels.push(p);
       u.weapons.forEach((w) => {
-        const heroConfig = ModelConfig.find(
-          (c) => c.type === u.type
-        ) as HeroConfig;
         const weaponConfig = ModelConfig.find(
           (c) => c.type === w
         ) as WeaponConfig;
@@ -139,9 +144,9 @@ export class GameScene extends Container implements IScene {
           heroConfig,
           weaponConfig,
           (i * this._parentWidth) / sum,
-          this._parentHeight - 120 * SceneManager.scale,
+          this._parentHeight - 80 * SceneManager.scale,
           this._parentWidth / sum,
-          120 * SceneManager.scale
+          80 * SceneManager.scale
         );
         b.setCallback(() => {
           const hero = this._hero[index];
@@ -175,7 +180,7 @@ export class GameScene extends Container implements IScene {
       x: SceneManager.scale,
       y: SceneManager.scale,
     };
-    this._tilingSprite.position.y = -270 * SceneManager.scale;
+    this._tilingSprite.position.y = -200 * SceneManager.scale;
     this.addChild(this._tilingSprite);
 
     const texture3 = Texture.from("background_3");
@@ -285,6 +290,11 @@ export class GameScene extends Container implements IScene {
     this.heroHitTest();
     if (this._bossLifeGage) {
       this._bossLifeGage.update(this._boss!.restLife());
+    }
+    if (this._isHitted) {
+      this._heroPanels.forEach((p, index) => {
+        p.update(this._hero[index].restLife());
+      });
     }
   }
 

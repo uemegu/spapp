@@ -31,6 +31,7 @@ export class DamageText extends SpriteModel {
     });
     this._me = new Text(this._text!, style);
     SceneManager.requestAddChild(this._me);
+    SceneManager.addTickListener(this);
   }
 
   update(framesPassed: number): void {

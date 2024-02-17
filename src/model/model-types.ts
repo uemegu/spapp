@@ -4,6 +4,7 @@ export interface HeroConfig {
   sequenceCount: number;
   maxHp: number;
   defaultAttackRange: number;
+  level: number;
 }
 
 export interface EnemyConfig {
@@ -13,6 +14,8 @@ export interface EnemyConfig {
   maxHp: number;
   power: number;
   speed: number;
+  exp: number;
+  money: number;
 }
 
 export interface WeaponConfig {
@@ -54,6 +57,7 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 100,
     defaultAttackRange: 1,
+    level: 1,
   },
   {
     type: "魔法使い",
@@ -61,6 +65,7 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
+    level: 1,
   },
   {
     type: "僧侶",
@@ -68,6 +73,7 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
+    level: 1,
   },
   {
     type: "アーチャー",
@@ -75,6 +81,7 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 4,
+    level: 1,
   },
   {
     type: "ゾンビ",
@@ -83,6 +90,8 @@ export const ModelConfig: Array<
     maxHp: 30,
     power: 5,
     speed: 1,
+    exp: 5,
+    money: 5,
   },
   {
     type: "ゴブリン",
@@ -91,6 +100,8 @@ export const ModelConfig: Array<
     maxHp: 30,
     power: 10,
     speed: 3,
+    exp: 15,
+    money: 5,
   },
   {
     type: "ホブゴブリン",
@@ -99,6 +110,8 @@ export const ModelConfig: Array<
     maxHp: 800,
     power: 30,
     speed: 1,
+    exp: 50,
+    money: 50,
   },
   {
     type: "スライム",
@@ -107,6 +120,8 @@ export const ModelConfig: Array<
     maxHp: 100,
     power: 5,
     speed: 0.5,
+    exp: 2,
+    money: 1,
   },
   {
     type: "スマッシュ",

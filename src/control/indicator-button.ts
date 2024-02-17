@@ -84,26 +84,12 @@ export class SkillButton extends Container implements IUpdate {
 
     const name = `${weaponConfig.resourceName}${weaponConfig.sequenceCount}`;
     const attakSymbol = new AnimatedSprite([Texture.from(name)]);
-    attakSymbol.width = width - 18;
-    attakSymbol.height = width - 18;
-    attakSymbol.x = x + 6;
-    attakSymbol.y = y + 18;
-
-    const name2 = `${heroConfig.resourceName}${heroConfig.sequenceCount}`;
-    const heroSymbol = new AnimatedSprite([Texture.from(name2)]);
-    heroSymbol.width = width;
-    heroSymbol.height = height;
-    heroSymbol.x = x - 32;
-    heroSymbol.y = y + 32;
-    heroSymbol.alpha = 0.3;
-    const graphics2 = new Graphics();
-    graphics2.beginFill(options?.backgroundColor ?? 0x00);
-    graphics2.drawRect(x + 5, y + 5, width - 5, height - 15);
-    graphics2.endFill();
-    heroSymbol.mask = graphics2;
+    attakSymbol.width = Math.min(width - 18, 40) * SceneManager.scale;
+    attakSymbol.height = Math.min(width - 18, 40) * SceneManager.scale;
+    attakSymbol.x = x + width / 2 - attakSymbol.width / 2;
+    attakSymbol.y = y + 20 * SceneManager.scale;
 
     this.addChild(this._graphics);
-    this.addChild(heroSymbol);
     this.addChild(this._gage);
     this.addChild(this._gagemask);
     this.addChild(attakSymbol);
