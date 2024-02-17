@@ -13,8 +13,10 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
         t.heal((this._config as WeaponConfig).power);
         for (let i = index; i < this._mes.length; i += team.length) {
           this._mes[i].x =
-            this._parentWidth / 2 - 120 - 100 * index + getRandom(120) - 60;
-          this._mes[i].y = this._parentHeight - getRandom(120) - 150;
+            this._parentWidth / 2 -
+            (120 + 100 * index - getRandom(120) + 60) * SceneManager.scale;
+          this._mes[i].y =
+            this._parentHeight - (getRandom(120) + 150) * SceneManager.scale;
         }
       }
     });
@@ -43,8 +45,8 @@ export class HealModel extends WeaponModel implements AuxiliaryModel {
       };
       (this._me as AnimatedSprite).loop = true;
       const sizeTmp = getRandom(20);
-      m.width = 12 + sizeTmp;
-      m.height = 12 + sizeTmp;
+      m.width = (12 + sizeTmp) * SceneManager.scale;
+      m.height = (12 + sizeTmp) * SceneManager.scale;
       m.alpha = getRandom(5) / 10 + 0.5;
     }
     this._restTime = (this._config as WeaponConfig).limitTime;

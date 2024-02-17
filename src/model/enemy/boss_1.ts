@@ -1,14 +1,12 @@
 import { AnimatedSprite, Sprite, Texture } from "pixi.js";
-import { getRandom } from "../../util";
-import { EnemyConfig } from "../model-types";
-import { GameScene } from "../../scenes/game-scene";
 import { EnemyModel } from "./ememy-common";
+import { SceneManager } from "../../shared/scene-manager";
 
 export class Boss_1 extends EnemyModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
-    this._me!.width = 140;
-    this._me!.height = 140;
+    this._me!.width = 140 * SceneManager.scale;
+    this._me!.height = 140 * SceneManager.scale;
   }
 
   update(framesPassed: number): void {

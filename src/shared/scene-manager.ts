@@ -9,6 +9,12 @@ export class SceneManager {
   private static _currentScene: IScene;
   private static _tickLisnters: Array<IUpdate> = [];
 
+  public static get scale() {
+    let x = this.width / 667;
+    let y = this.height / 375;
+    return Math.min(x, y);
+  }
+
   public static get width() {
     return Math.max(
       document.documentElement.clientWidth,

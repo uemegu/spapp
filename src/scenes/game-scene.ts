@@ -49,6 +49,7 @@ export class GameScene extends Container implements IScene {
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite!: TilingSprite;
   private _tilingSprite2!: TilingSprite;
+  private _tilingSprite3!: TilingSprite;
   private _counter: number = 0;
   private _nextEnemy: number = 0;
   private _parentWidth: number;
@@ -92,9 +93,17 @@ export class GameScene extends Container implements IScene {
           .filter((b) => b.getHeroType() === u.type)
           .forEach((b) => b.disable());
       });
+      console.log(
+        u,
+        this._parentWidth / 2 -
+          120 * SceneManager.scale -
+          60 * index * SceneManager.scale
+      );
       hero.move(
-        this._parentWidth / 2 - 120 - 60 * index,
-        this._parentHeight - 190
+        this._parentWidth / 2 -
+          120 * SceneManager.scale -
+          60 * index * SceneManager.scale,
+        this._parentHeight - 190 * SceneManager.scale
       );
     });
   }
@@ -130,9 +139,9 @@ export class GameScene extends Container implements IScene {
           heroConfig,
           weaponConfig,
           (i * this._parentWidth) / sum,
-          this._parentHeight - 120,
+          this._parentHeight - 120 * SceneManager.scale,
           this._parentWidth / sum,
-          120
+          120 * SceneManager.scale
         );
         b.setCallback(() => {
           const hero = this._hero[index];
@@ -157,13 +166,42 @@ export class GameScene extends Container implements IScene {
 
   loadBackground(): void {
     const texture = Texture.from("sky_1");
-    this._tilingSprite = new TilingSprite(texture, this._parentWidth, 400);
-    this._tilingSprite.position.y = -160;
+    this._tilingSprite = new TilingSprite(
+      texture,
+      this._parentWidth,
+      400 * SceneManager.scale
+    );
+    this._tilingSprite.tileScale = {
+      x: SceneManager.scale,
+      y: SceneManager.scale,
+    };
+    this._tilingSprite.position.y = -270 * SceneManager.scale;
     this.addChild(this._tilingSprite);
 
+    const texture3 = Texture.from("background_3");
+    this._tilingSprite3 = new TilingSprite(
+      texture3,
+      this._parentWidth,
+      300 * SceneManager.scale
+    );
+    this._tilingSprite3.tileScale = {
+      x: SceneManager.scale,
+      y: SceneManager.scale,
+    };
+    this._tilingSprite3.y = this._parentHeight - 400 * SceneManager.scale;
+    this.addChild(this._tilingSprite3);
+
     const texture2 = Texture.from("ground_1");
-    this._tilingSprite2 = new TilingSprite(texture2, this._parentWidth, 82);
-    this._tilingSprite2.y = this._parentHeight - 160;
+    this._tilingSprite2 = new TilingSprite(
+      texture2,
+      this._parentWidth,
+      82 * SceneManager.scale
+    );
+    this._tilingSprite2.tileScale = {
+      x: SceneManager.scale,
+      y: SceneManager.scale,
+    };
+    this._tilingSprite2.y = this._parentHeight - 160 * SceneManager.scale;
     this.addChild(this._tilingSprite2);
   }
 
@@ -226,6 +264,7 @@ export class GameScene extends Container implements IScene {
     if (!this._isHitted) {
       this._tilingSprite.tilePosition.x -= 0.1;
       this._tilingSprite2.tilePosition.x -= 1;
+      this._tilingSprite3.tilePosition.x -= 0.3;
     }
     this._counter += framesPassed;
     this._hero.forEach((hero) => {

@@ -1,4 +1,4 @@
-import { AnimatedSprite, Sprite, Texture } from "pixi.js";
+import { AnimatedSprite, IPointData, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import {
   EnemyType,
@@ -16,7 +16,7 @@ import { SceneManager } from "../../shared/scene-manager";
 
 export class HeroModel extends SpriteModel {
   private _life?: Sprite;
-  private _lifeMask?: Sprite;
+  private _lifeScale?: IPointData;
   private _currentWeapons: Array<WeaponModel> = [];
   private _UI: Array<SpriteModel> = [];
   private _team: Array<HeroModel> = [];
@@ -38,25 +38,20 @@ export class HeroModel extends SpriteModel {
     }
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
-    this._me.width = 300 * 0.25;
-    this._me.height = 512 * 0.25;
+    this._me.width = 300 * 0.25 * SceneManager.scale;
+    this._me.height = 512 * 0.25 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
 
     this._life = Sprite.from("bar_1");
     this._life.anchor.set(0);
-    this._life.width = 60;
-    this._life.height = 20;
-
-    this._lifeMask = Sprite.from("bar_1");
-    this._lifeMask.anchor.set(0);
-    this._lifeMask.width = this._life!.width;
-    this._lifeMask.height = this._life!.height;
-    this._life.mask = this._lifeMask;
+    this._life.width = 60 * SceneManager.scale;
+    this._life.height = 20 * SceneManager.scale;
+    this._lifeScale = this._life.scale;
 
     SceneManager.requestAddChild(this._me);
     SceneManager.requestAddChild(this._life);
-    SceneManager.requestAddChild(this._lifeMask);
+    //SceneManager.requestAddChild(this._lifeMask);
   }
 
   getWeaponConfig(type: WeaponType) {
@@ -70,9 +65,7 @@ export class HeroModel extends SpriteModel {
   destroy() {
     if (this._me) {
       this._life!.destroy();
-      this._lifeMask!.destroy();
       this.onDestroy?.(this._life!);
-      this.onDestroy?.(this._lifeMask!);
       this._currentWeapons.forEach((a) => {
         a.destroy();
       });
@@ -89,8 +82,6 @@ export class HeroModel extends SpriteModel {
     super.move(x, y);
     this._life!.x += x - this._life!.width / 2;
     this._life!.y += y + this._me!.height / 3;
-    this._lifeMask!.x += x - this._life!.width / 2;
-    this._lifeMask!.y += y + this._me!.height / 3;
   }
 
   update(framesPassed: number) {
@@ -102,8 +93,10 @@ export class HeroModel extends SpriteModel {
       return;
     }
     super.update(framesPassed);
-    this._lifeMask!.width =
-      60 * (this._hp / (this._config as HeroConfig).maxHp);
+    this._life!.scale = {
+      x: (this._lifeScale!.x * this._hp) / (this._config as HeroConfig).maxHp,
+      y: this._lifeScale!.y,
+    };
   }
 
   loadAttack(type: WeaponType): void {

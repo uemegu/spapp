@@ -36,10 +36,10 @@ export abstract class WeaponModel extends SpriteModel {
       }
       const sprite = new AnimatedSprite(frames);
       sprite.anchor.set(0.5);
-      sprite.width = 192;
-      sprite.height = 192;
-      sprite.position.x = this._me!.position.x;
-      sprite.position.y = this._me!.position.y;
+      sprite.width = 192 * SceneManager.scale;
+      sprite.height = 192 * SceneManager.scale;
+      sprite.position.x = this._me!.position.x * SceneManager.scale;
+      sprite.position.y = this._me!.position.y * SceneManager.scale;
       sprite.animationSpeed = 0.5;
       sprite.loop = false;
       sprite.onComplete = () => {
@@ -92,10 +92,10 @@ export class SwordModel extends WeaponModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
     (this._me as AnimatedSprite).loop = false;
-    this._me!.width = 128;
-    this._me!.height = 128;
-    this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight - 200;
+    this._me!.width = 128 * SceneManager.scale;
+    this._me!.height = 128 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 40 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 200 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.8;
     (this._me as AnimatedSprite).play();
   }
@@ -107,9 +107,9 @@ export class LineModel extends WeaponModel {
     (this._me as AnimatedSprite).loop = false;
     this._me!.anchor.set(0);
     this._me!.width = this._parentWidth;
-    this._me!.height = 128;
-    this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight - 240;
+    this._me!.height = 128 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 40 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 240 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.8;
     (this._me as AnimatedSprite).play();
   }
@@ -119,16 +119,16 @@ export class ThrowAttakModel extends WeaponModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
     (this._me as AnimatedSprite).loop = true;
-    this._me!.width = 64;
-    this._me!.height = 64;
-    this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight - 200;
+    this._me!.width = 64 * SceneManager.scale;
+    this._me!.height = 64 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 40 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 200 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.8;
     (this._me as AnimatedSprite).play();
   }
 
   update(framesPassed: number): void {
-    this._me!.x += framesPassed * 2;
+    this._me!.x += framesPassed * 2 * SceneManager.scale;
     super.update(framesPassed);
   }
 }
@@ -137,18 +137,18 @@ export class BigAttakModel extends ThrowAttakModel {
   load(onDestroy: (me: Sprite) => void): void {
     super.load(onDestroy);
     (this._me as AnimatedSprite).loop = true;
-    this._me!.width = 128;
-    this._me!.height = 128;
-    this._me!.position.x = this._parentWidth / 2 - 40;
-    this._me!.position.y = this._parentHeight - 210;
-    (this._me as AnimatedSprite).animationSpeed = 0.6;
+    this._me!.width = 128 * SceneManager.scale;
+    this._me!.height = 128 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 40 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 210 * SceneManager.scale;
+    (this._me as AnimatedSprite).animationSpeed = 0.3;
     (this._me as AnimatedSprite).play();
   }
 }
 
 export class FastThrowAttakModel extends ThrowAttakModel {
   update(framesPassed: number): void {
-    this._me!.x += framesPassed * 2 * 3;
+    this._me!.x += framesPassed * 2 * 3 * SceneManager.scale;
     super.update(framesPassed);
   }
 }
