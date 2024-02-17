@@ -19,7 +19,11 @@ export class EnemyModel extends SpriteModel {
     this._hp = (this._config as EnemyConfig).maxHp;
   }
 
-  getAttackPower(): number {
+  get exp() {
+    return (this._config as EnemyConfig).exp;
+  }
+
+  get attackPower(): number {
     return (this._config as EnemyConfig).power;
   }
 
@@ -70,7 +74,7 @@ export class EnemyModel extends SpriteModel {
       hero.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (!w.isDead() && w.isHit(e)) {
-            const damage = w.getAttackPower();
+            const damage = w.attackPower;
             if (e.damaged(damage)) {
               w.hitted();
             }

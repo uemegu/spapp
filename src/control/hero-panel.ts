@@ -9,8 +9,14 @@ import {
   Texture,
 } from "pixi.js";
 import { IUpdate, SceneManager } from "../shared/scene-manager";
-import { HeroConfig, HeroType, WeaponConfig } from "../model/model-types";
+import {
+  HeroConfig,
+  HeroType,
+  ModelConfig,
+  WeaponConfig,
+} from "../model/model-types";
 import { strings } from "../strings";
+import { UnitInfo } from "../scenes/game-scene";
 
 export interface HeroPanelOption {
   lineColor: ColorSource;
@@ -19,9 +25,10 @@ export interface HeroPanelOption {
 }
 
 export class HeroPanel extends Container implements IUpdate {
+  private _text: Text;
   private _graphics: Graphics;
   private _gage: Graphics;
-  private _heroType: HeroType;
+  private _unitInfo: UnitInfo;
   private _options?: Partial<HeroPanelOption>;
   private _x: number;
   private _y: number;
@@ -29,7 +36,7 @@ export class HeroPanel extends Container implements IUpdate {
   private _myheight: number;
 
   constructor(
-    heroConfig: HeroConfig,
+    info: UnitInfo,
     x: number,
     y: number,
     width: number,
@@ -41,7 +48,7 @@ export class HeroPanel extends Container implements IUpdate {
     this._y = y;
     this._mywidth = width;
     this._myheight = height;
-    this._heroType = heroConfig.type;
+    this._unitInfo = info;
     this._options = options;
 
     this._graphics = new Graphics();
@@ -57,13 +64,13 @@ export class HeroPanel extends Container implements IUpdate {
       wordWrap: true,
       wordWrapWidth: width - 24,
     });
-    const text = new Text(
-      `Lv.${heroConfig.level} ${strings.getString(heroConfig.type)}`,
+    this._text = new Text(
+      `Lv.${this._unitInfo.level} ${strings.getString(this._unitInfo.type)}`,
       style
     );
-    text.x = x + 44 * SceneManager.scale;
-    text.y = y + 10 * SceneManager.scale;
-    this._graphics.addChild(text);
+    this._text.x = x + 44 * SceneManager.scale;
+    this._text.y = y + 10 * SceneManager.scale;
+    this._graphics.addChild(this._text);
 
     this._gage = new Graphics();
     this._gage.lineStyle(1, 0x000000, 1);
@@ -76,6 +83,7 @@ export class HeroPanel extends Container implements IUpdate {
     );
     this._gage.endFill();
 
+    const heroConfig = ModelConfig.find((c) => c.type === this._unitInfo.type)!;
     const name2 = `${heroConfig.resourceName}${heroConfig.sequenceCount}`;
     const heroSymbol = new AnimatedSprite([Texture.from(name2)]);
     heroSymbol.width = 32 * SceneManager.scale;
@@ -95,7 +103,8 @@ export class HeroPanel extends Container implements IUpdate {
   }
 
   getHeroType(): HeroType {
-    return this._heroType;
+    return ModelConfig.find((c) => c.type === this._unitInfo.type)!
+      .type as HeroType;
   }
 
   disable(): void {
@@ -129,5 +138,10 @@ export class HeroPanel extends Container implements IUpdate {
       this._graphics.drawRect(this._x, this._y, this._mywidth, this._myheight);
       this._graphics.endFill();
     }
+  }
+  updateText() {
+    this._text.text = `Lv.${this._unitInfo.level} ${strings.getString(
+      this._unitInfo.type
+    )}`;
   }
 }

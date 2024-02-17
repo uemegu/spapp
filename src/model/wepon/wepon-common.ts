@@ -9,13 +9,13 @@ import { SceneManager } from "../../shared/scene-manager";
 export abstract class WeaponModel extends SpriteModel {
   protected _restTime: number = 0;
 
-  getAttackPower(): number {
+  get attackPower(): number {
     const power = (this._config as WeaponConfig).power;
     const rate = (this._config as WeaponConfig).criticalRate ?? 1;
     return power + getRandom(power * rate);
   }
 
-  getKnockback(): number {
+  get knockback(): number {
     const power = (this._config as WeaponConfig).knockback;
     return power ?? 0;
   }

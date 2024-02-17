@@ -13,6 +13,7 @@ import { EnemyModel } from "../enemy/ememy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { DamageText } from "../ui/damage";
 import { SceneManager } from "../../shared/scene-manager";
+import { GameScene } from "../../scenes/game-scene";
 
 export class HeroModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
@@ -95,12 +96,17 @@ export class HeroModel extends SpriteModel {
     }
   }
 
-  attackHitTest(enemy: Array<EnemyModel>): void {
+  attackHitTest(enemy: Array<EnemyModel>): number {
+    let exp = 0;
     if (this._currentWeapons.length > 0) {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (w.isHit(e)) {
-            const damage = w.getAttackPower();
+            const damage =
+              w.attackPower +
+              w.attackPower *
+                (GameScene.getLevel(this._config.type as HeroType) - 1) *
+                0.1;
             if (e.damaged(damage)) {
               const ui = new DamageText(
                 "UI",
@@ -113,15 +119,19 @@ export class HeroModel extends SpriteModel {
               });
               this._UI.push(ui);
               ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
-              if (!e.isDead() && w.getKnockback()) {
-                e.move(w.getKnockback(), 0);
+              if (!e.isDead() && w.knockback) {
+                e.move(w.knockback, 0);
               }
               w.hitted();
+              if (e.isDead()) {
+                exp += e.exp;
+              }
             }
           }
         });
       });
     }
+    return exp;
   }
 
   heal(num: number): void {
@@ -134,5 +144,15 @@ export class HeroModel extends SpriteModel {
   restLife(): number {
     const maxHP = (this._config as HeroConfig).maxHp;
     return Math.ceil((this._hp / maxHP) * 100);
+  }
+
+  static judgeLevel(exp: number) {
+    let th = 50;
+    let level = 1;
+    while (exp > th) {
+      th *= 1.5;
+      level++;
+    }
+    return level;
   }
 }

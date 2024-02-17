@@ -22,26 +22,36 @@ import { HeroPanel } from "../control/hero-panel";
 export interface UnitInfo {
   type: HeroType;
   weapons: Array<WeaponType>;
+  exp: number;
+  level: number;
 }
 
 export class GameScene extends Container implements IScene {
   // TODO
-  private _unitInfo: Array<UnitInfo> = [
+  private static _unitInfo: Array<UnitInfo> = [
     {
       type: "勇者",
       weapons: ["スマッシュ", "ソニックブーム"],
+      exp: 0,
+      level: 1,
     },
     {
       type: "アーチャー",
       weapons: ["ショット", "ロングショット"],
+      exp: 0,
+      level: 1,
     },
     {
       type: "魔法使い",
       weapons: ["ファイア", "サンダー"],
+      exp: 0,
+      level: 1,
     },
     {
       type: "僧侶",
       weapons: ["ヒール", "エアロ"],
+      exp: 0,
+      level: 1,
     },
   ];
 
@@ -82,7 +92,7 @@ export class GameScene extends Container implements IScene {
 
   private setHeros(): void {
     this._hero = [];
-    this._unitInfo.forEach((u, index) => {
+    GameScene._unitInfo.forEach((u, index) => {
       const hero = new HeroModel(u.type, this._parentWidth, this._parentHeight);
       this._hero.push(hero);
       hero.setTeam(this._hero);
@@ -119,19 +129,19 @@ export class GameScene extends Container implements IScene {
   }
 
   private addCommandButton(): void {
-    const sum = this._unitInfo
+    const sum = GameScene._unitInfo
       .map((a, b) => a.weapons.length)
       .reduce((a, b) => a + b);
     let i = 0;
-    this._unitInfo.forEach((u, index) => {
+    GameScene._unitInfo.forEach((u, index) => {
       const heroConfig = ModelConfig.find(
         (c) => c.type === u.type
       ) as HeroConfig;
       const p = new HeroPanel(
-        heroConfig,
+        u,
         (i * this._parentWidth) / sum,
         this._parentHeight - 120 * SceneManager.scale,
-        this._parentWidth / this._unitInfo.length,
+        this._parentWidth / GameScene._unitInfo.length,
         40 * SceneManager.scale
       );
       this.addChild(p);
@@ -299,9 +309,20 @@ export class GameScene extends Container implements IScene {
   }
 
   enemyHitTest(): void {
+    let exp = 0;
     this._hero.forEach((hero) => {
-      hero.attackHitTest(this._enemy);
+      exp += hero.attackHitTest(this._enemy);
     });
+    if (exp) {
+      GameScene._unitInfo.forEach((u, index) => {
+        u.exp += exp;
+        const newLevel = HeroModel.judgeLevel(u.exp);
+        if (newLevel != u.level) {
+          u.level = newLevel;
+          this._heroPanels[index].updateText();
+        }
+      });
+    }
   }
 
   heroHitTest(): void {
@@ -310,12 +331,13 @@ export class GameScene extends Container implements IScene {
       e.stop(false);
       this._hero.forEach((hero) => {
         if (hero.isHit(e)) {
-          hero.damaged(e.getAttackPower(), true);
+          hero.damaged(e.attackPower, true);
           e.stop(true);
           this._isHitted = true;
         }
       });
-      e.attackHitTest(this._hero);
+      let exp = e.attackHitTest(this._hero);
+      GameScene._unitInfo.forEach((u, index) => {});
     });
   }
 
@@ -325,5 +347,9 @@ export class GameScene extends Container implements IScene {
     } else {
       this._suspend = true;
     }
+  }
+
+  static getLevel(type: HeroType): number {
+    return this._unitInfo.find((u) => u.type === type)!.level;
   }
 }

@@ -4,7 +4,6 @@ export interface HeroConfig {
   sequenceCount: number;
   maxHp: number;
   defaultAttackRange: number;
-  level: number;
 }
 
 export interface EnemyConfig {
@@ -57,7 +56,6 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 100,
     defaultAttackRange: 1,
-    level: 1,
   },
   {
     type: "魔法使い",
@@ -65,7 +63,6 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
-    level: 1,
   },
   {
     type: "僧侶",
@@ -73,7 +70,6 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
-    level: 1,
   },
   {
     type: "アーチャー",
@@ -81,7 +77,6 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 4,
-    level: 1,
   },
   {
     type: "ゾンビ",

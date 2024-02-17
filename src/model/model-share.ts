@@ -37,9 +37,6 @@ export abstract class SpriteModel {
   load(onDestroy: (me: Sprite) => void): void {
     this.onDestroy = onDestroy;
   }
-  getAttackPower(): number {
-    throw new Error("Method not implemented.");
-  }
   move(x: number, y: number): void {
     if (!this._me) return;
     this._me!.x += x;
