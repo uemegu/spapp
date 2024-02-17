@@ -315,11 +315,13 @@ export class GameScene extends Container implements IScene {
     });
     if (exp) {
       GameScene._unitInfo.forEach((u, index) => {
-        u.exp += exp;
-        const newLevel = HeroModel.judgeLevel(u.exp);
-        if (newLevel != u.level) {
-          u.level = newLevel;
-          this._heroPanels[index].updateText();
+        if (!this._hero[index].isDead()) {
+          u.exp += exp;
+          const newLevel = HeroModel.judgeLevel(u.exp);
+          if (newLevel != u.level) {
+            u.level = newLevel;
+            this._heroPanels[index].updateText();
+          }
         }
       });
     }

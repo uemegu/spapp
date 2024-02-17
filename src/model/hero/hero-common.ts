@@ -102,11 +102,12 @@ export class HeroModel extends SpriteModel {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (w.isHit(e)) {
-            const damage =
+            const damage = Math.ceil(
               w.attackPower +
-              w.attackPower *
-                (GameScene.getLevel(this._config.type as HeroType) - 1) *
-                0.1;
+                w.attackPower *
+                  (GameScene.getLevel(this._config.type as HeroType) - 1) *
+                  0.1
+            );
             if (e.damaged(damage)) {
               const ui = new DamageText(
                 "UI",
