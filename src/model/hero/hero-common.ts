@@ -15,9 +15,9 @@ import {
 } from "../wepon/wepon-common";
 import { EnemyModel } from "../enemy/ememy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
-import { DamageText } from "../ui/damage";
 import { SceneManager } from "../../shared/scene-manager";
 import { GameScene } from "../../scenes/game-scene";
+import { UpText } from "../../control/up-text";
 
 export interface BuffModel {
   attackPower: number;
@@ -28,7 +28,6 @@ export interface BuffModel {
 
 export class HeroModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
-  private _UI: Array<SpriteModel> = [];
   private _team: Array<HeroModel> = [];
   private _maxHP: number = 0;
   private _defencePower: number = 0;
@@ -90,11 +89,7 @@ export class HeroModel extends SpriteModel {
       this._currentWeapons.forEach((a) => {
         a.destroy();
       });
-      this._UI.forEach((a) => {
-        a.destroy();
-      });
       this._currentWeapons = [];
-      this._UI = [];
     }
     super.destroy();
   }
@@ -103,7 +98,6 @@ export class HeroModel extends SpriteModel {
     super.move(x, y);
   }
 
-  private _count = 0;
   update(framesPassed: number) {
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);
@@ -153,17 +147,11 @@ export class HeroModel extends SpriteModel {
                   0.1
             );
             if (e.damaged(damage)) {
-              const ui = new DamageText(
-                "UI",
-                this._parentWidth,
-                this._parentHeight
+              UpText.ShowText(
+                damage.toString(),
+                e.getCoordinate().x!,
+                e.getCoordinate().y!
               );
-              ui.setText(damage.toString());
-              ui.load((_) => {
-                this._UI.splice(this._UI.indexOf(ui), 1);
-              });
-              this._UI.push(ui);
-              ui.move(e.getCoordinate().x!, e.getCoordinate().y!);
               if (!e.isDead() && w.knockback) {
                 e.move(w.knockback, 0);
               }

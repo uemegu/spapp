@@ -7,6 +7,7 @@ import {
   Sprite,
   AnimatedSprite,
   Texture,
+  IPointData,
 } from "pixi.js";
 import { IUpdate, SceneManager } from "../shared/scene-manager";
 import {
@@ -148,5 +149,8 @@ export class HeroPanel extends Container implements IUpdate {
     this._text.text = `Lv.${this._unitInfo.level} ${strings.getString(
       this._unitInfo.type
     )}`;
+  }
+  get Coordinate(): IPointData {
+    return { x: this._x, y: this._y };
   }
 }

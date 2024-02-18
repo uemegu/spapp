@@ -5,8 +5,6 @@ import {
   HeroConfig,
   HeroType,
   ModelConfig,
-  UIConfig,
-  UIType,
   WeaponConfig,
   WeaponType,
 } from "./model-types";
@@ -19,14 +17,14 @@ export abstract class SpriteModel {
   protected _parentHeight: number;
   protected _damagedCount: number = 0;
   protected _hp: number = 0;
-  protected _config: HeroConfig | EnemyConfig | WeaponConfig | UIConfig;
+  protected _config: HeroConfig | EnemyConfig | WeaponConfig;
   protected _isStopMoving = false;
   protected _attackMotionCount = 0;
 
   onDestroy?: (me: Sprite) => void;
 
   constructor(
-    type: HeroType | EnemyType | WeaponType | UIType,
+    type: HeroType | EnemyType | WeaponType,
     parentWidth: number,
     parentHeight: number
   ) {
@@ -108,7 +106,7 @@ export abstract class SpriteModel {
     this._parentWidth = parentWidth;
     this._parentHeight = parentHeight;
   }
-  get type(): HeroType | EnemyType | WeaponType | UIType {
+  get type(): HeroType | EnemyType | WeaponType {
     return this._config.type;
   }
 }

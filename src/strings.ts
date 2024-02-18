@@ -17,5 +17,6 @@ export const strings = new LocalizedStrings({
     ショット: "しょっと",
     ロングショット: "ろんぐしょっと",
     ガード: "がーど",
+    レベルアップ: "れべるあっぷ",
   },
 });

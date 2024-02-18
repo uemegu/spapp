@@ -19,6 +19,7 @@ import { strings } from "../strings";
 import { BossLifeGage } from "../control/boss-life-gage";
 import { HeroPanel } from "../control/hero-panel";
 import { StageInfo, Stages } from "./scene-master";
+import { UpText } from "../control/up-text";
 
 export interface UnitInfo {
   type: HeroType;
@@ -331,6 +332,15 @@ export class GameScene extends Container implements IScene {
             u.level = newLevel;
             this._heroPanels[index].updateText();
             this._hero[index].levelUp();
+
+            UpText.ShowText(
+              strings.getString("レベルアップ"),
+              this._heroPanels[index].Coordinate.x + 6,
+              this._heroPanels[index].Coordinate.y,
+              {
+                fill: ["#ffffff", "#9999ff"],
+              }
+            );
           }
         }
       });
