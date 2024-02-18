@@ -18,6 +18,7 @@ import { Button } from "../control/button";
 import { strings } from "../strings";
 import { BossLifeGage } from "../control/boss-life-gage";
 import { HeroPanel } from "../control/hero-panel";
+import { StageInfo, Stages } from "./scene-master";
 
 export interface UnitInfo {
   type: HeroType;
@@ -59,9 +60,7 @@ export class GameScene extends Container implements IScene {
   private _heroCommands: Array<SkillButton> = [];
   private _heroPanels: Array<HeroPanel> = [];
   private _enemy!: Array<EnemyModel>;
-  private _tilingSprite!: TilingSprite;
-  private _tilingSprite2!: TilingSprite;
-  private _tilingSprite3!: TilingSprite;
+  private _tilingSprite: Array<TilingSprite> = [];
   private _counter: number = 0;
   private _nextEnemy: number = 0;
   private _parentWidth: number;
@@ -72,6 +71,8 @@ export class GameScene extends Container implements IScene {
   private _isHitted: boolean = false;
   private _isAppearBoss = false;
   private _boss?: EnemyModel;
+  private _fadeOutHeros: boolean = false;
+  private _fadeOutHerosCount: number = 0;
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
@@ -79,12 +80,16 @@ export class GameScene extends Container implements IScene {
     this._parentHeight = parentHeight;
   }
 
+  private get _stageInfo(): StageInfo {
+    return Stages.find((s) => s.name === SceneManager.CurrentStageName)!;
+  }
+
   load(): void {
     this._enemy = [];
     this._nextEnemy = getRandom(400);
 
     sound.stopAll();
-    sound.play("field1", { loop: true });
+    sound.play(this._stageInfo.sound.resourceName, { loop: true });
     this.loadBackground();
     this.setHeros();
     this.addCommandButton();
@@ -122,7 +127,8 @@ export class GameScene extends Container implements IScene {
     );
     button.setCallback(() => {
       SceneManager.changeScene(
-        new GameScene(SceneManager.width, SceneManager.height)
+        new GameScene(SceneManager.width, SceneManager.height),
+        "草原"
       );
     });
     this.addChild(button);
@@ -180,60 +186,35 @@ export class GameScene extends Container implements IScene {
   }
 
   loadBackground(): void {
-    const texture = Texture.from("sky_1");
-    this._tilingSprite = new TilingSprite(
-      texture,
-      this._parentWidth,
-      400 * SceneManager.scale
-    );
-    this._tilingSprite.tileScale = {
-      x: SceneManager.scale,
-      y: SceneManager.scale,
-    };
-    this._tilingSprite.position.y = -200 * SceneManager.scale;
-    this.addChild(this._tilingSprite);
-
-    const texture3 = Texture.from("background_3");
-    this._tilingSprite3 = new TilingSprite(
-      texture3,
-      this._parentWidth,
-      300 * SceneManager.scale
-    );
-    this._tilingSprite3.tileScale = {
-      x: SceneManager.scale,
-      y: SceneManager.scale,
-    };
-    this._tilingSprite3.y = this._parentHeight - 400 * SceneManager.scale;
-    this.addChild(this._tilingSprite3);
-
-    const texture2 = Texture.from("ground_1");
-    this._tilingSprite2 = new TilingSprite(
-      texture2,
-      this._parentWidth,
-      82 * SceneManager.scale
-    );
-    this._tilingSprite2.tileScale = {
-      x: SceneManager.scale,
-      y: SceneManager.scale,
-    };
-    this._tilingSprite2.y = this._parentHeight - 160 * SceneManager.scale;
-    this.addChild(this._tilingSprite2);
+    this._stageInfo.background.forEach((backgroundInfo) => {
+      const texture = Texture.from(backgroundInfo.resourceName);
+      const tile = new TilingSprite(
+        texture,
+        this._parentWidth,
+        backgroundInfo.height * SceneManager.scale
+      );
+      tile.tileScale = {
+        x: SceneManager.scale,
+        y: SceneManager.scale,
+      };
+      if (backgroundInfo.fromTop) {
+        tile.position.y = backgroundInfo.offsetY * SceneManager.scale;
+      } else {
+        tile.position.y =
+          this._parentHeight - backgroundInfo.offsetY * SceneManager.scale;
+      }
+      this.addChild(tile);
+      this._tilingSprite.push(tile);
+    });
   }
 
   private _bossLifeGage?: BossLifeGage;
   loadEnemy(): void {
     if (this._isAppearBoss) return;
     let type: EnemyType;
-    const tmp = getRandom(10);
-    if (tmp <= 2) {
-      type = "ゴブリン";
-    } else if (tmp >= 8) {
-      type = "スライム";
-    } else {
-      type = "ゾンビ";
-    }
-    if (!this._isAppearBoss && this._frameCount > 2000) {
-      type = "ホブゴブリン";
+
+    if (!this._isAppearBoss && this._frameCount > this._stageInfo.boss.count) {
+      type = this._stageInfo.boss.type;
       this._isAppearBoss = true;
 
       this._bossLifeGage = new BossLifeGage(
@@ -244,10 +225,21 @@ export class GameScene extends Container implements IScene {
         48
       );
       this.addChild(this._bossLifeGage);
+    } else {
+      const max = this._stageInfo.enemy.reduce((a, b) => a + b.rate, 0);
+      const tmp = getRandom(max);
+      let count = 0;
+      for (let i = 0; i < this._stageInfo.enemy.length; i++) {
+        count += this._stageInfo.enemy[i].rate;
+        if (tmp <= count) {
+          type = this._stageInfo.enemy[i].type;
+          break;
+        }
+      }
     }
 
     const enemy = EnemyFactory.CreateEnemy(
-      type,
+      type!,
       this._parentWidth,
       this._parentHeight
     );
@@ -255,8 +247,12 @@ export class GameScene extends Container implements IScene {
     enemy.load((obj) => {
       this.removeChild(obj);
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
-      if (type == "ホブゴブリン") {
-        this.showReload();
+      if (type == this._stageInfo.boss.type) {
+        if (SceneManager.CurrentStageName == "砂漠") {
+          this.showReload();
+        } else {
+          this._fadeOutHeros = true;
+        }
         this.removeChild(this._bossLifeGage!);
         this._bossLifeGage?.destroy();
         this._bossLifeGage = undefined;
@@ -276,10 +272,10 @@ export class GameScene extends Container implements IScene {
     if (this._gameover) {
       return;
     }
-    if (!this._isHitted) {
-      this._tilingSprite.tilePosition.x -= 0.1;
-      this._tilingSprite2.tilePosition.x -= 1;
-      this._tilingSprite3.tilePosition.x -= 0.3;
+    if (!this._isHitted && !this._fadeOutHeros) {
+      this._stageInfo.background.forEach((back, index) => {
+        this._tilingSprite[index].tilePosition.x -= back.movePower;
+      });
     }
     this._counter += framesPassed;
     this._hero.forEach((hero) => {
@@ -290,7 +286,7 @@ export class GameScene extends Container implements IScene {
     });
     if (this._counter >= this._nextEnemy) {
       this.loadEnemy();
-      this._nextEnemy = getRandom(60) + 10;
+      this._nextEnemy = getRandom(this._stageInfo.nextEnemyCount) + 10;
       this._counter = 0;
     }
     this._enemy.forEach((e) => {
@@ -305,6 +301,18 @@ export class GameScene extends Container implements IScene {
       this._heroPanels.forEach((p, index) => {
         p.update(this._hero[index].restLife());
       });
+    }
+    if (this._fadeOutHeros) {
+      this._hero.forEach((h) => {
+        h.move(framesPassed * 4, 0);
+      });
+      this._fadeOutHerosCount += framesPassed;
+      if (this._fadeOutHerosCount > 200) {
+        SceneManager.changeScene(
+          new GameScene(SceneManager.width, SceneManager.height),
+          "砂漠"
+        );
+      }
     }
   }
 

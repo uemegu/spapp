@@ -103,6 +103,7 @@ export class HeroModel extends SpriteModel {
     super.move(x, y);
   }
 
+  private _count = 0;
   update(framesPassed: number) {
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);

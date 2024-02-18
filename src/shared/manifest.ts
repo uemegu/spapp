@@ -60,8 +60,10 @@ export const manifest: AssetsManifest = {
         background_1: "resources/images/background/background_1.jpeg",
         background_2: "resources/images/background/background_2.png",
         background_3: "resources/images/background/background_3.png",
+        background_4: "resources/images/background/background_4.png",
         sky_1: "resources/images/background/sky_1.png",
         ground_1: "resources/images/background/ground_1.png",
+        ground_2: "resources/images/background/ground_2.png",
         panel_background: "resources/images/background/panel_background.png",
         panel_background2: "resources/images/background/panel_background2.png",
       },
@@ -77,6 +79,7 @@ export const manifest: AssetsManifest = {
       name: "sound",
       assets: {
         field1: "sound/bgm/field1.m4a",
+        desert: "sound/bgm/desert.m4a",
       },
     },
     {

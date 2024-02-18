@@ -1,6 +1,7 @@
 import { Application, Container, DisplayObject } from "pixi.js";
 import { Stage, Layer } from "@pixi/layers";
 import { diffuseGroup, normalGroup, lightGroup } from "@pixi/lights";
+import { StageName } from "../scenes/scene-master";
 
 export class SceneManager {
   //class is almost will be static
@@ -8,11 +9,16 @@ export class SceneManager {
   private static _app: Application;
   private static _currentScene: IScene;
   private static _tickLisnters: Array<IUpdate> = [];
+  private static _currentStageName: StageName = "草原";
 
   public static get scale() {
     let x = this.width / 667;
     let y = this.height / 375;
     return Math.min(x, y);
+  }
+
+  public static get CurrentStageName(): StageName {
+    return this._currentStageName;
   }
 
   public static get width() {
@@ -48,10 +54,13 @@ export class SceneManager {
     window.addEventListener("resize", SceneManager.resize);
   }
 
-  public static changeScene(newScene: IScene): void {
+  public static changeScene(newScene: IScene, stageName?: StageName): void {
     if (SceneManager._currentScene) {
       SceneManager._app.stage.removeChild(SceneManager._currentScene);
       SceneManager._currentScene.destroy();
+    }
+    if (stageName) {
+      this._currentStageName = stageName;
     }
 
     // Add the new one
