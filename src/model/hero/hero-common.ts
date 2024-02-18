@@ -129,8 +129,9 @@ export class HeroModel extends SpriteModel {
     }
   }
 
-  attackHitTest(enemy: Array<EnemyModel>): number {
+  attackHitTest(enemy: Array<EnemyModel>): { exp: number; money: number } {
     let exp = 0;
+    let money = 0;
     if (this._currentWeapons.length > 0) {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
@@ -158,13 +159,14 @@ export class HeroModel extends SpriteModel {
               w.hitted();
               if (e.isDead()) {
                 exp += e.exp;
+                money += e.money;
               }
             }
           }
         });
       });
     }
-    return exp;
+    return { exp: exp, money: money };
   }
 
   heal(num: number): void {

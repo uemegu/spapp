@@ -64,7 +64,7 @@ export class UpText extends Container implements IUpdate {
       SceneManager.requestRemoveChild(this);
       SceneManager.removeTickListener(this);
     } else {
-      const speed = this._options?.count ?? 5;
+      const speed = this._options?.speed ?? 5;
       this._graphics.y -= framesPassed * speed;
     }
   }

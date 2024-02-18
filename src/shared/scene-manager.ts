@@ -4,7 +4,7 @@ import { diffuseGroup, normalGroup, lightGroup } from "@pixi/lights";
 import { StageName } from "../scenes/scene-master";
 
 export class SceneManager {
-  //class is almost will be static
+  public static suspend: boolean = false;
   private constructor() {}
   private static _app: Application;
   private static _currentScene: IScene;
@@ -70,6 +70,7 @@ export class SceneManager {
   }
 
   private static update(framesPassed: number): void {
+    if (SceneManager.suspend) return;
     try {
       if (SceneManager._currentScene) {
         SceneManager._currentScene.update(framesPassed);

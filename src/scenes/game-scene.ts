@@ -20,6 +20,7 @@ import { BossLifeGage } from "../control/boss-life-gage";
 import { HeroPanel } from "../control/hero-panel";
 import { StageInfo, Stages } from "./scene-master";
 import { UpText } from "../control/up-text";
+import { GameSceneStatusBar } from "../control/game-scene-status-bar";
 
 export interface UnitInfo {
   type: HeroType;
@@ -74,6 +75,8 @@ export class GameScene extends Container implements IScene {
   private _boss?: EnemyModel;
   private _fadeOutHeros: boolean = false;
   private _fadeOutHerosCount: number = 0;
+  private _statusBar?: GameSceneStatusBar;
+  private _getMoney: number = 0;
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
@@ -94,6 +97,7 @@ export class GameScene extends Container implements IScene {
     this.loadBackground();
     this.setHeros();
     this.addCommandButton();
+    this.addStatusBar();
   }
 
   private setHeros(): void {
@@ -170,6 +174,11 @@ export class GameScene extends Container implements IScene {
           const hero = this._hero[index];
           if (hero.isDead()) return false;
           hero.loadAttack(w);
+          if (weaponConfig.targetType != "敵") {
+            this._heroPanels.forEach((p, index) => {
+              p.update(this._hero[index].restLife());
+            });
+          }
           return true;
         });
         this.addChild(b);
@@ -177,6 +186,11 @@ export class GameScene extends Container implements IScene {
         i++;
       });
     });
+  }
+
+  private addStatusBar() {
+    this._statusBar = new GameSceneStatusBar();
+    this.addChild(this._statusBar!);
   }
 
   public requestAddChild(obj: Container): void {
@@ -320,15 +334,24 @@ export class GameScene extends Container implements IScene {
 
   enemyHitTest(): void {
     let exp = 0;
+    let money = 0;
     this._hero.forEach((hero) => {
-      exp += hero.attackHitTest(this._enemy);
+      const result = hero.attackHitTest(this._enemy);
+      exp += result.exp;
+      money += result.money;
     });
+    if (money) {
+      this._getMoney += money;
+      this._statusBar!.updateMoney(this._getMoney);
+    }
     if (exp) {
+      let isChangeLevel = false;
       GameScene._unitInfo.forEach((u, index) => {
         if (!this._hero[index].isDead()) {
           u.exp += exp;
           const newLevel = HeroModel.judgeLevel(u.exp);
           if (newLevel != u.level) {
+            isChangeLevel = true;
             u.level = newLevel;
             this._heroPanels[index].updateText();
             this._hero[index].levelUp();
@@ -339,11 +362,15 @@ export class GameScene extends Container implements IScene {
               this._heroPanels[index].Coordinate.y,
               {
                 fill: ["#ffffff", "#9999ff"],
+                speed: 1,
               }
             );
           }
         }
       });
+      if (isChangeLevel) {
+        sound.play("se_level_up", { loop: false });
+      }
     }
   }
 

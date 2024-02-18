@@ -23,6 +23,10 @@ export class EnemyModel extends SpriteModel {
     return (this._config as EnemyConfig).exp;
   }
 
+  get money() {
+    return (this._config as EnemyConfig).money;
+  }
+
   get attackPower(): number {
     return (this._config as EnemyConfig).power;
   }

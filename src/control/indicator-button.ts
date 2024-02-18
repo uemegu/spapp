@@ -135,6 +135,7 @@ export class SkillButton extends Container implements IUpdate {
   setCallback(callback: () => boolean): void {
     this.eventMode = "dynamic";
     this.on("pointerdown", () => {
+      if (SceneManager.suspend) return;
       if (this._coolTime === 0) {
         if (callback()) {
           this._disableGraphics.alpha = 0.5;

@@ -69,8 +69,6 @@ export const manifest: AssetsManifest = {
         sky_1: "resources/images/background/sky_1.png",
         ground_1: "resources/images/background/ground_1.png",
         ground_2: "resources/images/background/ground_2.png",
-        panel_background: "resources/images/background/panel_background.png",
-        panel_background2: "resources/images/background/panel_background2.png",
       },
     },
     {
@@ -78,6 +76,10 @@ export const manifest: AssetsManifest = {
       assets: {
         bar_1: "resources/images/ui/bar_1.png",
         bar_2: "resources/images/ui/bar_2.png",
+        panel_background: "resources/images/ui/panel_background.png",
+        panel_background2: "resources/images/ui/panel_background2.png",
+        status_bar: "resources/images/ui/status_bar.png",
+        money: "resources/images/ui/money.png",
       },
     },
     {
@@ -97,6 +99,7 @@ export const manifest: AssetsManifest = {
         se_damaged: "sound/se/damaged.mp3",
         se_thander: "sound/se/thander.mp3",
         se_aero: "sound/se/aero.mp3",
+        se_level_up: "sound/se/level_up.mp3",
       },
     },
   ],
