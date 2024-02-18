@@ -156,3 +156,28 @@ export class FastThrowAttakModel extends ThrowAttakModel {
 export interface AuxiliaryModel extends WeaponModel {
   powerUp(team: Array<HeroModel>): void;
 }
+
+export interface AuxiliarySelfModel extends WeaponModel {
+  powerUp(self: HeroModel): void;
+}
+
+export class GuardModel extends WeaponModel implements AuxiliarySelfModel {
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
+    (this._me as AnimatedSprite).loop = true;
+    this._me!.width = 62 * SceneManager.scale;
+    this._me!.height = 62 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 90 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 190 * SceneManager.scale;
+    (this._me as AnimatedSprite).animationSpeed = 0.8;
+    (this._me as AnimatedSprite).play();
+  }
+  powerUp(self: HeroModel): void {
+    self.addBuff({
+      defencePower: (this._config as WeaponConfig).power,
+      attackPower: 0,
+      dex: 0,
+      restTime: (this._config as WeaponConfig).limitTime,
+    });
+  }
+}

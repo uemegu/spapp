@@ -8,18 +8,31 @@ import {
   WeaponConfig,
   WeaponType,
 } from "../model-types";
-import { AuxiliaryModel, WeaponModel } from "../wepon/wepon-common";
+import {
+  AuxiliaryModel,
+  AuxiliarySelfModel,
+  WeaponModel,
+} from "../wepon/wepon-common";
 import { EnemyModel } from "../enemy/ememy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { DamageText } from "../ui/damage";
 import { SceneManager } from "../../shared/scene-manager";
 import { GameScene } from "../../scenes/game-scene";
 
+export interface BuffModel {
+  attackPower: number;
+  defencePower: number;
+  dex: number;
+  restTime: number;
+}
+
 export class HeroModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
   private _UI: Array<SpriteModel> = [];
   private _team: Array<HeroModel> = [];
-  private _maxHP: number;
+  private _maxHP: number = 0;
+  private _defencePower: number = 0;
+  private _buff: Array<BuffModel> = [];
 
   constructor(
     type: HeroType | EnemyType | WeaponType,
@@ -27,6 +40,10 @@ export class HeroModel extends SpriteModel {
     parentHeight: number
   ) {
     super(type, parentWidth, parentHeight);
+    this.setStatus();
+  }
+
+  private setStatus() {
     this._maxHP =
       (this._config as HeroConfig).maxHp +
       (this._config as HeroConfig).maxHp *
@@ -35,6 +52,11 @@ export class HeroModel extends SpriteModel {
     this._hp =
       (this._config as HeroConfig).maxHp +
       (this._config as HeroConfig).maxHp *
+        (GameScene.getLevel(this._config.type as HeroType) - 1) *
+        0.1;
+    this._defencePower =
+      (this._config as HeroConfig).defencePower +
+      (this._config as HeroConfig).defencePower *
         (GameScene.getLevel(this._config.type as HeroType) - 1) *
         0.1;
   }
@@ -85,6 +107,10 @@ export class HeroModel extends SpriteModel {
     this._currentWeapons.forEach((w) => {
       w.update(framesPassed);
     });
+    this._buff.forEach((b) => {
+      b.restTime -= framesPassed;
+    });
+    this._buff = this._buff.filter((b) => b.restTime > 0);
     if (this.isDead()) {
       return;
     }
@@ -103,6 +129,8 @@ export class HeroModel extends SpriteModel {
     this._currentWeapons.push(attack);
     if (this.getWeaponConfig(type).targetType === "味方") {
       (attack as AuxiliaryModel).powerUp(this._team);
+    } else if (this.getWeaponConfig(type).targetType === "自分") {
+      (attack as AuxiliarySelfModel).powerUp(this);
     }
   }
 
@@ -111,10 +139,15 @@ export class HeroModel extends SpriteModel {
     if (this._currentWeapons.length > 0) {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
-          if (w.isHit(e)) {
+          if (
+            this.getWeaponConfig(w.type as WeaponType).targetType === "敵" &&
+            w.isHit(e)
+          ) {
+            const attackPower =
+              w.attackPower + this._buff.reduce((a, b) => a + b.attackPower, 0);
             const damage = Math.ceil(
-              w.attackPower +
-                w.attackPower *
+              attackPower +
+                attackPower *
                   (GameScene.getLevel(this._config.type as HeroType) - 1) *
                   0.1
             );
@@ -166,16 +199,17 @@ export class HeroModel extends SpriteModel {
     return level;
   }
 
-  levelUp(level: number) {
-    this._maxHP =
-      (this._config as HeroConfig).maxHp +
-      (this._config as HeroConfig).maxHp *
-        (GameScene.getLevel(this._config.type as HeroType) - 1) *
-        0.1;
-    this._hp =
-      (this._config as HeroConfig).maxHp +
-      (this._config as HeroConfig).maxHp *
-        (GameScene.getLevel(this._config.type as HeroType) - 1) *
-        0.1;
+  get defencePower(): number {
+    return (
+      this._defencePower + this._buff.reduce((a, b) => a + b.defencePower, 0)
+    );
+  }
+
+  levelUp() {
+    this.setStatus();
+  }
+
+  addBuff(buf: BuffModel) {
+    this._buff.push(buf);
   }
 }

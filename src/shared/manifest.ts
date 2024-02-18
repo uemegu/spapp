@@ -36,6 +36,7 @@ export const manifest: AssetsManifest = {
         sword_2: "resources/images/weapon/sword_2.png",
         sword_3: "resources/images/weapon/sword_3.png",
         sword_4: "resources/images/weapon/sword_4.png",
+        shilde_1: "resources/images/weapon/shilde_1.png",
         fire_1: "resources/images/weapon/fire_1.png",
         after_fire_1: "resources/images/weapon/after_fire_1.png",
         after_fire_2: "resources/images/weapon/after_fire_2.png",

@@ -31,7 +31,7 @@ export class GameScene extends Container implements IScene {
   private static _unitInfo: Array<UnitInfo> = [
     {
       type: "勇者",
-      weapons: ["スマッシュ", "ソニックブーム"],
+      weapons: ["スマッシュ", "ガード"],
       exp: 0,
       level: 1,
     },
@@ -290,7 +290,7 @@ export class GameScene extends Container implements IScene {
     });
     if (this._counter >= this._nextEnemy) {
       this.loadEnemy();
-      this._nextEnemy = getRandom(6) + 10;
+      this._nextEnemy = getRandom(60) + 10;
       this._counter = 0;
     }
     this._enemy.forEach((e) => {
@@ -321,7 +321,7 @@ export class GameScene extends Container implements IScene {
           if (newLevel != u.level) {
             u.level = newLevel;
             this._heroPanels[index].updateText();
-            this._hero[index].levelUp(newLevel);
+            this._hero[index].levelUp();
           }
         }
       });
@@ -334,13 +334,15 @@ export class GameScene extends Container implements IScene {
       e.stop(false);
       this._hero.forEach((hero) => {
         if (hero.isHit(e)) {
-          hero.damaged(e.attackPower, true);
+          const value = e.attackPower - hero.defencePower;
+          if (value > 0) {
+            hero.damaged(e.attackPower, true);
+          }
           e.stop(true);
           this._isHitted = true;
         }
       });
-      let exp = e.attackHitTest(this._hero);
-      GameScene._unitInfo.forEach((u, index) => {});
+      e.attackHitTest(this._hero);
     });
   }
 

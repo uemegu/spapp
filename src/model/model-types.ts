@@ -4,6 +4,8 @@ export interface HeroConfig {
   sequenceCount: number;
   maxHp: number;
   defaultAttackRange: number;
+  defencePower: number;
+  dex: number;
 }
 
 export interface EnemyConfig {
@@ -31,7 +33,7 @@ export interface WeaponConfig {
   attenuationRate: number;
   criticalRate?: number;
   knockback?: number;
-  targetType: "味方" | "敵";
+  targetType: "味方" | "敵" | "自分";
 }
 
 export interface UIConfig {
@@ -56,6 +58,8 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 100,
     defaultAttackRange: 1,
+    defencePower: 2,
+    dex: 10,
   },
   {
     type: "魔法使い",
@@ -63,6 +67,8 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
+    defencePower: 1,
+    dex: 10,
   },
   {
     type: "僧侶",
@@ -70,6 +76,8 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
+    defencePower: 1,
+    dex: 10,
   },
   {
     type: "アーチャー",
@@ -77,6 +85,8 @@ export const ModelConfig: Array<
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 4,
+    defencePower: 1,
+    dex: 20,
   },
   {
     type: "ゾンビ",
@@ -133,17 +143,15 @@ export const ModelConfig: Array<
     criticalRate: 1,
   },
   {
-    type: "ソニックブーム",
-    resourceName: "sword_",
-    startSEName: "sword_1",
-    hittedSEName: "sword_2",
-    sequenceCount: 4,
+    type: "ガード",
+    resourceName: "shilde_",
+    sequenceCount: 1,
     power: 30,
     coolTime: 300,
-    limitTime: 40,
+    limitTime: 80,
     onetime: false,
-    targetType: "敵",
-    attenuationRate: 0.8,
+    targetType: "自分",
+    attenuationRate: 1,
     criticalRate: 1,
   },
   {
@@ -234,7 +242,7 @@ export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
 export type EnemyType = "ゾンビ" | "ゴブリン" | "スライム" | "ホブゴブリン";
 export type WeaponType =
   | "スマッシュ"
-  | "ソニックブーム"
+  | "ガード"
   | "ファイア"
   | "サンダー"
   | "ヒール"

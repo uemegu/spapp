@@ -1,16 +1,22 @@
 import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { AuxiliaryModel, WeaponModel } from "./wepon-common";
 import { HeroModel } from "../hero/hero-common";
-import { WeaponConfig } from "../model-types";
+import { HeroType, WeaponConfig } from "../model-types";
 import { getRandom } from "../../util";
 import { SceneManager } from "../../shared/scene-manager";
+import { GameScene } from "../../scenes/game-scene";
 
 export class HealModel extends WeaponModel implements AuxiliaryModel {
   private _mes: Array<AnimatedSprite> = [];
   powerUp(team: HeroModel[]): void {
     team.forEach((t, index) => {
       if (!t.isDead()) {
-        t.heal((this._config as WeaponConfig).power);
+        t.heal(
+          (this._config as WeaponConfig).power +
+            (this._config as WeaponConfig).power *
+              (GameScene.getLevel(t.type as HeroType) - 1) *
+              0.1
+        );
         for (let i = index; i < this._mes.length; i += team.length) {
           this._mes[i].x =
             this._parentWidth / 2 -

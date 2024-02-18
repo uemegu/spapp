@@ -108,4 +108,7 @@ export abstract class SpriteModel {
     this._parentWidth = parentWidth;
     this._parentHeight = parentHeight;
   }
+  get type(): HeroType | EnemyType | WeaponType | UIType {
+    return this._config.type;
+  }
 }
