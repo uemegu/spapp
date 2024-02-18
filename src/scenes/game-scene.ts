@@ -290,7 +290,7 @@ export class GameScene extends Container implements IScene {
     });
     if (this._counter >= this._nextEnemy) {
       this.loadEnemy();
-      this._nextEnemy = getRandom(60) + 10;
+      this._nextEnemy = getRandom(6) + 10;
       this._counter = 0;
     }
     this._enemy.forEach((e) => {

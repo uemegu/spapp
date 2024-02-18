@@ -61,6 +61,8 @@ export const manifest: AssetsManifest = {
         background_3: "resources/images/background/background_3.png",
         sky_1: "resources/images/background/sky_1.png",
         ground_1: "resources/images/background/ground_1.png",
+        panel_background: "resources/images/background/panel_background.png",
+        panel_background2: "resources/images/background/panel_background2.png",
       },
     },
     {

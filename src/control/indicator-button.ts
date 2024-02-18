@@ -22,7 +22,8 @@ export interface SkillButtonOption {
 export class SkillButton extends Container implements IUpdate {
   private _coolTime: number = 0;
   private _maxCoolTime: number;
-  private _graphics: Graphics;
+  private _graphics: Sprite;
+  private _disableGraphics: Graphics;
   private _gage: Sprite;
   private _gagemask: Sprite;
   private _isDisable: boolean = false;
@@ -51,11 +52,22 @@ export class SkillButton extends Container implements IUpdate {
     this._heroType = heroConfig.type;
     this._options = options;
 
-    this._graphics = new Graphics();
-    this._graphics.lineStyle(5, this._options?.lineColor ?? 0x000000, 1);
-    this._graphics.beginFill(this._options?.backgroundColor ?? 0xffffff);
-    this._graphics.drawRect(this._x, this._y, this._mywidth, this._myheight);
-    this._graphics.endFill();
+    this._disableGraphics = new Graphics();
+    this._disableGraphics.beginFill(this._options?.backgroundColor ?? 0x888888);
+    this._disableGraphics.drawRect(
+      this._x,
+      this._y,
+      this._mywidth,
+      this._myheight
+    );
+    this._disableGraphics.endFill();
+    this._disableGraphics.alpha = 0;
+
+    this._graphics = Sprite.from("panel_background");
+    this._graphics.x = this._x;
+    this._graphics.y = this._y;
+    this._graphics.width = this._mywidth;
+    this._graphics.height = this._myheight;
 
     const style = new TextStyle({
       fontSize: options?.textSize ?? 8,
@@ -93,6 +105,7 @@ export class SkillButton extends Container implements IUpdate {
     this.addChild(this._gage);
     this.addChild(this._gagemask);
     this.addChild(attakSymbol);
+    this.addChild(this._disableGraphics);
     SceneManager.addTickListener(this);
   }
 
@@ -103,10 +116,7 @@ export class SkillButton extends Container implements IUpdate {
   disable(): void {
     this._isDisable = true;
     this._coolTime = this._maxCoolTime;
-    this._graphics.lineStyle(5, this._options?.lineColor ?? 0x000000, 1);
-    this._graphics.beginFill(this._options?.backgroundColor ?? 0x888888);
-    this._graphics.drawRect(this._x, this._y, this._mywidth, this._myheight);
-    this._graphics.endFill();
+    this._disableGraphics.alpha = 0.5;
   }
 
   update(framesPassed: number): void {
@@ -115,16 +125,9 @@ export class SkillButton extends Container implements IUpdate {
       ((this._maxCoolTime - this._coolTime) / this._maxCoolTime);
     if (this._coolTime > 0 && !this._isDisable) {
       this._coolTime--;
+      this._disableGraphics.alpha = 0.5;
       if (this._coolTime <= 0) {
-        this._graphics.lineStyle(5, this._options?.lineColor ?? 0x000000, 1);
-        this._graphics.beginFill(this._options?.backgroundColor ?? 0xffffff);
-        this._graphics.drawRect(
-          this._x,
-          this._y,
-          this._mywidth,
-          this._myheight
-        );
-        this._graphics.endFill();
+        this._disableGraphics.alpha = 0;
       }
     }
   }
@@ -134,16 +137,8 @@ export class SkillButton extends Container implements IUpdate {
     this.on("pointerdown", () => {
       if (this._coolTime === 0) {
         if (callback()) {
+          this._disableGraphics.alpha = 0.5;
           this._coolTime = this._maxCoolTime;
-          this._graphics.lineStyle(5, this._options?.lineColor ?? 0x000000, 1);
-          this._graphics.beginFill(this._options?.backgroundColor ?? 0x888888);
-          this._graphics.drawRect(
-            this._x,
-            this._y,
-            this._mywidth,
-            this._myheight
-          );
-          this._graphics.endFill();
         }
       }
     });
