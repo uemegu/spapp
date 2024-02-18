@@ -42,8 +42,8 @@ export class Button extends Container {
       fill: [options?.textColor ?? "#fff"],
     });
     this._text = new Text(caption, style);
-    this._text.x = x + ((options?.textSize ?? 24) * SceneManager.scale) / 2;
-    this._text.y = y + ((options?.textSize ?? 24) * SceneManager.scale) / 2;
+    this._text.x = x + (options?.textSize ?? 24) / 2;
+    this._text.y = y + (options?.textSize ?? 24) / 2;
 
     this._graphics = new Graphics();
     this.draw(caption);
@@ -66,8 +66,7 @@ export class Button extends Container {
       this._point.x,
       this._point.y,
       this._options?.width ?? textWidth + (this._options?.textSize ?? 24),
-      this._options?.height ??
-        (this._options?.textSize ?? 24) * 2 * SceneManager.scale
+      this._options?.height ?? (this._options?.textSize ?? 24) * 2
     );
     this._graphics.endFill();
     if (this._options?.width) {

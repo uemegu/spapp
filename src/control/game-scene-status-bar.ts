@@ -60,14 +60,19 @@ export class GameSceneStatusBar extends Container implements IUpdate {
       }
     });
 
-    const fieldName = new Text(SceneManager.CurrentStageName, style);
+    const fieldName = new Text(
+      strings.getString(SceneManager.CurrentStageName),
+      style
+    );
     fieldName.x =
       SceneManager.width -
       200 * SceneManager.scale -
       12 +
       (200 * SceneManager.scale) / 2 -
-      (SceneManager.CurrentStageName.length / 2) * 24 * SceneManager.scale;
-    fieldName.y = 12 * SceneManager.scale;
+      (strings.getString(SceneManager.CurrentStageName).length / 2) *
+        24 *
+        SceneManager.scale;
+    fieldName.y = 13 * SceneManager.scale;
 
     this.addChild(this._graphics);
     this.addChild(this._money);

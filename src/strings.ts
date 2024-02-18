@@ -20,5 +20,7 @@ export const strings = new LocalizedStrings({
     レベルアップ: "れべるあっぷ",
     とめる: "とめる",
     さいかい: "さいかい",
+    草原: "そうげん",
+    砂漠: "さばく",
   },
 });
