@@ -165,6 +165,7 @@ export class GameScene extends Container implements IScene {
           80 * SceneManager.scale
         );
         b.setCallback(() => {
+          if (this._fadeOutHeros) return false;
           const hero = this._hero[index];
           if (hero.isDead()) return false;
           hero.loadAttack(w);

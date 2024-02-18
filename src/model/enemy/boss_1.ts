@@ -19,8 +19,8 @@ export class Boss_1 extends EnemyModel {
   attackMotion() {
     if (this._attackMotionCount <= 0) {
       const frames = [];
-      for (let i = 1; i <= 3; i++) {
-        frames.push(Texture.from(`boss_2_attack_${i}`));
+      for (let i = 1; i <= 2; i++) {
+        frames.push(Texture.from(`${this._config.resourceName}attack_${i}`));
       }
       (this._me as AnimatedSprite).textures = frames;
       (this._me as AnimatedSprite).loop = false;

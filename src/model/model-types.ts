@@ -110,7 +110,7 @@ export const ModelConfig: Array<
   },
   {
     type: "ホブゴブリン",
-    resourceName: "boss_",
+    resourceName: "hobgoblin_",
     sequenceCount: 2,
     maxHp: 800,
     power: 30,
@@ -127,6 +127,26 @@ export const ModelConfig: Array<
     speed: 0.5,
     exp: 2,
     money: 1,
+  },
+  {
+    type: "ミイラ",
+    resourceName: "mummy_",
+    sequenceCount: 2,
+    maxHp: 100,
+    power: 15,
+    speed: 1,
+    exp: 20,
+    money: 10,
+  },
+  {
+    type: "キマイラ",
+    resourceName: "chimera_",
+    sequenceCount: 2,
+    maxHp: 1200,
+    power: 50,
+    speed: 1,
+    exp: 150,
+    money: 150,
   },
   {
     type: "スマッシュ",
@@ -239,7 +259,13 @@ export const ModelConfig: Array<
 ];
 
 export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
-export type EnemyType = "ゾンビ" | "ゴブリン" | "スライム" | "ホブゴブリン";
+export type EnemyType =
+  | "ゾンビ"
+  | "ゴブリン"
+  | "スライム"
+  | "ホブゴブリン"
+  | "ミイラ"
+  | "キマイラ";
 export type WeaponType =
   | "スマッシュ"
   | "ガード"

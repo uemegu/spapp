@@ -12,6 +12,8 @@ export class EnemyFactory {
     switch (type) {
       case "ホブゴブリン":
         return new Boss_1(type, parentWidth, parentHeight);
+      case "キマイラ":
+        return new Boss_1(type, parentWidth, parentHeight);
       default:
         return new EnemyModel(type, parentWidth, parentHeight);
     }

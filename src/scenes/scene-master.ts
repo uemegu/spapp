@@ -87,12 +87,12 @@ export const Stages: Array<StageInfo> = [
     nextEnemyCount: 30,
     enemy: [
       {
-        type: "ゴブリン",
-        rate: 2,
+        type: "ミイラ",
+        rate: 4,
       },
       {
         type: "スライム",
-        rate: 4,
+        rate: 2,
       },
       {
         type: "ゾンビ",
@@ -100,7 +100,7 @@ export const Stages: Array<StageInfo> = [
       },
     ],
     boss: {
-      type: "ホブゴブリン",
+      type: "キマイラ",
       count: 2000,
     },
     background: [

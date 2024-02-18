@@ -16,5 +16,6 @@ export const strings = new LocalizedStrings({
     エアロ: "えあろ",
     ショット: "しょっと",
     ロングショット: "ろんぐしょっと",
+    ガード: "がーど",
   },
 });
