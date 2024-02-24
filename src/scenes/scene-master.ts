@@ -32,11 +32,11 @@ export interface StageInfo {
   endCount: number;
 }
 
-export type StageName = "草原" | "砂漠";
+export type StageName = "森林" | "砂漠";
 
 export const Stages: Array<StageInfo> = [
   {
-    name: "草原",
+    name: "森林",
     nextEnemyCount: 60,
     endCount: 3000,
     enemy: [
@@ -68,8 +68,8 @@ export const Stages: Array<StageInfo> = [
       {
         resourceName: "background_3",
         movePower: 0.3,
-        height: 300,
-        offsetY: 400,
+        height: 512,
+        offsetY: 670,
         fromTop: false,
       },
       {

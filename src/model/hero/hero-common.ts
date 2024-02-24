@@ -129,9 +129,14 @@ export class HeroModel extends SpriteModel {
     }
   }
 
-  attackHitTest(enemy: Array<EnemyModel>): { exp: number; money: number } {
+  attackHitTest(enemy: Array<EnemyModel>): {
+    exp: number;
+    money: number;
+    count: number;
+  } {
     let exp = 0;
     let money = 0;
+    let count = 0;
     if (this._currentWeapons.length > 0) {
       enemy.forEach((e) => {
         this._currentWeapons.forEach((w) => {
@@ -147,12 +152,9 @@ export class HeroModel extends SpriteModel {
                   (GameScene.getLevel(this._config.type as HeroType) - 1) *
                   0.1
             );
+            const point = e.getCoordinate();
             if (e.damaged(damage)) {
-              UpText.ShowText(
-                damage.toString(),
-                e.getCoordinate().x!,
-                e.getCoordinate().y!
-              );
+              UpText.ShowText(damage.toString(), point.x!, point.y!);
               if (!e.isDead() && w.knockback) {
                 e.move(w.knockback, 0);
               }
@@ -160,13 +162,14 @@ export class HeroModel extends SpriteModel {
               if (e.isDead()) {
                 exp += e.exp;
                 money += e.money;
+                count++;
               }
             }
           }
         });
       });
     }
-    return { exp: exp, money: money };
+    return { exp: exp, money: money, count: count };
   }
 
   heal(num: number): void {

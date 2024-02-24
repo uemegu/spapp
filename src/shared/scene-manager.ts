@@ -9,7 +9,7 @@ export class SceneManager {
   private static _app: Application;
   private static _currentScene: IScene;
   private static _tickLisnters: Array<IUpdate> = [];
-  private static _currentStageName: StageName = "草原";
+  private static _currentStageName: StageName = "森林";
 
   public static get scale() {
     let x = this.width / 667;

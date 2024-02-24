@@ -8,7 +8,6 @@ export class GameSceneStatusBar extends Container implements IUpdate {
   private _graphics: Sprite;
   private _money: Text;
   private _upText: Array<{ count: number; money: Text }> = [];
-  private _gage: Graphics;
   private _gage2: Graphics;
   private _endCount: number;
   private _count: number = 0;
@@ -66,23 +65,9 @@ export class GameSceneStatusBar extends Container implements IUpdate {
       }
     });
 
-    this._gage = new Graphics();
-    this._gage.beginFill(0xffcdd2);
-    this._gage.drawRect(
-      SceneManager.width - 200 * SceneManager.scale - 12,
-      this._graphics.height,
-      200 * SceneManager.scale,
-      5 * SceneManager.scale
-    );
-    this._gage.endFill();
     this._gage2 = new Graphics();
     this._gage2.beginFill(0xf604b1);
-    this._gage2.drawRect(
-      SceneManager.width - 200 * SceneManager.scale - 12,
-      this._graphics.height,
-      0,
-      5 * SceneManager.scale
-    );
+    this._gage2.drawRect(0, 0, 0, 5 * SceneManager.scale);
     this._gage2.endFill();
 
     const fieldName = new Text(
@@ -99,13 +84,12 @@ export class GameSceneStatusBar extends Container implements IUpdate {
         SceneManager.scale;
     fieldName.y = 13 * SceneManager.scale;
 
+    this.addChild(this._gage2);
     this.addChild(this._graphics);
     this.addChild(this._money);
     this.addChild(money);
     this.addChild(button);
     this.addChild(fieldName);
-    this.addChild(this._gage);
-    this.addChild(this._gage2);
   }
 
   updateMoney(money: number) {
@@ -153,11 +137,15 @@ export class GameSceneStatusBar extends Container implements IUpdate {
     this._gage2.clear();
     this._gage2.beginFill(0xf604b1);
     this._gage2.drawRect(
-      SceneManager.width - 200 * SceneManager.scale - 12,
-      this._graphics.height,
-      200 * SceneManager.scale * (this._count / this._endCount),
+      0,
+      0,
+      SceneManager.width * (this._count / this._endCount),
       5 * SceneManager.scale
     );
     this._gage2.endFill();
+  }
+
+  get progress(): number {
+    return this._count / this._endCount;
   }
 }

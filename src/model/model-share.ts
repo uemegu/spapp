@@ -66,20 +66,28 @@ export abstract class SpriteModel {
     }
   }
   attackMotion() {}
+
+  private _defenceSoundWait: number = 0;
   damaged(damage: number, needSound: boolean = false): boolean {
     const MAX_DAMAGE_COUNT = (this._config as EnemyConfig).speed ? 10 : 50;
     if (this._damagedCount > 0 && this._damagedCount != MAX_DAMAGE_COUNT) {
       return false;
     }
-    this._hp -= damage;
-    //console.log("ダメージ", this._config.type, this._hp);
-    if (this._hp <= 0) {
-      this.destroy();
-    } else {
-      this._damagedCount = MAX_DAMAGE_COUNT;
+    if (damage > 0) {
+      this._hp -= damage;
+      if (this._hp <= 0) {
+        this.destroy();
+      } else {
+        this._damagedCount = MAX_DAMAGE_COUNT;
+      }
     }
     if (needSound) {
-      sound.play("se_damaged");
+      if (damage > 0) {
+        sound.play("se_damaged");
+      } else if (this._defenceSoundWait <= 0) {
+        this._defenceSoundWait = MAX_DAMAGE_COUNT;
+        sound.play("se_defense");
+      }
     }
     return true;
   }
@@ -91,6 +99,10 @@ export abstract class SpriteModel {
     } else {
       this._me!.alpha = 1;
     }
+    if (this._defenceSoundWait > 0) {
+      this._defenceSoundWait -= framesPassed;
+    }
+
     this._attackMotionCount -= framesPassed;
   }
   isDead(): boolean {

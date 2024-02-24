@@ -21,6 +21,7 @@ import { HeroPanel } from "../control/hero-panel";
 import { StageInfo, Stages } from "./scene-master";
 import { UpText } from "../control/up-text";
 import { GameSceneStatusBar } from "../control/game-scene-status-bar";
+import { StageClear } from "../control/stage-clear";
 
 export interface UnitInfo {
   type: HeroType;
@@ -63,7 +64,7 @@ export class GameScene extends Container implements IScene {
   private _heroPanels: Array<HeroPanel> = [];
   private _enemy!: Array<EnemyModel>;
   private _tilingSprite: Array<TilingSprite> = [];
-  private _counter: number = 0;
+  private _encountCounter: number = 0;
   private _nextEnemy: number = 0;
   private _parentWidth: number;
   private _parentHeight: number;
@@ -77,6 +78,8 @@ export class GameScene extends Container implements IScene {
   private _fadeOutHerosCount: number = 0;
   private _statusBar?: GameSceneStatusBar;
   private _getMoney: number = 0;
+  private _defeatEnemyCount: number = 0;
+  private _specialBonus: number = 0;
 
   constructor(parentWidth: number, parentHeight: number) {
     super();
@@ -109,7 +112,21 @@ export class GameScene extends Container implements IScene {
       hero.load((_) => {
         if (!this._hero.find((h) => !h.isDead())) {
           this._gameover = true;
-          this.showReload();
+          sound.stopAll();
+          sound.play("failed", { loop: true });
+          StageClear.show(
+            {
+              type: "失敗",
+              enemyCount: this._defeatEnemyCount,
+              specialBonus: this._specialBonus,
+            },
+            () => {
+              SceneManager.changeScene(
+                new GameScene(SceneManager.width, SceneManager.height),
+                "森林"
+              );
+            }
+          );
         }
         this._heroCommands
           .filter((b) => b.getHeroType() === u.type)
@@ -133,7 +150,7 @@ export class GameScene extends Container implements IScene {
     button.setCallback(() => {
       SceneManager.changeScene(
         new GameScene(SceneManager.width, SceneManager.height),
-        "草原"
+        "森林"
       );
     });
     this.addChild(button);
@@ -170,7 +187,7 @@ export class GameScene extends Container implements IScene {
           80 * SceneManager.scale
         );
         b.setCallback(() => {
-          if (this._fadeOutHeros) return false;
+          if (this._fadeOutHeros || this._gameover) return false;
           const hero = this._hero[index];
           if (hero.isDead()) return false;
           hero.loadAttack(w);
@@ -264,14 +281,29 @@ export class GameScene extends Container implements IScene {
       this.removeChild(obj);
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
       if (type == this._stageInfo.boss.type) {
-        if (SceneManager.CurrentStageName == "砂漠") {
-          this.showReload();
-        } else {
-          this._fadeOutHeros = true;
-        }
+        sound.stopAll();
+        sound.play("win", { loop: true });
+        this._gameover = true;
         this.removeChild(this._bossLifeGage!);
         this._bossLifeGage?.destroy();
         this._bossLifeGage = undefined;
+        StageClear.show(
+          {
+            type: "ボス撃破",
+            enemyCount: this._defeatEnemyCount,
+            specialBonus: this._specialBonus,
+          },
+          () => {
+            if (SceneManager.CurrentStageName == "砂漠") {
+              SceneManager.changeScene(
+                new GameScene(SceneManager.width, SceneManager.height),
+                "森林"
+              );
+            } else {
+              this._fadeOutHeros = true;
+            }
+          }
+        );
       }
     });
 
@@ -285,6 +317,19 @@ export class GameScene extends Container implements IScene {
       return;
     }
     this._frameCount += framesPassed;
+    if (this._fadeOutHeros) {
+      this._hero.forEach((h) => {
+        h.move(framesPassed * 4, 0);
+      });
+      this._fadeOutHerosCount += framesPassed;
+      if (this._fadeOutHerosCount > 200) {
+        SceneManager.changeScene(
+          new GameScene(SceneManager.width, SceneManager.height),
+          "砂漠"
+        );
+      }
+      return;
+    }
     if (this._gameover) {
       return;
     }
@@ -294,17 +339,42 @@ export class GameScene extends Container implements IScene {
       });
       this._statusBar!.update(framesPassed);
     }
-    this._counter += framesPassed;
+    if (this._statusBar!.progress >= 1) {
+      this._gameover = true;
+      sound.stopAll();
+      sound.play("win", { loop: true });
+      StageClear.show(
+        {
+          type: "踏破",
+          enemyCount: this._defeatEnemyCount,
+          specialBonus: 0,
+        },
+        () => {
+          if (SceneManager.CurrentStageName == "砂漠") {
+            SceneManager.changeScene(
+              new GameScene(SceneManager.width, SceneManager.height),
+              "森林"
+            );
+          } else {
+            this._fadeOutHeros = true;
+          }
+        }
+      );
+      return;
+    }
+
     this._hero.forEach((hero) => {
       hero.update(framesPassed);
     });
     this._enemy.forEach((e) => {
       e.update(framesPassed);
     });
-    if (this._counter >= this._nextEnemy) {
+
+    this._encountCounter += framesPassed;
+    if (this._encountCounter >= this._nextEnemy) {
       this.loadEnemy();
       this._nextEnemy = getRandom(this._stageInfo.nextEnemyCount) + 10;
-      this._counter = 0;
+      this._encountCounter = 0;
     }
     this._enemy.forEach((e) => {
       e.update(framesPassed);
@@ -319,18 +389,6 @@ export class GameScene extends Container implements IScene {
         p.update(this._hero[index].restLife());
       });
     }
-    if (this._fadeOutHeros) {
-      this._hero.forEach((h) => {
-        h.move(framesPassed * 4, 0);
-      });
-      this._fadeOutHerosCount += framesPassed;
-      if (this._fadeOutHerosCount > 200) {
-        SceneManager.changeScene(
-          new GameScene(SceneManager.width, SceneManager.height),
-          "砂漠"
-        );
-      }
-    }
   }
 
   enemyHitTest(): void {
@@ -340,6 +398,7 @@ export class GameScene extends Container implements IScene {
       const result = hero.attackHitTest(this._enemy);
       exp += result.exp;
       money += result.money;
+      this._defeatEnemyCount += result.count;
     });
     if (money) {
       this._getMoney += money;
@@ -382,9 +441,7 @@ export class GameScene extends Container implements IScene {
       this._hero.forEach((hero) => {
         if (hero.isHit(e)) {
           const value = e.attackPower - hero.defencePower;
-          if (value > 0) {
-            hero.damaged(e.attackPower, true);
-          }
+          hero.damaged(value, true);
           e.stop(true);
           this._isHitted = true;
         }

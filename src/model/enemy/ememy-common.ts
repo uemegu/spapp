@@ -6,6 +6,7 @@ import { WeaponFactory } from "../wepon/wepon-factory";
 import { WeaponModel } from "../wepon/wepon-common";
 import { HeroModel } from "../hero/hero-common";
 import { SceneManager } from "../../shared/scene-manager";
+import { sound } from "@pixi/sound";
 
 export class EnemyModel extends SpriteModel {
   private _currentWeapons: Array<WeaponModel> = [];
@@ -77,7 +78,7 @@ export class EnemyModel extends SpriteModel {
       hero.forEach((e) => {
         this._currentWeapons.forEach((w) => {
           if (!w.isDead() && w.isHit(e)) {
-            const damage = w.attackPower;
+            const damage = w.attackPower - e.defencePower;
             if (e.damaged(damage)) {
               w.hitted();
             }

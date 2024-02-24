@@ -87,6 +87,8 @@ export const manifest: AssetsManifest = {
       assets: {
         field1: "sound/bgm/field1.m4a",
         desert: "sound/bgm/desert.m4a",
+        win: "sound/bgm/Short_RPG_06.mp3",
+        failed: "sound/bgm/Short_Gothic_09.mp3",
       },
     },
     {
@@ -100,6 +102,7 @@ export const manifest: AssetsManifest = {
         se_thander: "sound/se/thander.mp3",
         se_aero: "sound/se/aero.mp3",
         se_level_up: "sound/se/level_up.mp3",
+        se_defense: "sound/se/defense.mp3",
       },
     },
   ],
