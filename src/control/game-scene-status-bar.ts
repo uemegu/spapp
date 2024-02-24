@@ -17,11 +17,11 @@ export class GameSceneStatusBar extends Container implements IUpdate {
 
     this._endCount = endCount;
 
-    this._graphics = Sprite.from("status_bar");
-    this._graphics.x = SceneManager.width - 200 * SceneManager.scale - 12;
-    this._graphics.y = 0;
-    this._graphics.width = 200 * SceneManager.scale;
-    this._graphics.height = 62 * SceneManager.scale;
+    this._graphics = Sprite.from("panel_background3");
+    this._graphics.x = SceneManager.width - 150 * SceneManager.scale + 20;
+    this._graphics.y = -20;
+    this._graphics.width = 150 * SceneManager.scale;
+    this._graphics.height = 100 * SceneManager.scale;
 
     const money = Sprite.from("money");
     money.x = 90 * SceneManager.scale;
@@ -72,17 +72,22 @@ export class GameSceneStatusBar extends Container implements IUpdate {
 
     const fieldName = new Text(
       strings.getString(SceneManager.CurrentStageName),
-      style
+      new TextStyle({
+        fontSize: 22 * SceneManager.scale,
+        fontWeight: "bold",
+        fill: ["ffffff"],
+        stroke: "8888ee",
+        strokeThickness: 5,
+        wordWrap: false,
+      })
     );
     fieldName.x =
       SceneManager.width -
-      200 * SceneManager.scale -
-      12 +
-      (200 * SceneManager.scale) / 2 -
+      (150 * SceneManager.scale) / 2 -
       (strings.getString(SceneManager.CurrentStageName).length / 2) *
         24 *
         SceneManager.scale;
-    fieldName.y = 13 * SceneManager.scale;
+    fieldName.y = 20 * SceneManager.scale;
 
     this.addChild(this._gage2);
     this.addChild(this._graphics);
