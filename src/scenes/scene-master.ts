@@ -45,8 +45,12 @@ export const Stages: Array<StageInfo> = [
         rate: 2,
       },
       {
+        type: "ゴブリンアーチャー",
+        rate: 1,
+      },
+      {
         type: "スライム",
-        rate: 4,
+        rate: 3,
       },
       {
         type: "ゾンビ",

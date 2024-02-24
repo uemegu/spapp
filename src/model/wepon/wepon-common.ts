@@ -77,7 +77,7 @@ export abstract class WeaponModel extends SpriteModel {
   }
 
   reverse(): void {
-    this._me!.scale = { x: -1, y: 1 };
+    this._me!.scale = { x: -this._me!.scale.x, y: this._me!.scale.y };
   }
 
   update(framesPassed: number): void {
@@ -128,7 +128,11 @@ export class ThrowAttakModel extends WeaponModel {
   }
 
   update(framesPassed: number): void {
-    this._me!.x += framesPassed * 2 * SceneManager.scale;
+    let speed = framesPassed * 2 * SceneManager.scale;
+    if (this._me!.scale.x < 0) {
+      speed *= -1;
+    }
+    this._me!.x += speed;
     super.update(framesPassed);
   }
 }
@@ -148,7 +152,11 @@ export class BigAttakModel extends ThrowAttakModel {
 
 export class FastThrowAttakModel extends ThrowAttakModel {
   update(framesPassed: number): void {
-    this._me!.x += framesPassed * 2 * 3 * SceneManager.scale;
+    let speed = framesPassed * 2 * 3 * SceneManager.scale;
+    if (this._me!.scale.x < 0) {
+      speed *= -1;
+    }
+    this._me!.x += speed;
     super.update(framesPassed);
   }
 }

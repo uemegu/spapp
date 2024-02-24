@@ -11,7 +11,10 @@ export interface HeroConfig {
 export interface EnemyConfig {
   type: EnemyType;
   resourceName: string;
+  attackType?: WeaponType;
   sequenceCount: number;
+  attackSequenceCount?: number;
+  attackCounter?: number;
   maxHp: number;
   power: number;
   speed: number;
@@ -91,15 +94,31 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     sequenceCount: 2,
     maxHp: 30,
     power: 10,
-    speed: 3,
+    speed: 2,
     exp: 15,
     money: 5,
+    offsetY: 2,
+  },
+  {
+    type: "ゴブリンアーチャー",
+    resourceName: "gobrin_archer_",
+    attackType: "ショット",
+    sequenceCount: 2,
+    attackSequenceCount: 1,
+    attackCounter: 50,
+    maxHp: 40,
+    power: 20,
+    speed: 2,
+    exp: 30,
+    money: 15,
     offsetY: 2,
   },
   {
     type: "ホブゴブリン",
     resourceName: "hobgoblin_",
     sequenceCount: 2,
+    attackType: "スマッシュ",
+    attackSequenceCount: 2,
     maxHp: 800,
     power: 30,
     speed: 1,
@@ -133,6 +152,8 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     type: "キマイラ",
     resourceName: "chimera_",
     sequenceCount: 2,
+    attackType: "スマッシュ",
+    attackSequenceCount: 2,
     maxHp: 1200,
     power: 50,
     speed: 1,
@@ -228,7 +249,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     sequenceCount: 1,
     power: 20,
     coolTime: 50,
-    limitTime: 80,
+    limitTime: 300,
     onetime: true,
     targetType: "敵",
     attenuationRate: 1,
@@ -254,6 +275,7 @@ export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
 export type EnemyType =
   | "ゾンビ"
   | "ゴブリン"
+  | "ゴブリンアーチャー"
   | "スライム"
   | "ホブゴブリン"
   | "ミイラ"

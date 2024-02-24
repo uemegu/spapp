@@ -1,6 +1,6 @@
 import { EnemyType } from "../model-types";
-import { Boss_1 } from "./boss_1";
-import { EnemyModel } from "./ememy-common";
+import { HitAndAwwayEnemy, SimpleAttackEnemy } from "./enemy-variations";
+import { EnemyModel } from "./enemy-common";
 
 export class EnemyFactory {
   protected _restTime: number = 0;
@@ -11,9 +11,11 @@ export class EnemyFactory {
   ): EnemyModel {
     switch (type) {
       case "ホブゴブリン":
-        return new Boss_1(type, parentWidth, parentHeight);
+        return new SimpleAttackEnemy(type, parentWidth, parentHeight);
       case "キマイラ":
-        return new Boss_1(type, parentWidth, parentHeight);
+        return new SimpleAttackEnemy(type, parentWidth, parentHeight);
+      case "ゴブリンアーチャー":
+        return new HitAndAwwayEnemy(type, parentWidth, parentHeight);
       default:
         return new EnemyModel(type, parentWidth, parentHeight);
     }

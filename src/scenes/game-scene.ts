@@ -2,7 +2,7 @@ import { Container, Texture, TilingSprite } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { HeroModel } from "../model/hero/hero-common";
 import { getRandom } from "../util";
-import { EnemyModel } from "../model/enemy/ememy-common";
+import { EnemyModel } from "../model/enemy/enemy-common";
 import {
   EnemyType,
   HeroConfig,
@@ -139,21 +139,6 @@ export class GameScene extends Container implements IScene {
         this._parentHeight - 190 * SceneManager.scale
       );
     });
-  }
-
-  private showReload(): void {
-    const button = new Button(
-      strings.getString("もう1回"),
-      SceneManager.width / 2 - 60,
-      SceneManager.height / 2
-    );
-    button.setCallback(() => {
-      SceneManager.changeScene(
-        new GameScene(SceneManager.width, SceneManager.height),
-        "森林"
-      );
-    });
-    this.addChild(button);
   }
 
   private addCommandButton(): void {
@@ -388,6 +373,10 @@ export class GameScene extends Container implements IScene {
       this._heroPanels.forEach((p, index) => {
         p.update(this._hero[index].restLife());
       });
+    } else {
+      this._enemy.forEach((e) => {
+        e.move(-1, 0);
+      });
     }
   }
 
@@ -446,7 +435,7 @@ export class GameScene extends Container implements IScene {
           this._isHitted = true;
         }
       });
-      e.attackHitTest(this._hero);
+      this._isHitted ||= e.attackHitTest(this._hero);
     });
   }
 

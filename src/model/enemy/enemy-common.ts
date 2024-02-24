@@ -9,7 +9,7 @@ import { SceneManager } from "../../shared/scene-manager";
 import { sound } from "@pixi/sound";
 
 export class EnemyModel extends SpriteModel {
-  private _currentWeapons: Array<WeaponModel> = [];
+  protected _currentWeapons: Array<WeaponModel> = [];
 
   constructor(
     type: HeroType | EnemyType | WeaponType,
@@ -73,19 +73,22 @@ export class EnemyModel extends SpriteModel {
     this._currentWeapons.push(attack);
   }
 
-  attackHitTest(hero: Array<HeroModel>): void {
+  attackHitTest(hero: Array<HeroModel>): boolean {
+    let isHit = false;
     if (this._currentWeapons.length > 0) {
       hero.forEach((e) => {
         this._currentWeapons.forEach((w) => {
-          if (!w.isDead() && w.isHit(e)) {
+          if (!e.isDead() && w.isHit(e)) {
             const damage = w.attackPower - e.defencePower;
-            if (e.damaged(damage)) {
+            if (e.damaged(damage, true)) {
               w.hitted();
+              isHit = true;
             }
           }
         });
       });
     }
+    return isHit;
   }
 
   restLife(): number {

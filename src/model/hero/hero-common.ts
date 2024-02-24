@@ -13,7 +13,7 @@ import {
   AuxiliarySelfModel,
   WeaponModel,
 } from "../wepon/wepon-common";
-import { EnemyModel } from "../enemy/ememy-common";
+import { EnemyModel } from "../enemy/enemy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { SceneManager } from "../../shared/scene-manager";
 import { GameScene } from "../../scenes/game-scene";
