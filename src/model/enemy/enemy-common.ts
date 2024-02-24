@@ -1,4 +1,4 @@
-import { AnimatedSprite, Sprite, Texture } from "pixi.js";
+import { AnimatedSprite, ColorMatrixFilter, Sprite, Texture } from "pixi.js";
 import { SpriteModel } from "../model-share";
 import { getRandom } from "../../util";
 import { EnemyConfig, EnemyType, HeroType, WeaponType } from "../model-types";
@@ -50,6 +50,11 @@ export class EnemyModel extends SpriteModel {
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
     SceneManager.requestAddChild(this._me);
+    if ((this._config as EnemyConfig).hue) {
+      const filter = new ColorMatrixFilter();
+      filter.hue((this._config as EnemyConfig).hue!, false);
+      this._me!.filters = [filter];
+    }
   }
 
   update(framesPassed: number): void {

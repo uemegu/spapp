@@ -308,6 +308,7 @@ export class GameScene extends Container implements IScene {
       });
       this._fadeOutHerosCount += framesPassed;
       if (this._fadeOutHerosCount > 200) {
+        sound.stopAll();
         SceneManager.changeScene(
           new GameScene(SceneManager.width, SceneManager.height),
           "砂漠"

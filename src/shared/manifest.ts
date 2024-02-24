@@ -83,6 +83,7 @@ export const manifest: AssetsManifest = {
         panel_background2: "resources/images/ui/panel_background2.png",
         status_bar: "resources/images/ui/statusbar.png",
         money: "resources/images/ui/money.png",
+        opening: "resources/images/ui/opening.jpg",
       },
     },
     {

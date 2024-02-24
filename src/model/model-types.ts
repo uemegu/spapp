@@ -21,6 +21,7 @@ export interface EnemyConfig {
   exp: number;
   money: number;
   offsetY: number;
+  hue?: number;
 }
 
 export interface WeaponConfig {
@@ -109,7 +110,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     maxHp: 40,
     power: 20,
     speed: 2,
-    exp: 30,
+    exp: 20,
     money: 15,
     offsetY: 2,
   },
@@ -129,13 +130,25 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   {
     type: "スライム",
     resourceName: "slime_",
-    sequenceCount: 4,
+    sequenceCount: 2,
     maxHp: 100,
     power: 5,
     speed: 0.5,
     exp: 2,
     money: 1,
     offsetY: 0,
+  },
+  {
+    type: "ブラッドスライム",
+    resourceName: "slime_",
+    sequenceCount: 2,
+    maxHp: 200,
+    power: 15,
+    speed: 0.5,
+    exp: 15,
+    money: 1,
+    offsetY: 0,
+    hue: -143,
   },
   {
     type: "ミイラ",
@@ -277,6 +290,7 @@ export type EnemyType =
   | "ゴブリン"
   | "ゴブリンアーチャー"
   | "スライム"
+  | "ブラッドスライム"
   | "ホブゴブリン"
   | "ミイラ"
   | "キマイラ";

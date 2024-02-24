@@ -118,7 +118,7 @@ export class HitAndAwwayEnemy extends EnemyModel {
       (this._me as AnimatedSprite).animationSpeed = 0.01;
       (this._me as AnimatedSprite).play();
       this.loadAttack((this._config as EnemyConfig).attackType!);
-      this._attackMotionCount = 100;
+      this._attackMotionCount = 150;
     }
   }
 }

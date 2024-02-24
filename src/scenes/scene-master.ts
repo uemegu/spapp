@@ -49,10 +49,6 @@ export const Stages: Array<StageInfo> = [
         rate: 1,
       },
       {
-        type: "スライム",
-        rate: 3,
-      },
-      {
         type: "ゾンビ",
         rate: 4,
       },
@@ -98,12 +94,16 @@ export const Stages: Array<StageInfo> = [
         rate: 4,
       },
       {
-        type: "スライム",
+        type: "ブラッドスライム",
         rate: 2,
       },
       {
+        type: "ゴブリンアーチャー",
+        rate: 1,
+      },
+      {
         type: "ゾンビ",
-        rate: 4,
+        rate: 3,
       },
     ],
     boss: {

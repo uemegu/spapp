@@ -1,4 +1,4 @@
-import { Container } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { GameScene } from "./game-scene";
 import { Button } from "../control/button";
@@ -10,10 +10,18 @@ export class StartScene extends Container implements IScene {
   }
 
   load(): void {
+    const graphics = Sprite.from("opening");
+    graphics.width = SceneManager.width;
+    graphics.height = SceneManager.height;
+    this.addChild(graphics);
+
     const button = new Button(
       strings.getString("スタート"),
-      SceneManager.width / 2 - 60,
-      SceneManager.height / 2
+      SceneManager.width * 0.8,
+      SceneManager.height * 0.7,
+      {
+        textSize: 24 * SceneManager.scale,
+      }
     );
     button.setCallback(() => {
       SceneManager.changeScene(
