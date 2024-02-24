@@ -68,8 +68,8 @@ export class HeroModel extends SpriteModel {
     }
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
-    this._me.width = 250 * 0.25 * SceneManager.scale;
-    this._me.height = 512 * 0.25 * SceneManager.scale;
+    this._me.width = 300 * 0.25 * SceneManager.scale;
+    this._me.height = 400 * 0.25 * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
 

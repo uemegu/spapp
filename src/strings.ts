@@ -3,6 +3,7 @@ import LocalizedStrings from "localized-strings";
 export const strings = new LocalizedStrings({
   ja: {
     勇者: "ゆうしゃ",
+    戦士: "せんし",
     アーチャー: "あーちゃー",
     魔法使い: "まじしゃん",
     僧侶: "ぷりーすと",

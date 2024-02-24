@@ -7,8 +7,15 @@ export const manifest: AssetsManifest = {
       assets: {
         hero_walk_1: "resources/images/hero/hero_walk_1.png",
         wizard_walk_1: "resources/images/hero/wizard_walk_1.png",
+        wizard_walk_2: "resources/images/hero/wizard_walk_2.png",
         priest_walk_1: "resources/images/hero/priest_walk_1.png",
+        priest_walk_2: "resources/images/hero/priest_walk_2.png",
         archer_walk_1: "resources/images/hero/archer_walk_1.png",
+        archer_walk_2: "resources/images/hero/archer_walk_2.png",
+        fighter_walk_1: "resources/images/hero/fighter_walk_1.png",
+        fighter_walk_2: "resources/images/hero/fighter_walk_2.png",
+        fighter_walk_3: "resources/images/hero/fighter_walk_3.png",
+        fighter_walk_4: "resources/images/hero/fighter_walk_4.png",
       },
     },
     {

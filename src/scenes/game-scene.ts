@@ -33,7 +33,7 @@ export class GameScene extends Container implements IScene {
   // TODO
   private static _unitInfo: Array<UnitInfo> = [
     {
-      type: "勇者",
+      type: "戦士",
       weapons: ["スマッシュ", "ガード"],
       exp: 0,
       level: 1,

@@ -48,9 +48,18 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     dex: 10,
   },
   {
+    type: "戦士",
+    resourceName: "fighter_walk_",
+    sequenceCount: 4,
+    maxHp: 100,
+    defaultAttackRange: 1,
+    defencePower: 2,
+    dex: 10,
+  },
+  {
     type: "魔法使い",
     resourceName: "wizard_walk_",
-    sequenceCount: 1,
+    sequenceCount: 2,
     maxHp: 80,
     defaultAttackRange: 1,
     defencePower: 1,
@@ -59,7 +68,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   {
     type: "僧侶",
     resourceName: "priest_walk_",
-    sequenceCount: 1,
+    sequenceCount: 2,
     maxHp: 80,
     defaultAttackRange: 1,
     defencePower: 1,
@@ -68,7 +77,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   {
     type: "アーチャー",
     resourceName: "archer_walk_",
-    sequenceCount: 1,
+    sequenceCount: 2,
     maxHp: 80,
     defaultAttackRange: 4,
     defencePower: 1,
@@ -250,7 +259,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
 ];
 
-export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
+export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー" | "戦士";
 export type EnemyType =
   | "ゾンビ"
   | "ゴブリン"
