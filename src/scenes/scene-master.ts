@@ -29,6 +29,7 @@ export interface StageInfo {
   background: Array<BackgroundInfo>;
   sound: SoundInfo;
   nextEnemyCount: number;
+  endCount: number;
 }
 
 export type StageName = "草原" | "砂漠";
@@ -37,6 +38,7 @@ export const Stages: Array<StageInfo> = [
   {
     name: "草原",
     nextEnemyCount: 60,
+    endCount: 3000,
     enemy: [
       {
         type: "ゴブリン",
@@ -85,6 +87,7 @@ export const Stages: Array<StageInfo> = [
   {
     name: "砂漠",
     nextEnemyCount: 30,
+    endCount: 3000,
     enemy: [
       {
         type: "ミイラ",

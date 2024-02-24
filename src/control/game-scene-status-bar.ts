@@ -1,4 +1,4 @@
-import { Container, Sprite, TextStyle, Text } from "pixi.js";
+import { Container, Sprite, TextStyle, Text, Graphics } from "pixi.js";
 import { IUpdate, SceneManager } from "../shared/scene-manager";
 import { strings } from "../strings";
 import { Button } from "./button";
@@ -7,9 +7,16 @@ export interface GameSceneStatusBarOption {}
 export class GameSceneStatusBar extends Container implements IUpdate {
   private _graphics: Sprite;
   private _money: Text;
+  private _upText: Array<{ count: number; money: Text }> = [];
+  private _gage: Graphics;
+  private _gage2: Graphics;
+  private _endCount: number;
+  private _count: number = 0;
 
-  constructor() {
+  constructor(endCount: number) {
     super();
+
+    this._endCount = endCount;
 
     this._graphics = Sprite.from("status_bar");
     this._graphics.x = SceneManager.width - 200 * SceneManager.scale - 12;
@@ -37,10 +44,9 @@ export class GameSceneStatusBar extends Container implements IUpdate {
 
     const button = new Button(
       strings.getString("とめる"),
-      10 * SceneManager.scale,
+      5 * SceneManager.scale,
       16 * SceneManager.scale,
       {
-        //height: 24 * SceneManager.scale,
         textSize: 12 * SceneManager.scale,
         lineWidth: 1,
         backgroundColor: 0x37474f,
@@ -59,6 +65,25 @@ export class GameSceneStatusBar extends Container implements IUpdate {
         SceneManager.suspend = true;
       }
     });
+
+    this._gage = new Graphics();
+    this._gage.beginFill(0xffcdd2);
+    this._gage.drawRect(
+      SceneManager.width - 200 * SceneManager.scale - 12,
+      this._graphics.height,
+      200 * SceneManager.scale,
+      5 * SceneManager.scale
+    );
+    this._gage.endFill();
+    this._gage2 = new Graphics();
+    this._gage2.beginFill(0xf604b1);
+    this._gage2.drawRect(
+      SceneManager.width - 200 * SceneManager.scale - 12,
+      this._graphics.height,
+      0,
+      5 * SceneManager.scale
+    );
+    this._gage2.endFill();
 
     const fieldName = new Text(
       strings.getString(SceneManager.CurrentStageName),
@@ -79,12 +104,60 @@ export class GameSceneStatusBar extends Container implements IUpdate {
     this.addChild(money);
     this.addChild(button);
     this.addChild(fieldName);
+    this.addChild(this._gage);
+    this.addChild(this._gage2);
   }
 
   updateMoney(money: number) {
+    const current = Number(this._money.text);
+    const diff = money - current;
     this._money.text = money.toString();
-    console.log(this._money.text, money);
+    if (diff) {
+      const style = new TextStyle({
+        fontSize: 22 * SceneManager.scale,
+        fontWeight: "bold",
+        fill: ["#ffffff", "#00ff99"],
+        stroke: "0x000000",
+        strokeThickness: 5,
+        wordWrap: false,
+      });
+      const upText = new Text(`+${diff}`, style);
+      upText.x = this._money.x;
+      upText.x += this._money.width - upText.width;
+      upText.y = 12 * SceneManager.scale;
+      this.addChild(upText);
+      this._upText.push({
+        count: 0,
+        money: upText,
+      });
+    }
   }
 
-  update(): void {}
+  update(framesPassed: number): void {
+    this._count += framesPassed;
+    if (this._upText.length) {
+      const removes: Array<any> = [];
+      this._upText.forEach((t) => {
+        t.money.y -= framesPassed;
+        t.count += framesPassed;
+        if (t.count > 10) {
+          removes.push(t);
+          this.removeChild(t.money);
+        }
+      });
+      removes.forEach((r) => {
+        this._upText.splice(this._upText.indexOf(r), 1);
+      });
+    }
+
+    this._gage2.clear();
+    this._gage2.beginFill(0xf604b1);
+    this._gage2.drawRect(
+      SceneManager.width - 200 * SceneManager.scale - 12,
+      this._graphics.height,
+      200 * SceneManager.scale * (this._count / this._endCount),
+      5 * SceneManager.scale
+    );
+    this._gage2.endFill();
+  }
 }

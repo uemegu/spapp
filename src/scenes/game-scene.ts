@@ -189,7 +189,7 @@ export class GameScene extends Container implements IScene {
   }
 
   private addStatusBar() {
-    this._statusBar = new GameSceneStatusBar();
+    this._statusBar = new GameSceneStatusBar(this._stageInfo.endCount);
     this.addChild(this._statusBar!);
   }
 
@@ -292,6 +292,7 @@ export class GameScene extends Container implements IScene {
       this._stageInfo.background.forEach((back, index) => {
         this._tilingSprite[index].tilePosition.x -= back.movePower;
       });
+      this._statusBar!.update(framesPassed);
     }
     this._counter += framesPassed;
     this._hero.forEach((hero) => {

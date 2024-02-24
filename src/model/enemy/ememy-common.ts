@@ -37,7 +37,6 @@ export class EnemyModel extends SpriteModel {
     for (let i = 1; i <= this._config.sequenceCount; i++) {
       frames.push(Texture.from(`${this._config.resourceName}${i}`));
     }
-    const offset = getRandom(15);
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);
     this._me.width = 128 * SceneManager.scale;
@@ -46,7 +45,7 @@ export class EnemyModel extends SpriteModel {
     this._me.position.y =
       this._parentHeight -
       175 * SceneManager.scale -
-      offset * SceneManager.scale;
+      (this._config as EnemyConfig).offsetY * SceneManager.scale;
     (this._me as AnimatedSprite).animationSpeed = 0.1;
     (this._me as AnimatedSprite).play();
     SceneManager.requestAddChild(this._me);

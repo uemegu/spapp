@@ -17,6 +17,7 @@ export interface EnemyConfig {
   speed: number;
   exp: number;
   money: number;
+  offsetY: number;
 }
 
 export interface WeaponConfig {
@@ -82,6 +83,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 1,
     exp: 5,
     money: 5,
+    offsetY: 10,
   },
   {
     type: "ゴブリン",
@@ -92,6 +94,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 3,
     exp: 15,
     money: 5,
+    offsetY: 2,
   },
   {
     type: "ホブゴブリン",
@@ -102,6 +105,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 1,
     exp: 50,
     money: 50,
+    offsetY: 10,
   },
   {
     type: "スライム",
@@ -112,6 +116,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 0.5,
     exp: 2,
     money: 1,
+    offsetY: 0,
   },
   {
     type: "ミイラ",
@@ -122,6 +127,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 1,
     exp: 20,
     money: 10,
+    offsetY: 10,
   },
   {
     type: "キマイラ",
@@ -132,6 +138,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     speed: 1,
     exp: 150,
     money: 150,
+    offsetY: 10,
   },
   {
     type: "スマッシュ",
