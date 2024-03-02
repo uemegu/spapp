@@ -5,6 +5,7 @@ import { Button } from "../control/game-scene/button";
 import { strings } from "../strings";
 import { EditScene } from "./edit-scene";
 import { sound } from "@pixi/sound";
+import { BGM } from "../util";
 
 export class StartScene extends Container implements IScene {
   constructor(parentWidth: number, parentHeight: number) {
@@ -13,8 +14,7 @@ export class StartScene extends Container implements IScene {
 
   load(): void {
     const graphics = Sprite.from("opening");
-    sound.stopAll();
-    sound.play("opening");
+    BGM("opening");
 
     graphics.width = SceneManager.width;
     graphics.height = SceneManager.height;

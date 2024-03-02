@@ -1,3 +1,4 @@
+import { sound } from "@pixi/sound";
 import { HeroConfig, HeroType, ModelConfig, WeaponConfig, WeaponType } from "./model/model-types";
 
 export function getRandom(max: number): number {
@@ -30,4 +31,9 @@ export function WeaponSpec(type: WeaponType): WeaponConfig {
 
 export function HeroSpec(type: HeroType): HeroConfig {
   return ModelConfig.find((m) => m.type == type) as HeroConfig;
+}
+
+export function BGM(name: string, loop: boolean = true) {
+  sound.stopAll();
+  sound.play(name, { loop: loop });
 }

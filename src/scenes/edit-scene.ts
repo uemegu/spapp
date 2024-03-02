@@ -3,14 +3,11 @@ import { IScene, SceneManager } from "../shared/scene-manager";
 import { CurrentUnitInfo } from "./scene-master";
 import { CharactorCard } from "../control/charactor-card/charactor-card";
 import { GameScene } from "./game-scene";
-import { sound } from "@pixi/sound";
+import { BGM } from "../util";
 
 export class EditScene extends Container implements IScene {
   constructor(parentWidth: number, parentHeight: number) {
     super();
-
-    sound.stopAll();
-    sound.play("town");
 
     document.getElementById("app")?.classList.add("hidden");
     document.getElementById("editScreen")?.classList.remove("hidden");
@@ -32,7 +29,9 @@ export class EditScene extends Container implements IScene {
     document.getElementById("charactorList")!.innerHTML = html;
   }
 
-  load(): void {}
+  load(): void {
+    BGM("town");
+  }
 
   resize(screenWidth: number, screenHeight: number): void {}
 

@@ -1,4 +1,3 @@
-import { ModelConfig } from "../../model/model-types";
 import { UnitInfo } from "../../scenes/scene-master";
 import { strings } from "../../strings";
 import { HeroSpec, WeaponSpec, bind } from "../../util";

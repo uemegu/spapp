@@ -1,13 +1,12 @@
 import { Container, Texture, TilingSprite } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { HeroModel } from "../model/hero/hero-common";
-import { getRandom } from "../util";
+import { BGM, getRandom } from "../util";
 import { EnemyModel } from "../model/enemy/enemy-common";
-import { EnemyType, HeroConfig, HeroType, ModelConfig, WeaponConfig, WeaponType } from "../model/model-types";
+import { EnemyType, HeroConfig, HeroType, ModelConfig, WeaponConfig } from "../model/model-types";
 import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
 import { SkillButton } from "../control/game-scene/indicator-button";
-import { Button } from "../control/game-scene/button";
 import { strings } from "../strings";
 import { BossLifeGage } from "../control/game-scene/boss-life-gage";
 import { HeroPanel } from "../control/game-scene/hero-panel";
@@ -60,8 +59,7 @@ export class GameScene extends Container implements IScene {
     this._enemy = [];
     this._nextEnemy = getRandom(400);
 
-    sound.stopAll();
-    sound.play(this._stageInfo.sound.resourceName, { loop: true });
+    BGM(this._stageInfo.sound.resourceName, true);
     this.loadBackground();
     this.setHeros();
     this.addCommandButton();
@@ -77,8 +75,7 @@ export class GameScene extends Container implements IScene {
       hero.load((_) => {
         if (!this._hero.find((h) => !h.isDead())) {
           this._gameover = true;
-          sound.stopAll();
-          sound.play("failed", { loop: true });
+          BGM("failed");
           StageClear.show(
             {
               type: "失敗",
@@ -86,7 +83,6 @@ export class GameScene extends Container implements IScene {
               specialBonus: this._specialBonus,
             },
             () => {
-              sound.stopAll();
               SceneManager.changeScene(new EditScene(SceneManager.width, SceneManager.height));
             }
           );
@@ -188,8 +184,7 @@ export class GameScene extends Container implements IScene {
       this.removeChild(obj);
       this._enemy.splice(this._enemy.indexOf(enemy), 1);
       if (type == this._stageInfo.boss.type) {
-        sound.stopAll();
-        sound.play("win", { loop: true });
+        BGM("win");
         this._gameover = true;
         this.removeChild(this._bossLifeGage!);
         this._bossLifeGage?.destroy();
@@ -236,7 +231,6 @@ export class GameScene extends Container implements IScene {
       });
       this._fadeOutHerosCount += framesPassed;
       if (this._fadeOutHerosCount > 200) {
-        sound.stopAll();
         SceneManager.changeScene(new GameScene(SceneManager.width, SceneManager.height), "砂漠");
       }
       return;
@@ -252,8 +246,7 @@ export class GameScene extends Container implements IScene {
     }
     if (this._statusBar!.progress >= 1) {
       this._gameover = true;
-      sound.stopAll();
-      sound.play("win", { loop: true });
+      BGM("win");
       StageClear.show(
         {
           type: "踏破",
