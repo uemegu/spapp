@@ -14,7 +14,7 @@ export class StartScene extends Container implements IScene {
 
   load(): void {
     const graphics = Sprite.from("opening");
-    BGM("opening");
+    BGM("title");
 
     graphics.width = SceneManager.width;
     graphics.height = SceneManager.height;

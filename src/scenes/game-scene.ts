@@ -47,7 +47,7 @@ export class GameScene extends Container implements IScene {
     this._parentHeight = parentHeight;
     GameScene._unitInfo = [];
     CurrentUnitInfo.forEach((u) => {
-      GameScene._unitInfo.push(u);
+      GameScene._unitInfo.push({ ...u });
     });
   }
 

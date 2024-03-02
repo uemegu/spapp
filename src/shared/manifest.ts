@@ -94,7 +94,7 @@ export const manifest: AssetsManifest = {
         win: "sound/bgm/Short_RPG_06.mp3",
         failed: "sound/bgm/Short_Gothic_09.mp3",
         town: "sound/bgm/Town.mp3",
-        opening: "sound/bgm/Opening.mp3",
+        title: "sound/bgm/Opening.mp3",
       },
     },
     {
