@@ -1,4 +1,4 @@
-import { EnemyType } from "../model/model-types";
+import { EnemyType, HeroType, WeaponType } from "../model/model-types";
 
 export interface EnemyInfo {
   type: EnemyType;
@@ -136,5 +136,39 @@ export const Stages: Array<StageInfo> = [
     sound: {
       resourceName: "desert",
     },
+  },
+];
+
+export interface UnitInfo {
+  type: HeroType;
+  weapons: Array<WeaponType>;
+  exp: number;
+  level: number;
+}
+
+export const CurrentUnitInfo: Array<UnitInfo> = [
+  {
+    type: "勇者",
+    weapons: ["スマッシュ", "ガード"],
+    exp: 0,
+    level: 1,
+  },
+  {
+    type: "アーチャー",
+    weapons: ["ショット", "ロングショット"],
+    exp: 0,
+    level: 1,
+  },
+  {
+    type: "魔法使い",
+    weapons: ["ファイア", "サンダー"],
+    exp: 0,
+    level: 1,
+  },
+  {
+    type: "僧侶",
+    weapons: ["ヒール", "エアロ"],
+    exp: 0,
+    level: 1,
   },
 ];

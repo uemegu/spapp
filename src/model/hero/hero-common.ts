@@ -17,7 +17,7 @@ import { EnemyModel } from "../enemy/enemy-common";
 import { WeaponFactory } from "../wepon/wepon-factory";
 import { SceneManager } from "../../shared/scene-manager";
 import { GameScene } from "../../scenes/game-scene";
-import { UpText } from "../../control/up-text";
+import { UpText } from "../../control/game-scene/up-text";
 
 export interface BuffModel {
   attackPower: number;

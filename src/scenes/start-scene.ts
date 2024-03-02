@@ -1,8 +1,10 @@
 import { Container, Sprite } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { GameScene } from "./game-scene";
-import { Button } from "../control/button";
+import { Button } from "../control/game-scene/button";
 import { strings } from "../strings";
+import { EditScene } from "./edit-scene";
+import { sound } from "@pixi/sound";
 
 export class StartScene extends Container implements IScene {
   constructor(parentWidth: number, parentHeight: number) {
@@ -11,22 +13,18 @@ export class StartScene extends Container implements IScene {
 
   load(): void {
     const graphics = Sprite.from("opening");
+    sound.stopAll();
+    sound.play("opening");
+
     graphics.width = SceneManager.width;
     graphics.height = SceneManager.height;
     this.addChild(graphics);
 
-    const button = new Button(
-      strings.getString("スタート"),
-      SceneManager.width * 0.8,
-      SceneManager.height * 0.7,
-      {
-        textSize: 24 * SceneManager.scale,
-      }
-    );
+    const button = new Button(strings.getString("スタート"), SceneManager.width * 0.8, SceneManager.height * 0.7, {
+      textSize: 24 * SceneManager.scale,
+    });
     button.setCallback(() => {
-      SceneManager.changeScene(
-        new GameScene(SceneManager.width, SceneManager.height)
-      );
+      SceneManager.changeScene(new EditScene(SceneManager.width, SceneManager.height));
     });
     this.addChild(button);
   }

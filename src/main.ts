@@ -1,2 +1,3 @@
-import './style.css';
-import './index.ts';
+import "./style.css";
+import "./output.css";
+import "./index.ts";

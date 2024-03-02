@@ -3,61 +3,22 @@ import { IScene, SceneManager } from "../shared/scene-manager";
 import { HeroModel } from "../model/hero/hero-common";
 import { getRandom } from "../util";
 import { EnemyModel } from "../model/enemy/enemy-common";
-import {
-  EnemyType,
-  HeroConfig,
-  HeroType,
-  ModelConfig,
-  WeaponConfig,
-  WeaponType,
-} from "../model/model-types";
+import { EnemyType, HeroConfig, HeroType, ModelConfig, WeaponConfig, WeaponType } from "../model/model-types";
 import { sound } from "@pixi/sound";
 import { EnemyFactory } from "../model/enemy/enemy-factory";
-import { SkillButton } from "../control/indicator-button";
-import { Button } from "../control/button";
+import { SkillButton } from "../control/game-scene/indicator-button";
+import { Button } from "../control/game-scene/button";
 import { strings } from "../strings";
-import { BossLifeGage } from "../control/boss-life-gage";
-import { HeroPanel } from "../control/hero-panel";
-import { StageInfo, Stages } from "./scene-master";
-import { UpText } from "../control/up-text";
-import { GameSceneStatusBar } from "../control/game-scene-status-bar";
-import { StageClear } from "../control/stage-clear";
-
-export interface UnitInfo {
-  type: HeroType;
-  weapons: Array<WeaponType>;
-  exp: number;
-  level: number;
-}
+import { BossLifeGage } from "../control/game-scene/boss-life-gage";
+import { HeroPanel } from "../control/game-scene/hero-panel";
+import { CurrentUnitInfo, StageInfo, Stages, UnitInfo } from "./scene-master";
+import { UpText } from "../control/game-scene/up-text";
+import { GameSceneStatusBar } from "../control/game-scene/game-scene-status-bar";
+import { StageClear } from "../control/game-scene/stage-clear";
+import { EditScene } from "./edit-scene";
 
 export class GameScene extends Container implements IScene {
-  // TODO
-  private static _unitInfo: Array<UnitInfo> = [
-    {
-      type: "勇者",
-      weapons: ["スマッシュ", "ガード"],
-      exp: 0,
-      level: 1,
-    },
-    {
-      type: "アーチャー",
-      weapons: ["ショット", "ロングショット"],
-      exp: 0,
-      level: 1,
-    },
-    {
-      type: "魔法使い",
-      weapons: ["ファイア", "サンダー"],
-      exp: 0,
-      level: 1,
-    },
-    {
-      type: "僧侶",
-      weapons: ["ヒール", "エアロ"],
-      exp: 0,
-      level: 1,
-    },
-  ];
+  private static _unitInfo: Array<UnitInfo> = [];
 
   private _hero!: Array<HeroModel>;
   private _heroCommands: Array<SkillButton> = [];
@@ -85,6 +46,10 @@ export class GameScene extends Container implements IScene {
     super();
     this._parentWidth = parentWidth;
     this._parentHeight = parentHeight;
+    GameScene._unitInfo = [];
+    CurrentUnitInfo.forEach((u) => {
+      GameScene._unitInfo.push(u);
+    });
   }
 
   private get _stageInfo(): StageInfo {
@@ -121,56 +86,28 @@ export class GameScene extends Container implements IScene {
               specialBonus: this._specialBonus,
             },
             () => {
-              SceneManager.changeScene(
-                new GameScene(SceneManager.width, SceneManager.height),
-                "森林"
-              );
+              sound.stopAll();
+              SceneManager.changeScene(new EditScene(SceneManager.width, SceneManager.height));
             }
           );
         }
-        this._heroCommands
-          .filter((b) => b.getHeroType() === u.type)
-          .forEach((b) => b.disable());
+        this._heroCommands.filter((b) => b.getHeroType() === u.type).forEach((b) => b.disable());
       });
-      hero.move(
-        this._parentWidth / 2 -
-          120 * SceneManager.scale -
-          60 * index * SceneManager.scale,
-        this._parentHeight - 190 * SceneManager.scale
-      );
+      hero.move(this._parentWidth / 2 - 120 * SceneManager.scale - 60 * index * SceneManager.scale, this._parentHeight - 190 * SceneManager.scale);
     });
   }
 
   private addCommandButton(): void {
-    const sum = GameScene._unitInfo
-      .map((a, b) => a.weapons.length)
-      .reduce((a, b) => a + b);
+    const sum = GameScene._unitInfo.map((a, b) => a.weapons.length).reduce((a, b) => a + b);
     let i = 0;
     GameScene._unitInfo.forEach((u, index) => {
-      const heroConfig = ModelConfig.find(
-        (c) => c.type === u.type
-      ) as HeroConfig;
-      const p = new HeroPanel(
-        u,
-        (i * this._parentWidth) / sum,
-        this._parentHeight - 120 * SceneManager.scale,
-        this._parentWidth / GameScene._unitInfo.length,
-        40 * SceneManager.scale
-      );
+      const heroConfig = ModelConfig.find((c) => c.type === u.type) as HeroConfig;
+      const p = new HeroPanel(u, (i * this._parentWidth) / sum, this._parentHeight - 120 * SceneManager.scale, this._parentWidth / GameScene._unitInfo.length, 40 * SceneManager.scale);
       this.addChild(p);
       this._heroPanels.push(p);
       u.weapons.forEach((w) => {
-        const weaponConfig = ModelConfig.find(
-          (c) => c.type === w
-        ) as WeaponConfig;
-        const b = new SkillButton(
-          heroConfig,
-          weaponConfig,
-          (i * this._parentWidth) / sum,
-          this._parentHeight - 80 * SceneManager.scale,
-          this._parentWidth / sum,
-          80 * SceneManager.scale
-        );
+        const weaponConfig = ModelConfig.find((c) => c.type === w) as WeaponConfig;
+        const b = new SkillButton(heroConfig, weaponConfig, (i * this._parentWidth) / sum, this._parentHeight - 80 * SceneManager.scale, this._parentWidth / sum, 80 * SceneManager.scale);
         b.setCallback(() => {
           if (this._fadeOutHeros || this._gameover) return false;
           const hero = this._hero[index];
@@ -206,11 +143,7 @@ export class GameScene extends Container implements IScene {
   loadBackground(): void {
     this._stageInfo.background.forEach((backgroundInfo) => {
       const texture = Texture.from(backgroundInfo.resourceName);
-      const tile = new TilingSprite(
-        texture,
-        this._parentWidth,
-        backgroundInfo.height * SceneManager.scale
-      );
+      const tile = new TilingSprite(texture, this._parentWidth, backgroundInfo.height * SceneManager.scale);
       tile.tileScale = {
         x: SceneManager.scale,
         y: SceneManager.scale,
@@ -218,8 +151,7 @@ export class GameScene extends Container implements IScene {
       if (backgroundInfo.fromTop) {
         tile.position.y = backgroundInfo.offsetY * SceneManager.scale;
       } else {
-        tile.position.y =
-          this._parentHeight - backgroundInfo.offsetY * SceneManager.scale;
+        tile.position.y = this._parentHeight - backgroundInfo.offsetY * SceneManager.scale;
       }
       this.addChild(tile);
       this._tilingSprite.push(tile);
@@ -235,13 +167,7 @@ export class GameScene extends Container implements IScene {
       type = this._stageInfo.boss.type;
       this._isAppearBoss = true;
 
-      this._bossLifeGage = new BossLifeGage(
-        type,
-        this._parentWidth / 5,
-        0,
-        (3 * this._parentWidth) / 5,
-        48
-      );
+      this._bossLifeGage = new BossLifeGage(type, this._parentWidth / 5, 0, (3 * this._parentWidth) / 5, 48);
       this.addChild(this._bossLifeGage);
     } else {
       const max = this._stageInfo.enemy.reduce((a, b) => a + b.rate, 0);
@@ -256,11 +182,7 @@ export class GameScene extends Container implements IScene {
       }
     }
 
-    const enemy = EnemyFactory.CreateEnemy(
-      type!,
-      this._parentWidth,
-      this._parentHeight
-    );
+    const enemy = EnemyFactory.CreateEnemy(type!, this._parentWidth, this._parentHeight);
     this._enemy.push(enemy);
     enemy.load((obj) => {
       this.removeChild(obj);
@@ -279,11 +201,9 @@ export class GameScene extends Container implements IScene {
             specialBonus: this._specialBonus,
           },
           () => {
+            this.feedBackResult();
             if (SceneManager.CurrentStageName == "砂漠") {
-              SceneManager.changeScene(
-                new GameScene(SceneManager.width, SceneManager.height),
-                "森林"
-              );
+              SceneManager.changeScene(new GameScene(SceneManager.width, SceneManager.height), "森林");
             } else {
               this._fadeOutHeros = true;
             }
@@ -295,6 +215,14 @@ export class GameScene extends Container implements IScene {
     if (this._isAppearBoss) {
       this._boss = enemy;
     }
+  }
+
+  feedBackResult() {
+    CurrentUnitInfo.forEach((u) => {
+      let t = GameScene._unitInfo.find((i) => i.type == u.type);
+      u.exp = t!.exp;
+      u.level = t!.level;
+    });
   }
 
   update(framesPassed: number): void {
@@ -309,10 +237,7 @@ export class GameScene extends Container implements IScene {
       this._fadeOutHerosCount += framesPassed;
       if (this._fadeOutHerosCount > 200) {
         sound.stopAll();
-        SceneManager.changeScene(
-          new GameScene(SceneManager.width, SceneManager.height),
-          "砂漠"
-        );
+        SceneManager.changeScene(new GameScene(SceneManager.width, SceneManager.height), "砂漠");
       }
       return;
     }
@@ -336,11 +261,9 @@ export class GameScene extends Container implements IScene {
           specialBonus: 0,
         },
         () => {
+          this.feedBackResult();
           if (SceneManager.CurrentStageName == "砂漠") {
-            SceneManager.changeScene(
-              new GameScene(SceneManager.width, SceneManager.height),
-              "森林"
-            );
+            SceneManager.changeScene(new GameScene(SceneManager.width, SceneManager.height), "森林");
           } else {
             this._fadeOutHeros = true;
           }
@@ -406,15 +329,10 @@ export class GameScene extends Container implements IScene {
             this._heroPanels[index].updateText();
             this._hero[index].levelUp();
 
-            UpText.ShowText(
-              strings.getString("レベルアップ"),
-              this._heroPanels[index].Coordinate.x + 6,
-              this._heroPanels[index].Coordinate.y,
-              {
-                fill: ["#ffffff", "#9999ff"],
-                speed: 1,
-              }
-            );
+            UpText.ShowText(strings.getString("レベルアップ"), this._heroPanels[index].Coordinate.x + 6, this._heroPanels[index].Coordinate.y, {
+              fill: ["#ffffff", "#9999ff"],
+              speed: 1,
+            });
           }
         }
       });
