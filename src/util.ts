@@ -1,5 +1,11 @@
 import { sound } from "@pixi/sound";
-import { HeroConfig, HeroType, ModelConfig, WeaponConfig, WeaponType } from "./model/model-types";
+import {
+  HeroConfig,
+  HeroType,
+  ModelConfig,
+  WeaponConfig,
+  WeaponType,
+} from "./model/model-types";
 
 export function getRandom(max: number): number {
   return Math.floor(Math.random() * max);
@@ -36,4 +42,13 @@ export function HeroSpec(type: HeroType): HeroConfig {
 export function BGM(name: string, loop: boolean = true) {
   sound.stopAll();
   sound.play(name, { loop: loop });
+}
+
+export function swapElements<T>(array: T[], t1: T, t2: T): T[] {
+  const index1 = array.indexOf(t1);
+  const index2 = array.indexOf(t2);
+  let temp: T = array[index1];
+  array[index1] = array[index2];
+  array[index2] = temp;
+  return array;
 }

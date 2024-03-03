@@ -8,6 +8,7 @@ import {
   BigAttakModel,
   LineModel,
   GuardModel,
+  PetAttakModel,
 } from "./wepon-common";
 
 export class WeaponFactory {
@@ -32,6 +33,8 @@ export class WeaponFactory {
         return new FastThrowAttakModel(type, parentWidth, parentHeight);
       case "ショット":
         return new ThrowAttakModel(type, parentWidth, parentHeight);
+      case "魔狼":
+        return new PetAttakModel(type, parentWidth, parentHeight);
       case "ガード":
         return new GuardModel(type, parentWidth, parentHeight);
     }

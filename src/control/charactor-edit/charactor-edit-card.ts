@@ -1,11 +1,22 @@
-import { HeroType } from "../../model/model-types";
-import { UnitInfo } from "../../scenes/scene-master";
+import { CurrentUnitInfo, UnitInfo } from "../../scenes/scene-master";
 import { strings } from "../../strings";
 import { HeroSpec, WeaponSpec, bind } from "../../util";
-import html from "./charactor-card.html?raw";
+import html from "./charactor-edit-card.html?raw";
+import heroIconHtml from "./charactor-edit-card-hero-icon.html?raw";
+import { HeroType } from "../../model/model-types";
 
-export class CharactorCard {
+export class CharactorEditCard {
   static write(info: UnitInfo): string {
+    let heroIcons = "";
+    CurrentUnitInfo.forEach((u) => {
+      heroIcons += bind(heroIconHtml.toString(), {
+        job: `${strings.getString(u.type)}`,
+        level: `Lv. ${u.level}`,
+        hero: `${HeroSpec(u.type).resourceName}1.png`,
+        unitType: u.type,
+      });
+    });
+
     return bind(html.toString(), {
       job: `${strings.getString(info.type)}`,
       level: `Lv. ${info.level}`,
@@ -22,11 +33,12 @@ export class CharactorCard {
               WeaponSpec(info.weapons[1]).sequenceCount
             }.png`
           : "",
-      unitType: info.type,
+      heros: heroIcons,
     });
   }
-  static tapCallback(action: (info: HeroType) => void) {
-    Array.from(document.getElementsByClassName("CharactorCard")).forEach(
+
+  static changeHeroEvent(action: (info: HeroType) => void) {
+    Array.from(document.getElementsByClassName("ChangeCharactorIcon")).forEach(
       (dom) => {
         dom.addEventListener("click", (d) => {
           const data = (d.currentTarget as HTMLElement).dataset

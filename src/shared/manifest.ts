@@ -9,6 +9,9 @@ export const manifest: AssetsManifest = {
         wizard_walk_1: "resources/images/hero/wizard_walk_1.png",
         priest_walk_1: "resources/images/hero/priest_walk_1.png",
         archer_walk_1: "resources/images/hero/archer_walk_1.png",
+        warrior_walk_1: "resources/images/hero/warrior_walk_1.png",
+        dancer_walk_1: "resources/images/hero/dancer_walk_1.png",
+        taimer_walk_1: "resources/images/hero/taimer_walk_1.png",
       },
     },
     {
@@ -59,6 +62,8 @@ export const manifest: AssetsManifest = {
         thander_2: "resources/images/weapon/thander_2.png",
         thander_3: "resources/images/weapon/thander_3.png",
         thander_4: "resources/images/weapon/thander_4.png",
+        wolf_1: "resources/images/weapon/wolf_1.png",
+        wolf_2: "resources/images/weapon/wolf_2.png",
       },
     },
     {
@@ -94,7 +99,7 @@ export const manifest: AssetsManifest = {
         win: "sound/bgm/Short_RPG_06.mp3",
         failed: "sound/bgm/Short_Gothic_09.mp3",
         town: "sound/bgm/Town.mp3",
-        title: "sound/bgm/Opening.mp3",
+        title: "sound/bgm/Opening.m4a",
       },
     },
     {

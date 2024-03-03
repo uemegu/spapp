@@ -79,6 +79,33 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     dex: 20,
   },
   {
+    type: "戦士",
+    resourceName: "warrior_walk_",
+    sequenceCount: 1,
+    maxHp: 200,
+    defaultAttackRange: 1,
+    defencePower: 5,
+    dex: 0,
+  },
+  {
+    type: "ダンサー",
+    resourceName: "dancer_walk_",
+    sequenceCount: 1,
+    maxHp: 80,
+    defaultAttackRange: 1,
+    defencePower: 1,
+    dex: 20,
+  },
+  {
+    type: "テイマー",
+    resourceName: "taimer_walk_",
+    sequenceCount: 1,
+    maxHp: 80,
+    defaultAttackRange: 1,
+    defencePower: 1,
+    dex: 10,
+  },
+  {
     type: "ゾンビ",
     resourceName: "zombi_",
     sequenceCount: 2,
@@ -282,9 +309,31 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     attenuationRate: 1,
     criticalRate: 0.5,
   },
+  {
+    type: "魔狼",
+    resourceName: "wolf_",
+    startSEName: "sword_1",
+    hittedSEName: "sword_2",
+    sequenceCount: 2,
+    power: 10,
+    coolTime: 250,
+    limitTime: 160,
+    onetime: false,
+    targetType: "敵",
+    attenuationRate: 1,
+    criticalRate: 1,
+    knockback: 80,
+  },
 ];
 
-export type HeroType = "勇者" | "魔法使い" | "僧侶" | "アーチャー";
+export type HeroType =
+  | "勇者"
+  | "魔法使い"
+  | "僧侶"
+  | "アーチャー"
+  | "戦士"
+  | "ダンサー"
+  | "テイマー";
 export type EnemyType =
   | "ゾンビ"
   | "ゴブリン"
@@ -302,4 +351,5 @@ export type WeaponType =
   | "ヒール"
   | "エアロ"
   | "ロングショット"
-  | "ショット";
+  | "ショット"
+  | "魔狼";

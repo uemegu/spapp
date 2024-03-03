@@ -171,4 +171,22 @@ export const CurrentUnitInfo: Array<UnitInfo> = [
     exp: 0,
     level: 1,
   },
+  {
+    type: "戦士",
+    weapons: ["スマッシュ", "ガード"],
+    exp: 0,
+    level: 1,
+  },
+  {
+    type: "ダンサー",
+    weapons: ["スマッシュ", "エアロ"],
+    exp: 0,
+    level: 1,
+  },
+  {
+    type: "テイマー",
+    weapons: ["スマッシュ", "魔狼"],
+    exp: 0,
+    level: 1,
+  },
 ];

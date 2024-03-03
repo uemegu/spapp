@@ -624,6 +624,18 @@ video {
   margin-right: 1.5rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .flex {
   display: flex;
 }
@@ -726,6 +738,10 @@ video {
 
 .w-\[36rem\] {
   width: 36rem;
+}
+
+.w-24 {
+  width: 6rem;
 }
 
 .min-w-52 {
@@ -870,6 +886,10 @@ video {
 
 .pb-4 {
   padding-bottom: 1rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
 }
 
 .text-center {

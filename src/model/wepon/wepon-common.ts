@@ -3,7 +3,7 @@ import { SpriteModel } from "../model-share";
 import { WeaponConfig } from "../model-types";
 import { HeroModel } from "../hero/hero-common";
 import { sound } from "@pixi/sound";
-import { getRandom } from "../../util";
+import { WeaponSpec, getRandom } from "../../util";
 import { SceneManager } from "../../shared/scene-manager";
 
 export abstract class WeaponModel extends SpriteModel {
@@ -158,6 +158,36 @@ export class FastThrowAttakModel extends ThrowAttakModel {
     }
     this._me!.x += speed;
     super.update(framesPassed);
+  }
+}
+
+export class PetAttakModel extends WeaponModel {
+  load(onDestroy: (me: Sprite) => void): void {
+    super.load(onDestroy);
+    (this._me as AnimatedSprite).loop = true;
+    this._me!.width = 64 * SceneManager.scale;
+    this._me!.height = 64 * SceneManager.scale;
+    this._me!.position.x = this._parentWidth / 2 - 40 * SceneManager.scale;
+    this._me!.position.y = this._parentHeight - 180 * SceneManager.scale;
+    (this._me as AnimatedSprite).animationSpeed = 0.2;
+    (this._me as AnimatedSprite).play();
+  }
+
+  private _reverse: boolean = false;
+  update(framesPassed: number): void {
+    let speed = framesPassed * 4 * SceneManager.scale;
+    if (this._me!.scale.x < 0) {
+      speed *= -1;
+    }
+    this._me!.x += speed;
+    super.update(framesPassed);
+    if (
+      !this._reverse &&
+      this._restTime < (this._config as WeaponConfig).limitTime / 2
+    ) {
+      this._reverse = true;
+      this.reverse();
+    }
   }
 }
 
