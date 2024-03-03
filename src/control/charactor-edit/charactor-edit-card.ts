@@ -8,12 +8,13 @@ import { HeroType } from "../../model/model-types";
 export class CharactorEditCard {
   static write(info: UnitInfo): string {
     let heroIcons = "";
-    CurrentUnitInfo.forEach((u) => {
+    CurrentUnitInfo.forEach((u, index) => {
       heroIcons += bind(heroIconHtml.toString(), {
         job: `${strings.getString(u.type)}`,
         level: `Lv. ${u.level}`,
         hero: `${HeroSpec(u.type).resourceName}1.png`,
         unitType: u.type,
+        ring: index <= 3 ? "ring-blue-500 ring-2" : "",
       });
     });
 

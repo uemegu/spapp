@@ -6,6 +6,7 @@ import { GameScene } from "./game-scene";
 import { BGM, swapElements } from "../util";
 import { HeroType } from "../model/model-types";
 import { CharactorEditCard } from "../control/charactor-edit/charactor-edit-card";
+import { sound } from "@pixi/sound";
 
 export class EditScene extends Container implements IScene {
   constructor(parentWidth: number, parentHeight: number) {
@@ -23,6 +24,7 @@ export class EditScene extends Container implements IScene {
     });
     document.getElementById("editMainContainer")!.innerHTML = html;
     CharactorCard.tapCallback((type) => {
+      sound.play("se_tap");
       this.writeCharactorEditCard(type);
     });
   }
@@ -32,6 +34,7 @@ export class EditScene extends Container implements IScene {
     document.getElementById("editMainContainer")!.innerHTML =
       CharactorEditCard.write(unitInfo);
     CharactorEditCard.changeHeroEvent((info) => {
+      sound.play("se_tap");
       const unitInfo2 = CurrentUnitInfo.find((c) => c.type === info)!;
       swapElements(CurrentUnitInfo, unitInfo, unitInfo2);
       this.writeCharactorEditCard(info);
@@ -51,6 +54,7 @@ export class EditScene extends Container implements IScene {
 
     document.getElementById("partyEdit")?.addEventListener("click", () => {
       this.writeCharctorCardList();
+      sound.play("se_menu");
     });
 
     this.writeCharctorCardList();

@@ -121,6 +121,7 @@ export class HeroModel extends SpriteModel {
     attack.load((_) => {
       this._currentWeapons.splice(this._currentWeapons.indexOf(attack), 1);
     });
+    attack.moveAt(this._me!.x + this._me!.width, attack.getCoordinate().y!);
     this._currentWeapons.push(attack);
     if (this.getWeaponConfig(type).targetType === "味方") {
       (attack as AuxiliaryModel).powerUp(this._team);

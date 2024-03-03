@@ -89,6 +89,7 @@ export const manifest: AssetsManifest = {
         status_bar: "resources/images/ui/statusbar.png",
         money: "resources/images/ui/money.png",
         opening: "resources/images/ui/opening.jpg",
+        map: "resources/images/ui/map.png",
       },
     },
     {
@@ -114,6 +115,8 @@ export const manifest: AssetsManifest = {
         se_aero: "sound/se/aero.mp3",
         se_level_up: "sound/se/level_up.mp3",
         se_defense: "sound/se/defense.mp3",
+        se_menu: "sound/se/menu.mp3",
+        se_tap: "sound/se/tap.mp3",
       },
     },
   ],
