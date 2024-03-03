@@ -1,6 +1,9 @@
 <div
-  class="w-full border border-slate-50 rounded-md shadow-xl ring-offset-2 ring-2 mr-4 slidein"
+  class="w-full border border-slate-50 rounded-md shadow-xl ring-offset-2 ring-2 mr-4 slidein relative"
 >
+  <div class="absolute right-0 top-0">
+    <img id="eidtCloseButton" src="./resources/images/icon/cancel.svg" />
+  </div>
   <div
     class="p-2 w-full flex bg-orange-100"
     style="
@@ -19,7 +22,13 @@
         <div class="w-full border border-indigo-700"></div>
         <img src="./resources/images/hero/${hero}" class="w-2/3" />
         <div class="w-full border border-indigo-700"></div>
-        <div class="text-sm">${job}</div>
+        <div class="text-sm">
+          ${job}<img
+            src="./resources/images/icon/info.svg"
+            class="float-right h-5 JobInfoIcon"
+            data-unit="${unitType}"
+          />
+        </div>
       </div>
       <div class="w-full h-12">
         <div class="flex">
@@ -48,11 +57,11 @@
     </div>
     <div class="flex flex-col w-full h-full pl-8">
       <div class="w-full h-1/2">
-        <div class="text-xl">いれかえ</div>
+        <div class="text-xl">${いれかえ}</div>
         <div class="flex">${heros}</div>
       </div>
       <div class="w-full h-1/2 mt-4">
-        <div class="text-xl">すきる</div>
+        <div class="text-xl">${すきる}</div>
         <div class="flex"></div>
       </div>
     </div>

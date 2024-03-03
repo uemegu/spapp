@@ -15,6 +15,18 @@ export const manifest: AssetsManifest = {
       },
     },
     {
+      name: "hero_detail",
+      assets: {
+        hero_detail: "resources/images/illust/hero_detail.webp",
+        wizard_detail: "resources/images/illust/wizard_detail.webp",
+        priest_detail: "resources/images/illust/priest_detail.webp",
+        archer_detail: "resources/images/illust/archer_detail.webp",
+        warrior_detail: "resources/images/illust/warrior_detail.webp",
+        dancer_detail: "resources/images/illust/dancer_detail.webp",
+        taimer_detail: "resources/images/illust/taimer_detail.webp",
+      },
+    },
+    {
       name: "enemy",
       assets: {
         zombi_1: "resources/images/enemy/zombi_1.png",

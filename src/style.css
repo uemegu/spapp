@@ -24,10 +24,10 @@ body {
 }
 
 .slidein {
-  animation: slideIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation: slideIn_animation 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }
 
-@keyframes slideIn {
+@keyframes slideIn_animation {
   0% {
     transform: translateX(180px);
     opacity: 0;
@@ -36,6 +36,24 @@ body {
     transform: translateX(0);
   }
   40%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.popup {
+  animation: popup_animation 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes popup_animation {
+  0% {
+    transform: translateY(40px) scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  80%,
   100% {
     opacity: 1;
   }

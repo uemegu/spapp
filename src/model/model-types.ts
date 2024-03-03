@@ -44,7 +44,7 @@ export interface WeaponConfig {
 export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   {
     type: "勇者",
-    resourceName: "hero_walk_",
+    resourceName: "hero_",
     sequenceCount: 1,
     maxHp: 100,
     defaultAttackRange: 1,
@@ -53,7 +53,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "魔法使い",
-    resourceName: "wizard_walk_",
+    resourceName: "wizard_",
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
@@ -62,7 +62,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "僧侶",
-    resourceName: "priest_walk_",
+    resourceName: "priest_",
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
@@ -71,7 +71,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "アーチャー",
-    resourceName: "archer_walk_",
+    resourceName: "archer_",
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 4,
@@ -80,7 +80,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "戦士",
-    resourceName: "warrior_walk_",
+    resourceName: "warrior_",
     sequenceCount: 1,
     maxHp: 200,
     defaultAttackRange: 1,
@@ -89,7 +89,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "ダンサー",
-    resourceName: "dancer_walk_",
+    resourceName: "dancer_",
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,
@@ -98,7 +98,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
   },
   {
     type: "テイマー",
-    resourceName: "taimer_walk_",
+    resourceName: "taimer_",
     sequenceCount: 1,
     maxHp: 80,
     defaultAttackRange: 1,

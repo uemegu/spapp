@@ -9,7 +9,7 @@ export class CharactorCard {
     return bind(html.toString(), {
       job: `${strings.getString(info.type)}`,
       level: `Lv. ${info.level}`,
-      hero: `${HeroSpec(info.type).resourceName}1.png`,
+      hero: `${HeroSpec(info.type).resourceName}walk_1.png`,
       weapon1:
         info.weapons.length > 0
           ? `${WeaponSpec(info.weapons[0]).resourceName}${

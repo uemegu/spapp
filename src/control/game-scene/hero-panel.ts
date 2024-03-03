@@ -12,7 +12,7 @@ import {
 import { IUpdate, SceneManager } from "../../shared/scene-manager";
 import { HeroType, ModelConfig } from "../../model/model-types";
 import { strings } from "../../strings";
-import { UnitInfo } from "../../scenes/game-scene";
+import { UnitInfo } from "../../scenes/scene-master";
 
 export interface HeroPanelOption {
   lineColor: ColorSource;
@@ -91,7 +91,7 @@ export class HeroPanel extends Container implements IUpdate {
     this._gage.endFill();
 
     const heroConfig = ModelConfig.find((c) => c.type === this._unitInfo.type)!;
-    const name2 = `${heroConfig.resourceName}${heroConfig.sequenceCount}`;
+    const name2 = `${heroConfig.resourceName}walk_${heroConfig.sequenceCount}`;
     const heroSymbol = new AnimatedSprite([Texture.from(name2)]);
     heroSymbol.width = (250 * SceneManager.scale) / 6;
     heroSymbol.height = (512 * SceneManager.scale) / 6;

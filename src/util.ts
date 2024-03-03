@@ -52,3 +52,17 @@ export function swapElements<T>(array: T[], t1: T, t2: T): T[] {
   array[index2] = temp;
   return array;
 }
+
+export function showDialog(html: string, closeHTMLID: string) {
+  sound.play("se_tap");
+  document.getElementById("dialog")!.innerHTML = html;
+  document.getElementById("overlay")?.classList.remove("hidden");
+  document.getElementById(closeHTMLID)?.addEventListener("click", () => {
+    closeDialog();
+  });
+}
+export function closeDialog() {
+  sound.play("se_tap");
+  document.getElementById("dialog")!.innerHTML = "";
+  document.getElementById("overlay")?.classList.add("hidden");
+}

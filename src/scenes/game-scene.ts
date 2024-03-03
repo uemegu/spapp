@@ -20,7 +20,7 @@ import { CurrentUnitInfo, StageInfo, Stages, UnitInfo } from "./scene-master";
 import { UpText } from "../control/game-scene/up-text";
 import { GameSceneStatusBar } from "../control/game-scene/game-scene-status-bar";
 import { StageClear } from "../control/game-scene/stage-clear";
-import { EditScene } from "./edit-scene";
+import { EditScene } from "./edit-scene/edit-scene";
 
 export class GameScene extends Container implements IScene {
   private static _unitInfo: Array<UnitInfo> = [];

@@ -64,7 +64,7 @@ export class HeroModel extends SpriteModel {
     super.load(onDestroy);
     const frames = [];
     for (let i = 1; i <= this._config.sequenceCount; i++) {
-      frames.push(Texture.from(`${this._config.resourceName}${i}`));
+      frames.push(Texture.from(`${this._config.resourceName}walk_${i}`));
     }
     this._me = new AnimatedSprite(frames);
     this._me.anchor.set(0.5);

@@ -2,6 +2,7 @@ import { Container, Sprite, TextStyle, Text, Graphics } from "pixi.js";
 import { IUpdate, SceneManager } from "../../shared/scene-manager";
 import { strings } from "../../strings";
 import { Button } from "./button";
+import { EditScene } from "../../scenes/edit-scene/edit-scene";
 export interface GameSceneStatusBarOption {}
 
 export class GameSceneStatusBar extends Container implements IUpdate {
@@ -42,7 +43,7 @@ export class GameSceneStatusBar extends Container implements IUpdate {
     this._money.y = 12 * SceneManager.scale;
 
     const button = new Button(
-      strings.getString("とめる"),
+      strings.getString("もどる"),
       5 * SceneManager.scale,
       16 * SceneManager.scale,
       {
@@ -56,6 +57,11 @@ export class GameSceneStatusBar extends Container implements IUpdate {
       }
     );
     button.setCallback(() => {
+      SceneManager.changeScene(
+        new EditScene(SceneManager.width, SceneManager.height)
+      );
+
+      /*
       if (button.text === strings.getString("さいかい")) {
         button.text = strings.getString("とめる");
         SceneManager.suspend = false;
@@ -63,6 +69,7 @@ export class GameSceneStatusBar extends Container implements IUpdate {
         button.text = strings.getString("さいかい");
         SceneManager.suspend = true;
       }
+      */
     });
 
     this._gage2 = new Graphics();
