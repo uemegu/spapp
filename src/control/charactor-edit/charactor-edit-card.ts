@@ -1,6 +1,13 @@
 import { CurrentUnitInfo, UnitInfo } from "../../scenes/scene-master";
 import { strings } from "../../strings";
-import { HeroSpec, WeaponSpec, bind, showDialog } from "../../util";
+import {
+  HeroSpec,
+  WeaponSpec,
+  bind,
+  closeDialog,
+  showDialog,
+  swapElements,
+} from "../../util";
 import html from "./charactor-edit-card.html?raw";
 import heroIconHtml from "./charactor-edit-card-hero-icon.html?raw";
 import heroDetailHtml from "./charactor-edit-detail-dialog.html?raw";
@@ -111,15 +118,66 @@ export class CharactorEditCard {
               power: `${spec.power}`,
               coolTime: `${spec.coolTime}`,
               onetime: `${
-                spec.onetime
-                  ? strings.getString("する")
-                  : strings.getString("しない")
+                spec.targetType === "敵"
+                  ? spec.onetime
+                    ? strings.getString("しない")
+                    : strings.getString("する")
+                  : "ー"
               }`,
-              knockback: `${spec.knockback ?? 0}`,
+              knockback: `${
+                spec.targetType === "敵" ? spec.knockback ?? 0 : "ー"
+              }`,
               weapon_name: strings.getString(`${type}`),
             }),
             "skillChangeCloseButton"
           );
+
+          const rewriteCurrentSkill = (skills: WeaponType[]) => {
+            skills.forEach((s, index) => {
+              const spec = WeaponSpec(s);
+              (
+                document.getElementById(
+                  `currentWeapon${index + 1}`
+                ) as HTMLImageElement
+              ).src = `./resources/images/weapon/${spec.resourceName}${spec.sequenceCount}.png`;
+            });
+          };
+          document
+            .getElementById("change1Button")
+            ?.addEventListener("click", (e) => {
+              const heroType = (
+                document.getElementsByClassName("JobInfoIcon")[0] as HTMLElement
+              ).dataset.unit as HeroType;
+              const weapons = CurrentUnitInfo.find(
+                (u) => u.type === heroType
+              )!.weapons;
+              if (weapons[1] === spec.type) {
+                swapElements(weapons, weapons[0], weapons[1]);
+              } else {
+                CurrentUnitInfo.find((u) => u.type === heroType)!.weapons[0] =
+                  spec.type;
+              }
+              rewriteCurrentSkill(weapons);
+              closeDialog();
+            });
+          document
+            .getElementById("change2Button")
+            ?.addEventListener("click", () => {
+              const heroType = (
+                document.getElementsByClassName("JobInfoIcon")[0] as HTMLElement
+              ).dataset.unit as HeroType;
+              const weapons = CurrentUnitInfo.find(
+                (u) => u.type === heroType
+              )!.weapons;
+              if (weapons[0] === spec.type) {
+                swapElements(weapons, weapons[0], weapons[1]);
+              } else {
+                CurrentUnitInfo.find((u) => u.type === heroType)!.weapons[1] =
+                  spec.type;
+              }
+              rewriteCurrentSkill(weapons);
+              closeDialog();
+            });
         });
       }
     );

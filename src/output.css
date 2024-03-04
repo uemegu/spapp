@@ -840,6 +840,10 @@ video {
   width: 4rem;
 }
 
+.w-3 {
+  width: 0.75rem;
+}
+
 .min-w-52 {
   min-width: 13rem;
 }
