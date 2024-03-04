@@ -1,0 +1,46 @@
+<div
+  class="w-1/2 h-2/3 top-[17%] left-1/4 fixed flex flex-col font-bold bg-slate-50 border-2 rounded-md border-indigo-700 p-4 shadow-lg popup"
+>
+  <div class="absolute right-0 top-0">
+    <img id="skillChangeCloseButton" src="./resources/images/icon/cancel.svg" />
+  </div>
+  <div class="w-full flex h-12">
+    <div class="w-16">
+      <img
+        src="./resources/images/weapon/${weapon_image}"
+        class="p-4 absolute h-12 ml-4 w-12 z-10"
+      />
+      <img
+        src="./resources/images/ui/panel_background.png"
+        class="absolute h-12 ml-4"
+      />
+    </div>
+    <div class="text-4xl ml-2">${weapon_name}</div>
+  </div>
+  <div class="w-full h-full flex flex-col justify-between p-4">
+    <div class="leading-6">
+      <div><span class="w-48 inline-block">${パワー}:</span> ${power}</div>
+      <div>
+        <span class="w-48 inline-block">${クールタイム}:</span> ${coolTime}
+      </div>
+      <div><span class="w-48 inline-block">${貫通}:</span> ${onetime}</div>
+      <div>
+        <span class="w-48 inline-block">${ノックバック}:</span> ${knockback}
+      </div>
+    </div>
+    <div class="flex">
+      <div
+        id="change1Button"
+        class="bg-slate-200 mt-4 rounded-md text-center ring-offset-2 ring-2 w-32 mr-4"
+      >
+        スキル1に設定
+      </div>
+      <div
+        id="change2Button"
+        class="bg-slate-200 mt-4 rounded-md text-center ring-offset-2 ring-2 w-32"
+      >
+        スキル2に設定
+      </div>
+    </div>
+  </div>
+</div>

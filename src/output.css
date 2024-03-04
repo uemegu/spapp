@@ -688,6 +688,10 @@ video {
   margin-top: 0.5rem;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -826,6 +830,14 @@ video {
 
 .w-4 {
   width: 1rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-16 {
+  width: 4rem;
 }
 
 .min-w-52 {
@@ -1060,6 +1072,11 @@ video {
   line-height: 1rem;
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .font-extrabold {
   font-weight: 800;
 }
@@ -1074,6 +1091,10 @@ video {
 
 .leading-3 {
   line-height: .75rem;
+}
+
+.leading-6 {
+  line-height: 1.5rem;
 }
 
 .text-slate-50 {

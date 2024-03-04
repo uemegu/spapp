@@ -6,6 +6,12 @@ export interface HeroConfig {
   defaultAttackRange: number;
   defencePower: number;
   dex: number;
+  skills: Array<SkilMap>;
+}
+
+export interface SkilMap {
+  type: WeaponType;
+  level: number;
 }
 
 export interface EnemyConfig {
@@ -50,6 +56,12 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 2,
     dex: 10,
+    skills: [
+      { type: "スマッシュ", level: 1 },
+      { type: "ガード", level: 1 },
+      { type: "サンダー", level: 1 },
+      { type: "ヒール", level: 1 },
+    ],
   },
   {
     type: "魔法使い",
@@ -59,6 +71,11 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 1,
     dex: 10,
+    skills: [
+      { type: "ファイア", level: 1 },
+      { type: "サンダー", level: 1 },
+      { type: "エアロ", level: 1 },
+    ],
   },
   {
     type: "僧侶",
@@ -68,6 +85,10 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 1,
     dex: 10,
+    skills: [
+      { type: "ヒール", level: 1 },
+      { type: "エアロ", level: 1 },
+    ],
   },
   {
     type: "アーチャー",
@@ -77,6 +98,10 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 4,
     defencePower: 1,
     dex: 20,
+    skills: [
+      { type: "ショット", level: 1 },
+      { type: "ロングショット", level: 1 },
+    ],
   },
   {
     type: "戦士",
@@ -86,6 +111,10 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 5,
     dex: 0,
+    skills: [
+      { type: "スマッシュ", level: 1 },
+      { type: "ガード", level: 1 },
+    ],
   },
   {
     type: "ダンサー",
@@ -95,6 +124,10 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 1,
     dex: 20,
+    skills: [
+      { type: "スマッシュ", level: 1 },
+      { type: "エアロ", level: 1 },
+    ],
   },
   {
     type: "テイマー",
@@ -104,6 +137,10 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     defaultAttackRange: 1,
     defencePower: 1,
     dex: 10,
+    skills: [
+      { type: "スマッシュ", level: 1 },
+      { type: "魔狼", level: 1 },
+    ],
   },
   {
     type: "ゾンビ",
