@@ -21,6 +21,7 @@ import { UpText } from "../control/game-scene/up-text";
 import { GameSceneStatusBar } from "../control/game-scene/game-scene-status-bar";
 import { StageClear } from "../control/game-scene/stage-clear";
 import { EditScene } from "./edit-scene/edit-scene";
+import { LoadingAnimation } from "../control/loading-animation/loading-animation";
 
 export class GameScene extends Container implements IScene {
   private static _unitInfo: Array<UnitInfo> = [];
@@ -90,9 +91,7 @@ export class GameScene extends Container implements IScene {
               specialBonus: this._specialBonus,
             },
             () => {
-              SceneManager.changeScene(
-                new EditScene(SceneManager.width, SceneManager.height)
-              );
+              this.backtoEditScreen();
             }
           );
         }
@@ -267,6 +266,14 @@ export class GameScene extends Container implements IScene {
     });
   }
 
+  backtoEditScreen() {
+    LoadingAnimation.show(() => {
+      SceneManager.changeScene(
+        new EditScene(SceneManager.width, SceneManager.height)
+      );
+    });
+  }
+
   update(framesPassed: number): void {
     if (this._suspend) {
       return;
@@ -278,9 +285,7 @@ export class GameScene extends Container implements IScene {
       });
       this._fadeOutHerosCount += framesPassed;
       if (this._fadeOutHerosCount > 200) {
-        SceneManager.changeScene(
-          new EditScene(SceneManager.width, SceneManager.height)
-        );
+        this.backtoEditScreen();
       }
       return;
     }

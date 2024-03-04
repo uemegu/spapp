@@ -80,3 +80,22 @@ body {
     box-shadow: 0 0 0 0 rgba(142, 62, 62, 0);
   }
 }
+
+.slidein2 {
+  animation: slideIn_animation2 2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slideIn_animation2 {
+  0% {
+    transform: translateX(100%);
+  }
+  25% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

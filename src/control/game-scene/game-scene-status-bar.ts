@@ -3,6 +3,7 @@ import { IUpdate, SceneManager } from "../../shared/scene-manager";
 import { strings } from "../../strings";
 import { Button } from "./button";
 import { EditScene } from "../../scenes/edit-scene/edit-scene";
+import { LoadingAnimation } from "../loading-animation/loading-animation";
 export interface GameSceneStatusBarOption {}
 
 export class GameSceneStatusBar extends Container implements IUpdate {
@@ -57,19 +58,13 @@ export class GameSceneStatusBar extends Container implements IUpdate {
       }
     );
     button.setCallback(() => {
-      SceneManager.changeScene(
-        new EditScene(SceneManager.width, SceneManager.height)
-      );
-
-      /*
-      if (button.text === strings.getString("さいかい")) {
-        button.text = strings.getString("とめる");
+      SceneManager.suspend = true;
+      LoadingAnimation.show(() => {
         SceneManager.suspend = false;
-      } else {
-        button.text = strings.getString("さいかい");
-        SceneManager.suspend = true;
-      }
-      */
+        SceneManager.changeScene(
+          new EditScene(SceneManager.width, SceneManager.height)
+        );
+      });
     });
 
     this._gage2 = new Graphics();
