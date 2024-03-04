@@ -267,7 +267,9 @@ export class GameScene extends Container implements IScene {
   }
 
   backtoEditScreen() {
+    this._suspend = true;
     LoadingAnimation.show(() => {
+      this._suspend = false;
       SceneManager.changeScene(
         new EditScene(SceneManager.width, SceneManager.height)
       );

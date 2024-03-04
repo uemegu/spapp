@@ -100,11 +100,22 @@ export class EditScene extends Container implements IScene {
     let charctorsHTML = "";
     CurrentUnitInfo.forEach((u, index) => {
       if (index > 3) return;
-      charctorsHTML += `<img src="./resources/images/hero/${
+      charctorsHTML += `<img data-unit="${
+        u.type
+      }" src="./resources/images/hero/${
         HeroSpec(u.type).resourceName
-      }walk_1.png" class="h-16 mr-4">`;
+      }walk_1.png" class="h-16 mr-4 CharactorMiniIcon">`;
     });
     document.getElementById("selectedCharactors")!.innerHTML = charctorsHTML;
+    Array.from(document.getElementsByClassName("CharactorMiniIcon")).forEach(
+      (dom) => {
+        dom.addEventListener("click", (e) => {
+          sound.play("se_tap");
+          const type = (e.currentTarget as HTMLElement).dataset.unit;
+          this.writeCharactorEditCard(type as HeroType);
+        });
+      }
+    );
   }
 
   resize(screenWidth: number, screenHeight: number): void {}

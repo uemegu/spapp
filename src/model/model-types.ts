@@ -274,7 +274,7 @@ export const ModelConfig: Array<HeroConfig | EnemyConfig | WeaponConfig> = [
     sequenceCount: 4,
     power: 4,
     coolTime: 400,
-    limitTime: 160,
+    limitTime: 100,
     onetime: false,
     targetType: "敵",
     attenuationRate: 1,

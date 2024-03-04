@@ -1,4 +1,4 @@
-import { Container, Sprite } from "pixi.js";
+import { Container, Sprite, Text, TextStyle } from "pixi.js";
 import { IScene, SceneManager } from "../shared/scene-manager";
 import { GameScene } from "./game-scene";
 import { Button } from "../control/game-scene/button";
@@ -20,20 +20,38 @@ export class StartScene extends Container implements IScene {
     graphics.height = SceneManager.height;
     this.addChild(graphics);
 
-    const button = new Button(
-      strings.getString("スタート"),
-      SceneManager.width * 0.8,
-      SceneManager.height * 0.7,
-      {
-        textSize: 24 * SceneManager.scale,
-      }
-    );
-    button.setCallback(() => {
-      SceneManager.changeScene(
-        new EditScene(SceneManager.width, SceneManager.height)
-      );
+    const style = new TextStyle({
+      fontSize: 24,
+      fontWeight: "bold",
+      fill: ["#fff"],
     });
-    this.addChild(button);
+    const text = new Text(strings.getString("画面をタップしてください"), style);
+    text.x =
+      SceneManager.width -
+      24 * strings.getString("画面をタップしてください").length -
+      16;
+    text.y = SceneManager.height * 0.7;
+    this.addChild(text);
+
+    this.eventMode = "dynamic";
+    this.on("pointerdown", () => {
+      this.removeChild(text);
+      this.off("pointerdown");
+      const button = new Button(
+        strings.getString("スタート"),
+        SceneManager.width * 0.8,
+        SceneManager.height * 0.7,
+        {
+          textSize: 24 * SceneManager.scale,
+        }
+      );
+      button.setCallback(() => {
+        SceneManager.changeScene(
+          new EditScene(SceneManager.width, SceneManager.height)
+        );
+      });
+      this.addChild(button);
+    });
   }
 
   resize(screenWidth: number, screenHeight: number): void {}

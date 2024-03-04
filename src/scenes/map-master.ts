@@ -9,15 +9,15 @@ export type StageName = "森林" | "砂漠";
 
 export const MapMaster: Array<MapInfo> = [
   {
-    x: 200,
-    y: 150,
+    x: 490,
+    y: 420,
     ereaName: "森林",
     difficulty: 1,
     resourceName: "forest_detail.webp",
   },
   {
-    x: 200,
-    y: 100,
+    x: 475,
+    y: 300,
     ereaName: "砂漠",
     difficulty: 2,
     resourceName: "desart_detail.webp",

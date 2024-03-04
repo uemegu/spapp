@@ -148,6 +148,15 @@ export class BigAttakModel extends ThrowAttakModel {
     (this._me as AnimatedSprite).animationSpeed = 0.3;
     (this._me as AnimatedSprite).play();
   }
+
+  update(framesPassed: number): void {
+    let speed = framesPassed * 2 * SceneManager.scale;
+    if (this._me!.scale.x < 0) {
+      speed *= -1;
+    }
+    this._me!.x += speed;
+    super.update(framesPassed);
+  }
 }
 
 export class FastThrowAttakModel extends ThrowAttakModel {

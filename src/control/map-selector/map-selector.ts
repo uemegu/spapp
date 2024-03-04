@@ -5,25 +5,18 @@ import { MapInfo, MapMaster } from "../../scenes/map-master";
 import { strings } from "../../strings";
 import { sound } from "@pixi/sound";
 
-const MAP_HEIGHT = 452;
+const MAP_WIDTH = 1360;
+const MAP_HEIGHT = 1024;
 
 export class MapSelector {
   private static _selectedIndex: number = 0;
   static write(): string {
-    const ratio = (MAP_HEIGHT / window.innerHeight) * 0.7;
-    const map_point: Array<{ top: number; left: number }> = [];
-    MapMaster.forEach((m) => {
-      map_point.push({
-        top: m.y * ratio,
-        left: m.x * ratio,
-      });
-    });
     let mapPointHTML = "";
-    map_point.forEach((m, index) => {
+    MapMaster.forEach((m, index) => {
       if (index === this._selectedIndex) {
-        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-500 ring-2 ring-red-500 pulse" style="top:${m.top}px;left:${m.left}px"></div>`;
+        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-500 ring-2 ring-red-500 pulse" ></div>`;
       } else {
-        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-200 ring-2 ring-red-500" style="top:${m.top}px;left:${m.left}px"></div>`;
+        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-200 ring-2 ring-red-500" ></div>`;
       }
     });
 
@@ -60,7 +53,7 @@ export class MapSelector {
             ?.classList.add("pulse", "bg-red-500");
           document
             .getElementById(`mapPoint${index}`)
-            ?.classList.remove("pulse", "bg-red-200");
+            ?.classList.remove("bg-red-200");
           this._selectedIndex = index;
           MapSelector.mapSelected();
         });
@@ -69,5 +62,21 @@ export class MapSelector {
       action(MapMaster[this._selectedIndex]);
     });
     MapSelector.mapSelected();
+
+    const ratioX =
+      document.getElementById("mapContainer")!.clientWidth / MAP_WIDTH;
+    const ratioY =
+      document.getElementById("mapContainer")!.clientHeight / MAP_HEIGHT;
+    const map_point: Array<{ top: number; left: number }> = [];
+    MapMaster.forEach((m) => {
+      map_point.push({
+        left: m.x * ratioX,
+        top: m.y * ratioY,
+      });
+    });
+    map_point.forEach((m, index) => {
+      document.getElementById(`mapPoint${index}`)!.style.left = `${m.left}px`;
+      document.getElementById(`mapPoint${index}`)!.style.top = `${m.top}px`;
+    });
   }
 }
