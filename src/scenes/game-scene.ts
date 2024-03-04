@@ -247,14 +247,7 @@ export class GameScene extends Container implements IScene {
           },
           () => {
             this.feedBackResult();
-            if (SceneManager.CurrentStageName == "砂漠") {
-              SceneManager.changeScene(
-                new GameScene(SceneManager.width, SceneManager.height),
-                "森林"
-              );
-            } else {
-              this._fadeOutHeros = true;
-            }
+            this._fadeOutHeros = true;
           }
         );
       }
@@ -286,8 +279,7 @@ export class GameScene extends Container implements IScene {
       this._fadeOutHerosCount += framesPassed;
       if (this._fadeOutHerosCount > 200) {
         SceneManager.changeScene(
-          new GameScene(SceneManager.width, SceneManager.height),
-          "砂漠"
+          new EditScene(SceneManager.width, SceneManager.height)
         );
       }
       return;
@@ -312,14 +304,7 @@ export class GameScene extends Container implements IScene {
         },
         () => {
           this.feedBackResult();
-          if (SceneManager.CurrentStageName == "砂漠") {
-            SceneManager.changeScene(
-              new GameScene(SceneManager.width, SceneManager.height),
-              "森林"
-            );
-          } else {
-            this._fadeOutHeros = true;
-          }
+          this._fadeOutHeros = true;
         }
       );
       return;

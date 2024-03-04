@@ -1,4 +1,5 @@
 import { EnemyType, HeroType, WeaponType } from "../model/model-types";
+import { StageName } from "./map-master";
 
 export interface EnemyInfo {
   type: EnemyType;
@@ -31,8 +32,6 @@ export interface StageInfo {
   nextEnemyCount: number;
   endCount: number;
 }
-
-export type StageName = "森林" | "砂漠";
 
 export const Stages: Array<StageInfo> = [
   {

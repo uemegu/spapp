@@ -3,17 +3,22 @@ import { IScene, SceneManager } from "../../shared/scene-manager";
 import { CurrentUnitInfo } from "../scene-master";
 import { CharactorCard } from "../../control/charactor-card/charactor-card";
 import { GameScene } from "../game-scene";
-import { BGM, swapElements } from "../../util";
+import { BGM, bind, swapElements } from "../../util";
 import { HeroType } from "../../model/model-types";
 import { CharactorEditCard } from "../../control/charactor-edit/charactor-edit-card";
 import { sound } from "@pixi/sound";
 import html from "./edit-scene.html?raw";
+import { MapSelector } from "../../control/map-selector/map-selector";
+import { strings } from "../../strings";
 
 export class EditScene extends Container implements IScene {
   constructor(parentWidth: number, parentHeight: number) {
     super();
 
-    document.getElementById("editScreen")!.innerHTML = html.toString();
+    document.getElementById("editScreen")!.innerHTML = bind(html.toString(), {
+      しゅっぱつ: strings.getString("しゅっぱつ"),
+      へんせい: strings.getString("へんせい"),
+    });
     document.getElementById("app")?.classList.add("hidden");
     document.getElementById("editScreen")?.classList.remove("hidden");
   }
@@ -46,7 +51,7 @@ export class EditScene extends Container implements IScene {
         this.writeCharactorEditCard(info);
       },
       () => {
-        sound.play("se_menu");
+        sound.play("se_tap");
         this.writeCharctorCardList();
       }
     );
@@ -56,21 +61,35 @@ export class EditScene extends Container implements IScene {
     BGM("town");
 
     setTimeout(() => {
-      document.getElementById("startButton")?.addEventListener("click", () => {
-        document.getElementById("app")?.classList.remove("hidden");
-        document.getElementById("editScreen")?.classList.add("hidden");
-        SceneManager.changeScene(
-          new GameScene(SceneManager.width, SceneManager.height)
-        );
-      });
-
-      document.getElementById("partyEdit")?.addEventListener("click", () => {
-        this.writeCharctorCardList();
-        sound.play("se_menu");
-      });
+      this.setUpClickEvent();
     }, 1000);
 
     this.writeCharctorCardList();
+  }
+
+  setUpClickEvent() {
+    document.getElementById("startButton")?.addEventListener("click", () => {
+      sound.play("se_menu");
+      document.getElementById("currentSelectedMenuName")!.innerHTML =
+        strings.getString("しゅっぱつ");
+      document.getElementById("editMainContainer")!.innerHTML =
+        MapSelector.write();
+      MapSelector.setup((info) => {
+        document.getElementById("app")?.classList.remove("hidden");
+        document.getElementById("editScreen")?.classList.add("hidden");
+        SceneManager.changeScene(
+          new GameScene(SceneManager.width, SceneManager.height),
+          info.ereaName
+        );
+      });
+    });
+
+    document.getElementById("partyEdit")?.addEventListener("click", () => {
+      this.writeCharctorCardList();
+      document.getElementById("currentSelectedMenuName")!.innerHTML =
+        strings.getString("へんせい");
+      sound.play("se_menu");
+    });
   }
 
   resize(screenWidth: number, screenHeight: number): void {}

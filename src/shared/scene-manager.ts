@@ -1,8 +1,8 @@
 import { Application, Container, DisplayObject } from "pixi.js";
 import { Stage, Layer } from "@pixi/layers";
 import { diffuseGroup, normalGroup, lightGroup } from "@pixi/lights";
-import { StageName } from "../scenes/scene-master";
 import { sound } from "@pixi/sound";
+import { StageName } from "../scenes/map-master";
 
 export class SceneManager {
   public static suspend: boolean = false;
@@ -23,11 +23,17 @@ export class SceneManager {
   }
 
   public static get width() {
-    return Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    return Math.max(
+      document.documentElement.clientWidth,
+      window.innerWidth || 0
+    );
   }
 
   public static get height() {
-    return Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    return Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight || 0
+    );
   }
 
   public static init(): void {
@@ -40,7 +46,11 @@ export class SceneManager {
     });
 
     SceneManager._app.stage = new Stage();
-    SceneManager._app.stage.addChild(new Layer(diffuseGroup), new Layer(normalGroup), new Layer(lightGroup));
+    SceneManager._app.stage.addChild(
+      new Layer(diffuseGroup),
+      new Layer(normalGroup),
+      new Layer(lightGroup)
+    );
     SceneManager._app.ticker.add(SceneManager.update);
     window.addEventListener("resize", SceneManager.resize);
   }
@@ -78,7 +88,10 @@ export class SceneManager {
   public static resize(): void {
     // if we have a scene, we let it know that a resize happened!
     if (SceneManager._currentScene) {
-      SceneManager._currentScene.resize(SceneManager.width, SceneManager.height);
+      SceneManager._currentScene.resize(
+        SceneManager.width,
+        SceneManager.height
+      );
     }
   }
 
@@ -95,7 +108,10 @@ export class SceneManager {
   }
 
   public static removeTickListener(listner: IUpdate) {
-    SceneManager._tickLisnters.splice(SceneManager._tickLisnters.indexOf(listner), 1);
+    SceneManager._tickLisnters.splice(
+      SceneManager._tickLisnters.indexOf(listner),
+      1
+    );
   }
 }
 

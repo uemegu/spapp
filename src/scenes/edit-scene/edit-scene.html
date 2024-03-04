@@ -3,16 +3,16 @@
     class="flex flex-col justify-around h-full relative z-20 font-extrabold text-slate-50"
   >
     <div id="partyEdit" style="-webkit-text-stroke: 1px #000" class="ml-4">
-      へんせい
+      ${へんせい}
     </div>
     <div style="-webkit-text-stroke: 1px #000" class="ml-4">おかいもの</div>
     <div style="-webkit-text-stroke: 1px #000" class="ml-4">ぎふと</div>
     <div style="-webkit-text-stroke: 1px #000" class="ml-4"></div>
     <div
       id="startButton"
-      class="bg-rose-700 ml-2 rounded-md text-center p-2 ring-offset-2 ring-2"
+      class="bg-blue-700 ml-2 rounded-md text-center p-2 ring-offset-2 ring-2"
     >
-      しゅっぱつ
+      ${しゅっぱつ}
     </div>
   </div>
   <img
@@ -26,10 +26,11 @@
 </div>
 <div class="flex-1">
   <div
+    id="currentSelectedMenuName"
     style="text-stroke: 1px #8c87ed; -webkit-text-stroke: 1px #8c87ed"
     class="absolute right-8 top-8 font-extrabold text-4xl text-slate-50 z-20"
   >
-    へんせい
+    ${へんせい}
   </div>
   <img
     src="./resources/images/ui/panel_background3.png"
