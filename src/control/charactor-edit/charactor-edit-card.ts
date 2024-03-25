@@ -31,7 +31,7 @@ export class CharactorEditCard {
     let skillIcons = "";
     HeroSpec(info.type).skills.forEach((skill) => {
       const spec = WeaponSpec(skill.type);
-      skillIcons += `<div data-unit="${skill.type}" class="w-16 ChangeSkillIcon"><img
+      skillIcons += `<div data-unit="${skill.type}" class="w-16 h-12 ChangeSkillIcon"><img
         src="./resources/images/weapon/${spec.resourceName}${spec.sequenceCount}.png"
         class="p-4 absolute z-10 h-12 ml-4 w-12"
       />

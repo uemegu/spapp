@@ -95,8 +95,8 @@ export const manifest: AssetsManifest = {
     {
       name: "sound",
       assets: {
-        field1: "sound/bgm/field1.m4a",
-        desert: "sound/bgm/desert.m4a",
+        field1: "sound/bgm/field1.mp3",
+        desert: "sound/bgm/desert.mp3",
         win: "sound/bgm/Short_RPG_06.mp3",
         failed: "sound/bgm/Short_Gothic_09.mp3",
         town: "sound/bgm/Town.mp3",

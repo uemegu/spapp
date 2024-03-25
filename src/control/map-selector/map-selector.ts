@@ -16,7 +16,7 @@ export class MapSelector {
       if (index === this._selectedIndex) {
         mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-500 ring-2 ring-red-500 pulse" ></div>`;
       } else {
-        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-200 ring-2 ring-red-500" ></div>`;
+        mapPointHTML += `<div id="mapPoint${index}" class="rounded-full w-4 h-4 absolute bg-red-200 " ></div>`;
       }
     });
 

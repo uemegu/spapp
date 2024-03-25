@@ -83,10 +83,10 @@ export class EditScene extends Container implements IScene {
       CharactorEditCard.write(unitInfo);
     CharactorEditCard.setup(
       (info) => {
-        sound.play("se_tap");
+        sound.play("se_menu");
         const unitInfo2 = CurrentUnitInfo.find((c) => c.type === info)!;
         swapElements(CurrentUnitInfo, unitInfo, unitInfo2);
-        this.writeCharactorEditCard(info);
+        this.writeCharctorCardList();
       },
       () => {
         sound.play("se_tap");
